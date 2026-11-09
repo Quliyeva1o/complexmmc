@@ -1405,6 +1405,7 @@ export interface Media {
    */
   alt: string;
   caption?: string | null;
+  sourceUrl?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -5381,6 +5382,7 @@ export interface Post {
   };
   publishedAt?: string | null;
   author?: (number | null) | Team;
+  authorName?: string | null;
   categories?: (number | PostCategory)[] | null;
   tags?: (number | Tag)[] | null;
   relatedPosts?: (number | Post)[] | null;
@@ -11948,6 +11950,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   publishedAt?: T;
   author?: T;
+  authorName?: T;
   categories?: T;
   tags?: T;
   relatedPosts?: T;
@@ -12013,6 +12016,7 @@ export interface TagsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  sourceUrl?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;

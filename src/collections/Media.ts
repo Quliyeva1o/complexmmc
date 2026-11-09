@@ -18,6 +18,13 @@ export const Media: CollectionConfig = {
       admin: { description: 'Şəkildə nə olduğunu qısa təsvir edin, məs: "Bilgəhdə infinity daşma hovuz, mozaika üzlük".' },
     },
     { name: 'caption', label: 'Alt yazı', type: 'text', localized: true },
+    {
+      name: 'sourceUrl',
+      label: 'Mənbə (köçürmə)',
+      type: 'text',
+      index: true,
+      admin: { readOnly: true, position: 'sidebar', condition: (d) => Boolean(d?.sourceUrl) },
+    },
   ],
   upload: {
     staticDir: 'media',

@@ -16,7 +16,8 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts"
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
+    "content": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/apply.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.93.0",
@@ -39,11 +40,14 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@tailwindcss/postcss": "^4.1.0",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "22.19.9",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "cheerio": "^1.2.0",
     "eslint": "^9.16.0",
     "eslint-config-next": "16.3.3",
+    "jsdom": "^26.1.0",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
     "tailwindcss": "^4.1.0",

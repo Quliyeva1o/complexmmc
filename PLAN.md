@@ -310,18 +310,56 @@ Smetalar gələnə qədər kalkulyator "yalnız müraciət" rejimində işləyir
 | 0 | Plan təsdiqi | — |
 | 1 | Layihə qurulması: Next.js + Payload + Postgres, 3 dil, kolleksiyalar, bloklar, rollar, `tokens.css` | Boş, işləyən admin |
 | 2 | **Məzmun idxalı:** turanprojects.az-ın tam sitemap-ı, bütün səhifələr, 3 dil, şəkillər → DB; 301 xəritəsi | Məzmunla dolu admin |
+| **2b** | **Məzmun gücləndirmə** (§9.1) — köhnə saytın zəif SEO məzmununu rəqibləri keçəcək səviyyəyə qaldırmaq | Admin-də yenilənmiş, dərcə hazır mətnlər |
 | 3 | Dizayn sistemi: aqua tokenlər, tipoqrafiya, ikon dəsti, komponentlər, animasiyalar; ana səhifə konsepti | Stil bələdçisi (sizin təsdiqinizlə) |
 | 4 | Ana səhifə (bütün bloklar, ikon zolağı daxil) | — |
 | 5 | Kateqoriya/pillar səhifələri, Xidmətlər, Rayonlar, Layihələr, Məhsullar | — |
 | 6 | Haqqımızda + sertifikatlar, Komanda (nümunə), Necə işləyirik, Qalereya, FAQ, Zəmanət | — |
 | 7 | Bloq, Əlaqə, formalar, kalkulyator (smetalar gələndə tam rejim) | — |
 | 8 | SEO qatı: sitemap, JSON-LD, hreflang, yönləndirmələr; Lighthouse auditi | Hesabat |
+| **8b** | **Məhsul kataloqunun idxalı:** `2026 Qiymet kataloqu rev 01 01.04.2026.pdf`-dən məhsulların (ad, brend, kateqoriya, ölçü/variant, AZN qiymət, şəkil) çıxarılması → `products` / `product-categories` / `brands` kolleksiyalarına idxal skripti; nəticənin admin-də yoxlanması | Doldurulmuş kataloq |
 | 9 | Deploy, domen, SSL, backup, 301-lərin işə salınması, Search Console köçməsi, admin təlimatı | Canlı sayt |
+
+---
+
+### 9.1 Mərhələ 2b — Məzmun gücləndirmə
+
+**Səbəb:** turanprojects.az az trafik və az sifariş gətirirdi. Köçürülmüş məzmunun ölçülməsi (2026-11-09) bunu izah edir:
+
+| Səhifə tipi | İndi (orta, AZ) | Hədəf | Problem |
+|---|---|---|---|
+| Kateqoriya (pillar) — 9 | ~356 söz | 1500–2000 söz | Rəqiblərdən qısa, ətraflı bölmələr yoxdur |
+| Layihə — 21 | ~50 söz | 300–500 söz | "Zəif məzmun" — Google dəyər görmür |
+| Rayon — 15 | ~150–240 söz, yalnız AZ | 400–600 unikal söz, 3 dil | EN/RU yoxdur, yerli detallar azdır |
+| Qiymət səhifələri — 2 | qiymət yoxdur | AZN cədvəl + nümunə hesablamalar | "qiymət" sorğularında rəqabət edə bilmir |
+| Meta description | 150–200 simvol | 140–155 simvol | Google kəsir |
+| Infinity / Villa hovuzu | yalnız AZ | 3 dil | EN/RU səhifə yoxdur |
+
+**İş sırası (prioritetə görə):**
+1. **Meta title / description** — bütün səhifələrdə 3 dildə: əsas açar söz əvvəldə, title ≤ 60, description 140–155 simvol, CTA ilə.
+2. **9 pillar səhifə** genişləndirilir: növlər, proses, materiallar, qiymətə təsir edən amillər, layihə nümunələri, zəmanət, 8–10 FAQ. Hədəf sorğular §8.2-dən (AZ + EN + RU).
+3. **Qiymət səhifələri** (`/hovuz-qiymetleri`, `/sauna-qiymetleri` + hamam, SPA): sizin smetalardan AZN diapazon cədvəlləri, m² qiymətləri, 3 nümunə hesablama. *Smetalar gələndən sonra.*
+4. **21 layihə**: hər birinə hekayə (tapşırıq → həll → nəticə), texniki detallar, istifadə olunan materiallar/brendlər, müddət; FAQ yoxdursa 2–3 sual.
+5. **15 rayon səhifəsi**: yerli şərait (torpaq, dəniz havası, su), o ərazidəki layihələr, xidmət siyahısı; EN və RU versiyaları yazılır.
+6. **Infinity / Villa hovuzu** üçün EN/RU səhifələr.
+7. **Yeni bələdçi yazılar** (rəqib boşluqları, §1.2): skimmer vs daşma, beton vs fiberglas, hovuz sızması səbəbləri, hamam vs sauna, "hovuz tikintisi neçə manatdır".
+8. **Daxili linklər**: hər pillar ↔ xidmət ↔ layihə ↔ rayon ↔ bloq; anchor mətnlər açar sözlü.
+
+**Qaydalar:**
+- Uydurma rəqəm, müştəri adı və ya rəy yazılmır. Bilinməyən faktlar (qiymət, il, layihə sayı) sizdən soruşulur və ya `[TƏSDİQ]` işarəsi ilə qaralama qalır.
+- Mətnlər insan üçün yazılır, açar söz doldurulmur. Hər rayon səhifəsi digərlərindən fərqli olur.
+- Hər dəyişiklik admin-də **qaralama** kimi saxlanılır — siz baxıb dərc edirsiniz.
+
+**Sizdən lazım olanlar (işi sürətləndirir):**
+- Smetalar (qiymət səhifələri və kalkulyator üçün).
+- Google Search Console girişi (turanprojects.az) — hansı sorğuların artıq göründüyünü görmək üçün; yoxdursa, rəqib analizi əsasında davam edirik.
+- Layihələr haqqında bildiyiniz əlavə faktlar (il, istifadə olunan avadanlıq brendləri, müştərinin tapşırığı), əgər varsa.
 
 ---
 
 ## 10. Açıq suallar və gözlənilən materiallar
 
-- **Sizdən gözlənilir:** smetalar (kalkulyator + qiymət səhifələri), məhsul kataloqu, loqo, komanda məlumatları, Gmail ünvanı (+ App Password, deploy zamanı).
+- **Sizdən gözlənilir:** smetalar (kalkulyator + qiymət səhifələri), loqo, komanda məlumatları, Gmail ünvanı (+ App Password, deploy zamanı).
+- **Alınıb (2026-11-09):** məhsul qiymət kataloqu PDF (`media/` qovluğunda) – Mərhələ 8b-də idxal olunacaq. Qeyd: `media/` Payload-un yükləmə qovluğudur və git-ə düşmür; kataloqu idxaldan əvvəl ayrıca `data/catalogs/` qovluğuna köçürəcəyik.
 - **Kateqoriya ikon zolağı:** §3.1-dəki 10 elementlik siyahı ilə başlayıram; istənilən vaxt admin-dən dəyişir.
 - **Hostinq:** deploy mərhələsində (tövsiyə: VPS — Node + Postgres + Nginx).
