@@ -1,0 +1,16 @@
+# Local development database only. Port 5440 because native PostgreSQL instances use 5432 and 5433.
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: complex
+      POSTGRES_PASSWORD: complex_dev
+      POSTGRES_DB: complex
+    ports:
+      - '5440:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -1,0 +1,72 @@
+/* =====================================================================
+   Complex MMC — design tokens (THE single source of colors).
+   Change the palette here. Components use ONLY the semantic --color-*
+   variables (or the Tailwind classes mapped to them in globals.css).
+   Admin → Parametrlər → Tema can override the semantic values at runtime.
+   ===================================================================== */
+:root {
+  /* Aqua scale */
+  --aqua-50: #eefbfc;
+  --aqua-100: #d2f4f7;
+  --aqua-200: #a8e8ef;
+  --aqua-300: #6fd4e1;
+  --aqua-400: #33b9cc;
+  --aqua-500: #129cb1; /* brand aqua — decor, icons, large shapes */
+  --aqua-600: #0c7e91; /* buttons — AA contrast with white text */
+  --aqua-700: #0e6575;
+  --aqua-800: #11525f;
+  --aqua-900: #12424d;
+  --aqua-950: #082a32; /* dark sections, footer */
+
+  /* Warm accent — sauna / hammam / wood */
+  --sand-50: #faf6f0;
+  --sand-200: #eadcc8;
+  --teak-500: #b9814f;
+  --teak-700: #8a5a33;
+
+  /* Neutrals */
+  --ink: #0f2a30;
+  --muted: #5a7176;
+  --line: #dce8ea;
+  --white: #ffffff;
+  --off-white: #f7fbfb;
+
+  /* ---------- Semantic tokens (use these) ---------- */
+  --color-primary: var(--aqua-600);
+  --color-primary-hover: var(--aqua-700);
+  --color-primary-soft: var(--aqua-50);
+  --color-primary-bright: var(--aqua-500);
+  --color-accent: var(--teak-500);
+  --color-accent-strong: var(--teak-700);
+  --color-heading: var(--aqua-950);
+  --color-text: var(--ink);
+  --color-text-muted: var(--muted);
+  --color-bg: var(--off-white);
+  --color-surface: var(--white);
+  --color-sand: var(--sand-50);
+  --color-border: var(--line);
+  --color-dark: var(--aqua-950);
+  --color-on-dark: #e6f6f8;
+  --color-on-primary: var(--white);
+
+  --gradient-water: linear-gradient(135deg, var(--aqua-400), var(--aqua-700));
+
+  /* Shape & motion */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgb(8 42 50 / 0.06), 0 8px 24px -8px rgb(8 42 50 / 0.12);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 450ms;
+
+  /* Layout */
+  --container: 1240px;
+  --gutter: clamp(1rem, 4vw, 2rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration: 0ms;
+  }
+}

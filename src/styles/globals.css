@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* Map Tailwind utilities to the CSS variables: bg-primary, text-heading, border-border… */
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-primary-bright: var(--color-primary-bright);
+  --color-accent: var(--color-accent);
+  --color-accent-strong: var(--color-accent-strong);
+  --color-heading: var(--color-heading);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-text-muted);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-sand: var(--color-sand);
+  --color-border: var(--color-border);
+  --color-dark: var(--color-dark);
+  --color-on-dark: var(--color-on-dark);
+  --color-on-primary: var(--color-on-primary);
+
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), system-ui, sans-serif;
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --shadow-card: var(--shadow-card);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-heading);
+    font-family: var(--font-display);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+}
