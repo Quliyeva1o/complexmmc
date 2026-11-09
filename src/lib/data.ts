@@ -40,3 +40,16 @@ export const findDocs = <T = Record<string, unknown>>(
 
 export const findBySlug = async <T = Record<string, unknown>>(collection: CollectionSlug, slug: string, locale: Locale, depth = 2) =>
   (await findDocs<T>(collection, locale, { where: { slug: { equals: slug } }, limit: 1, depth, sort: 'createdAt' }))[0] ?? null
+
+/** The same document's path in every locale that has a slug (for hreflang + language switch). */
+export const getAlternates = (collection: CollectionSlug, id: number, toPath: (slug: string, locale: Locale) => string) =>
+  unstable_cache(
+    async () => {
+      const doc = (await (await payloadClient()).findByID({ collection, id, locale: 'all', depth: 0, select: { slug: true } as never })) as { slug?: Record<string, string | null> }
+      const out: Partial<Record<Locale, string>> = {}
+      for (const [l, s] of Object.entries(doc.slug ?? {})) if (s) out[l as Locale] = toPath(s, l as Locale)
+      return out
+    },
+    ['alternates', collection, String(id)],
+    { tags: [collection] },
+  )()
