@@ -115,3 +115,22 @@ export function projectLd(o: { name: string; description?: string | null; path: 
     creator: { '@id': `${base}/#organization` },
   }
 }
+
+/** A blog post as schema.org BlogPosting. */
+export function articleLd(o: { headline: string; description?: string | null; path: string; image?: string | null; datePublished?: string | null; dateModified?: string | null; author?: string | null; locale: string }) {
+  const base = SITE()
+  return {
+    '@type': 'BlogPosting',
+    '@id': `${base}${o.path}#article`,
+    headline: o.headline,
+    description: o.description || undefined,
+    url: base + o.path,
+    mainEntityOfPage: base + o.path,
+    image: o.image ? base + o.image : undefined,
+    datePublished: o.datePublished || undefined,
+    dateModified: o.dateModified || o.datePublished || undefined,
+    inLanguage: o.locale,
+    author: o.author ? { '@type': 'Person', name: o.author } : { '@id': `${base}/#organization` },
+    publisher: { '@id': `${base}/#organization` },
+  }
+}

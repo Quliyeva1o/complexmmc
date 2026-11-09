@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import { UiIcon } from '@/components/icons/UiIcon'
-import { cx } from '@/components/ui/primitives'
+import { Button, cx } from '@/components/ui/primitives'
 
 export type NavItem = { href: string; label: string; children?: { href: string; label: string }[] }
 
@@ -28,11 +28,20 @@ export function HeaderClient({
   overlay: boolean
   menuLabel: { open: string; close: string; lang: string }
 }) {
-  const [scrolled, setScrolled] = useState(false)
+  // template behaviour: transparent at the top, hidden while scrolling down,
+  // shown again with the blue sticky background while scrolling up
+  const [mode, setMode] = useState<'top' | 'hidden' | 'sticky'>('top')
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 40)
+    let last = window.scrollY
+    const on = () => {
+      const y = window.scrollY
+      if (y < 120) setMode('top')
+      else if (y > last + 4) setMode('hidden')
+      else if (y < last - 4) setMode('sticky')
+      last = y
+    }
     on()
     window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
@@ -42,12 +51,15 @@ export function HeaderClient({
     document.documentElement.style.overflow = open ? 'hidden' : ''
   }, [open])
 
-  const light = overlay && !scrolled && !open // white text over hero
+  // pages without a dark banner start with the sticky colour so white text stays readable
+  const solid = mode === 'sticky' || open || (!overlay && mode === 'top')
+  const light = true
   return (
     <header
       className={cx(
-        'fixed inset-x-0 top-0 z-50 transition-[background,box-shadow] duration-300',
-        light ? 'bg-transparent' : 'bg-white shadow-[0_6px_30px_-12px_rgb(0_26_77/0.18)]',
+        'fixed inset-x-0 top-0 z-50 transition-[background,transform] duration-300',
+        solid ? 'bg-header-sticky shadow-[0_0_8px_rgb(0_0_0/0.05)]' : 'bg-transparent',
+        mode === 'hidden' && !open && '-translate-y-full',
       )}
     >
       <div className="container-x flex h-20 items-center justify-between gap-6">
@@ -64,13 +76,13 @@ export function HeaderClient({
 
         {/* desktop nav */}
         <nav aria-label="Main" className="hidden xl:block">
-          <ul className="flex items-center gap-7">
+          <ul className="flex items-center">
             {nav.map((item) => (
               <li key={item.href} className="group relative">
                 <Link
                   href={item.href}
                   className={cx(
-                    'flex items-center gap-1 whitespace-nowrap py-7 font-display text-base font-semibold transition-colors',
+                    'flex items-center gap-1 whitespace-nowrap px-[15px] py-[25px] text-[15px] leading-[30px] font-semibold transition-colors duration-500',
                     light ? 'text-white hover:text-primary' : 'text-heading hover:text-primary',
                   )}
                 >
@@ -78,10 +90,10 @@ export function HeaderClient({
                   {item.children?.length ? <UiIcon name="chevron" className="rotate-90 text-sm" /> : null}
                 </Link>
                 {item.children?.length ? (
-                  <ul className="invisible absolute top-full left-0 w-64 translate-y-2 rounded-[var(--radius-card)] bg-white py-3 opacity-0 shadow-[var(--shadow-card)] transition-all duration-300 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  <ul className="invisible absolute top-full left-0 w-60 origin-top scale-y-0 rounded-[3px] bg-white py-2 shadow-[var(--shadow-card)] transition-transform duration-300 group-focus-within:visible group-focus-within:scale-y-100 group-hover:visible group-hover:scale-y-100">
                     {item.children.map((c) => (
                       <li key={c.href}>
-                        <Link href={c.href} className="block px-5 py-2 text-sm font-medium text-heading transition-colors hover:bg-soft hover:text-primary">
+                        <Link href={c.href} className="block px-[15px] py-1 text-sm leading-[30px] text-[#606060] transition-colors hover:bg-primary hover:text-heading">
                           {c.label}
                         </Link>
                       </li>
@@ -111,12 +123,9 @@ export function HeaderClient({
             ))}
           </div>
           {cta && (
-            <Link
-              href={cta.href}
-              className="hidden min-h-[46px] items-center rounded-[var(--radius-pill)] bg-primary px-6 font-bold text-on-primary transition-colors hover:bg-primary-hover md:inline-flex"
-            >
+            <Button href={cta.href} className="hidden md:inline-flex">
               {cta.label}
-            </Link>
+            </Button>
           )}
           <button
             type="button"

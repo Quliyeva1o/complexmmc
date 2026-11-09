@@ -3,6 +3,7 @@ import { Inter, Manrope } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
+import { EntranceAnimations } from '@/components/ui/EntranceAnimations'
 import { isLocale, localeCodes } from '@/i18n/config'
 import '@/styles/globals.css'
 
@@ -46,6 +47,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${heading.variable} ${body.variable}`} suppressHydrationWarning>
       <body>
         {children}
+        <EntranceAnimations />
       </body>
     </html>
   )

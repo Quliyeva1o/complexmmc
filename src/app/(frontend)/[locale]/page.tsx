@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 import { PageShell } from '@/components/layout/PageShell'
-import { type Locale, localeCodes, localePrefix } from '@/i18n/config'
+import { isLocale, type Locale, localeCodes, localePrefix } from '@/i18n/config'
 import { findBySlug, getGlobal } from '@/lib/data'
 import { ldScript, organizationLd, websiteLd } from '@/lib/jsonld'
 import { buildMetadata } from '@/lib/seo'
@@ -16,12 +16,14 @@ const homePaths = Object.fromEntries(localeCodes.map((l) => [l, localePrefix(l) 
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params
+  if (!isLocale(locale)) return {}
   const page = await findBySlug<Page>('pages', 'home', locale)
   return buildMetadata({ locale, paths: homePaths, meta: page?.meta, fallbackTitle: 'Complex MMC' })
 }
 
 export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params
+  if (!isLocale(locale)) notFound()
   const [page, settings] = await Promise.all([findBySlug<Page>('pages', 'home', locale), getGlobal<SiteSetting>('site-settings', locale, 1)])
   if (!page) notFound()
   const firstIsHero = page.layout?.[0]?.blockType === 'hero'

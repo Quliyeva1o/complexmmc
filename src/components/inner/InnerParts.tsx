@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 
 import { CTABlock } from '@/components/blocks/ContentBlocks'
 import { UiIcon } from '@/components/icons/UiIcon'
-import { Button, cx } from '@/components/ui/primitives'
+import { Button, cx, SectionHeader } from '@/components/ui/primitives'
 import type { Locale } from '@/i18n/config'
 import type { Dict } from '@/i18n/dictionary'
 import { getGlobal } from '@/lib/data'
@@ -15,27 +15,32 @@ import type { Faq, Media, SiteSetting } from '@/payload-types'
 /* ------------------------------------------------------------------ Page banner (template inner-page header) */
 export type Crumb = { name: string; href?: string }
 
-/** Large H1 on a photo with navy overlay and a breadcrumb under it — like the template's inner pages. */
-export function PageBanner({ title, intro, image, crumbs }: { title: string; intro?: string | null; image?: Media | number | null; crumbs: Crumb[] }) {
+/**
+ * Template page title band: photo + navy 80% overlay + left gradient; 64px white title on the
+ * left, breadcrumb on the right (padding 200/140px desktop, 140/60px mobile).
+ */
+export function PageBanner({ title, intro, image, crumbs, small = false }: { title: string; intro?: string | null; image?: Media | number | null; crumbs: Crumb[]; /** 48px title (template blog post) */ small?: boolean }) {
   const img = mediaProps(image as Media, 'hero')
   return (
-    <section className="relative isolate overflow-hidden bg-dark pt-40 pb-20 text-center text-white md:pt-48 md:pb-28">
+    <section className="relative isolate overflow-hidden bg-dark pt-[140px] pb-[60px] text-white md:pt-[200px] md:pb-[140px]">
       {img && <Image src={img.src} alt="" fill priority sizes="100vw" className="-z-20 object-cover" />}
-      <div className="absolute inset-0 -z-10 bg-[image:var(--hero-overlay)]" />
-      <div className="container-x">
-        <h1 className="mx-auto max-w-4xl text-h1 leading-[1.1] text-white">{title}</h1>
-        {intro && <p className="mx-auto mt-5 max-w-2xl text-lg text-white/80">{intro}</p>}
-        <nav aria-label="Breadcrumb" className="mt-6">
-          <ol className="inline-flex flex-wrap items-center justify-center gap-2 rounded-[var(--radius-badge)] bg-white/10 px-5 py-2 text-sm">
+      <div className="absolute inset-0 -z-10 bg-[image:var(--banner-overlay)]" />
+      <div className="container-x flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-3xl">
+          <h1 className={small ? 'text-[32px] leading-[1.2] text-white md:text-[40px] lg:text-[48px]' : 'text-h1 leading-[1.1] text-white'}>{title}</h1>
+          {intro && <p className="mt-4 max-w-2xl text-white/80">{intro}</p>}
+        </div>
+        <nav aria-label="Breadcrumb" className="shrink-0">
+          <ol className="flex flex-wrap items-center gap-2 text-white/80">
             {crumbs.map((c, i) => (
               <li key={i} className="flex items-center gap-2">
-                {i > 0 && <span aria-hidden="true" className="text-white/50">/</span>}
+                {i > 0 && <UiIcon name="chevron" className="text-xs text-primary" />}
                 {c.href && i < crumbs.length - 1 ? (
-                  <Link href={c.href} className="text-white/85 hover:text-primary">
+                  <Link href={c.href} className="transition-colors hover:text-primary">
                     {c.name}
                   </Link>
                 ) : (
-                  <span aria-current="page" className="text-primary">
+                  <span aria-current="page" className="text-white">
                     {c.name}
                   </span>
                 )}
@@ -60,22 +65,29 @@ export function Prose({ data, className }: { data?: unknown; className?: string 
 }
 
 /* ------------------------------------------------------------------ FAQ list (accordion) */
+/** Template accordion item (Pooluxe contact/FAQ): 1px #ddd border, 16px radius, 15/25 padding. */
+export function FaqItem({ faq, open = false }: { faq: Faq; open?: boolean }) {
+  return (
+    <details className="group rounded-[16px] border border-[#ddd] px-[25px] py-[15px]" open={open}>
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-2.5 [&::-webkit-details-marker]:hidden">
+        <h3 className="font-body text-base leading-[30px] font-semibold tracking-normal text-heading">{faq.question}</h3>
+        <span className="shrink-0 text-2xl text-heading transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
+          <UiIcon name="plus" />
+        </span>
+      </summary>
+      <Prose data={faq.answer} className="max-w-none pt-2.5 pr-8" />
+    </details>
+  )
+}
+
 export function FaqList({ faqs, heading }: { faqs: Faq[]; heading?: string }) {
   if (!faqs.length) return null
   return (
-    <section className="mt-16">
-      {heading && <h2 className="mb-6 text-[clamp(1.625rem,1.3rem+1.2vw,2.25rem)]">{heading}</h2>}
-      <div className="divide-y divide-border border-y border-border">
+    <section className="pt-[30px] pb-10">
+      {heading && <SectionHeader align="start" heading={heading} className="mb-2" />}
+      <div className="flex flex-col gap-5">
         {faqs.map((f, i) => (
-          <details key={f.id} className="group py-5" open={i === 0}>
-            <summary className="flex cursor-pointer list-none items-start justify-between gap-6 font-display text-lg font-bold text-heading [&::-webkit-details-marker]:hidden">
-              {f.question}
-              <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-badge transition-transform duration-300 group-open:rotate-45 group-open:bg-primary">
-                <UiIcon name="plus" />
-              </span>
-            </summary>
-            <Prose data={f.answer} className="mt-3 pr-12" />
-          </details>
+          <FaqItem key={f.id} faq={f} open={i === 0} />
         ))}
       </div>
     </section>

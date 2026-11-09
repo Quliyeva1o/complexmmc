@@ -512,7 +512,7 @@ export interface Page {
             source?: ('auto' | 'manual') | null;
             items?: (number | Service)[] | null;
             limit?: number | null;
-            layout?: ('grid' | 'tabs') | null;
+            layout?: ('grid' | 'tabs' | 'overlay') | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -1493,6 +1493,10 @@ export interface FolderInterface {
  */
 export interface HeroBlock {
   /**
+   * V1 = sol tərəfdə başlıq + Pulsuz baxış kartı; V2 = böyük başlıq + video + xidmət kartları; V3 = fırlanan böyük sözlər.
+   */
+  variant?: ('classic' | 'video' | 'rotating') | null;
+  /**
    * Məs: "Layihələndiririk", "Tikirik", "Baxım edirik".
    */
   rotatingWords?:
@@ -1502,6 +1506,10 @@ export interface HeroBlock {
       }[]
     | null;
   heading: string;
+  /**
+   * V2 variantında çox böyük H1 kimi göstərilir. Açar söz saxlayın, məs: "Bakıda *hovuz* tikintisi". * arası cyan rəngdə olur.
+   */
+  shortHeading?: string | null;
   subheading?: string | null;
   primaryCta?: {
     label?: string | null;
@@ -1578,6 +1586,7 @@ export interface HeroBlock {
     title?: string | null;
     text?: string | null;
     phone?: string | null;
+    image?: (number | null) | Media;
   };
   settings?: {
     theme?: ('light' | 'soft' | 'sand' | 'dark') | null;
@@ -1941,7 +1950,7 @@ export interface Category {
             source?: ('auto' | 'manual') | null;
             items?: (number | Service)[] | null;
             limit?: number | null;
-            layout?: ('grid' | 'tabs') | null;
+            layout?: ('grid' | 'tabs' | 'overlay') | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -2835,6 +2844,10 @@ export interface Service {
   category?: (number | Category)[] | null;
   projectTypes?: ('villa' | 'hotel' | 'commercial')[] | null;
   excerpt?: string | null;
+  /**
+   * Səhifədə şəklin yanındakı böyük başlıq. Boş qalsa, başlığın ":"-dan sonrakı hissəsi və ya başlığın özü göstərilir.
+   */
+  headline?: string | null;
   icon?: (number | null) | Media;
   cover?: (number | null) | Media;
   /**
@@ -2856,9 +2869,14 @@ export interface Service {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Boş qalsa, ümumi "20+ il təcrübə" göstərilir.
+   */
   counter?: {
     value?: number | null;
     label?: string | null;
+    title?: string | null;
+    text?: string | null;
   };
   features?:
     | {
@@ -3180,7 +3198,7 @@ export interface Service {
             source?: ('auto' | 'manual') | null;
             items?: (number | Service)[] | null;
             limit?: number | null;
-            layout?: ('grid' | 'tabs') | null;
+            layout?: ('grid' | 'tabs' | 'overlay') | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -4429,7 +4447,7 @@ export interface Project {
             source?: ('auto' | 'manual') | null;
             items?: (number | Service)[] | null;
             limit?: number | null;
-            layout?: ('grid' | 'tabs') | null;
+            layout?: ('grid' | 'tabs' | 'overlay') | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -5849,7 +5867,7 @@ export interface ServiceArea {
             source?: ('auto' | 'manual') | null;
             items?: (number | Service)[] | null;
             limit?: number | null;
-            layout?: ('grid' | 'tabs') | null;
+            layout?: ('grid' | 'tabs' | 'overlay') | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -8248,6 +8266,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "HeroBlock_select".
  */
 export interface HeroBlockSelect<T extends boolean = true> {
+  variant?: T;
   rotatingWords?:
     | T
     | {
@@ -8255,6 +8274,7 @@ export interface HeroBlockSelect<T extends boolean = true> {
         id?: T;
       };
   heading?: T;
+  shortHeading?: T;
   subheading?: T;
   primaryCta?:
     | T
@@ -8289,6 +8309,7 @@ export interface HeroBlockSelect<T extends boolean = true> {
         title?: T;
         text?: T;
         phone?: T;
+        image?: T;
       };
   settings?:
     | T
@@ -9162,6 +9183,7 @@ export interface ServicesSelect<T extends boolean = true> {
   category?: T;
   projectTypes?: T;
   excerpt?: T;
+  headline?: T;
   icon?: T;
   cover?: T;
   banner?: T;
@@ -9171,6 +9193,8 @@ export interface ServicesSelect<T extends boolean = true> {
     | {
         value?: T;
         label?: T;
+        title?: T;
+        text?: T;
       };
   features?:
     | T

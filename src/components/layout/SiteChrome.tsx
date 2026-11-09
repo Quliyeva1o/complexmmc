@@ -84,7 +84,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
   return (
     <footer className="bg-dark text-on-dark-muted">
-      <div className="container-x grid gap-12 py-20 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.3fr]">
+      <div className="container-x grid gap-12 pt-[60px] md:grid-cols-2 md:pt-[100px] lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.3fr]">
         <div>
           <Link href={localePrefix(locale) || '/'} className="font-display text-2xl font-extrabold tracking-tight text-white">
             Complex<span className="text-primary"> MMC</span>
@@ -105,7 +105,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
         {(footer.columns ?? []).map((col) => (
           <div key={col.id ?? col.title}>
-            <h2 className="font-display text-xl font-bold text-white">{col.title}</h2>
+            <h2 className="text-[18px] tracking-normal text-white">{col.title}</h2>
             <ul className="mt-5 space-y-2 text-[0.95rem]">
               {columnLinks(col).map((l) => (
                 <li key={l.href}>
@@ -119,7 +119,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         ))}
 
         <div>
-          <h2 className="font-display text-xl font-bold text-white">{d.contact}</h2>
+          <h2 className="text-[18px] tracking-normal text-white">{d.contact}</h2>
           <ul className="mt-5 space-y-4 text-[0.95rem]">
             {s.address && (
               <li className="flex gap-3">
@@ -159,8 +159,8 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="container-x flex flex-col gap-3 py-6 text-sm md:flex-row md:items-center md:justify-between">
+      <div className="container-x mt-[50px]">
+        <div className="flex flex-col gap-3 border-t border-white/10 py-5 md:flex-row md:items-center md:justify-between">
           <p>{(footer.copyright ?? `© {year} Complex MMC. ${d.allRights}`).replace('{year}', String(year))}</p>
           <ul className="flex gap-6">
             {(footer.legalLinks ?? []).map((l) => {

@@ -18,7 +18,8 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
     "content": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/apply.ts",
-    "seed:pages": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/pages-only.ts"
+    "seed:pages": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/pages-only.ts",
+    "db:push": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_DB_PUSH=true payload run src/seed/push.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.93.0",

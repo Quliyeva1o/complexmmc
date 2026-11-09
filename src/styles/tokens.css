@@ -16,9 +16,10 @@
   --aqua-600: #0e8fa0;
 
   /* ---------- Palette: navy ---------- */
-  --navy-50: #f2f4f8;
+  --navy-50: #f4f7fb; /* template soft background */
   --navy-100: #e6e8ee;
-  --navy-700: #0a3d8f;
+  --navy-700: #0a3d8f; /* sticky header, service-card icon */
+  --navy-750: #00307a;
   --navy-800: #002362; /* dark sections (packages, stats, footer) */
   --navy-900: #001a4d; /* headings, button text */
 
@@ -40,6 +41,12 @@
   --color-surface: var(--white);
   --color-soft: var(--navy-50); /* light grey-blue section background */
   --color-badge: rgb(0 26 77 / 0.05); /* pill eyebrow background */
+  --color-card-tint: rgb(38 202 221 / 0.1); /* service cards */
+  /* Section headers (one style site-wide, from the old turanprojects "Əvvəl & Sonra" header) */
+  --section-eyebrow: #0b9aa6;
+  --section-title: #122844;
+  --section-intro: #5b6b7a;
+  --color-header-sticky: var(--navy-700);
   --color-border: var(--line);
   --color-dark: var(--navy-800);
   --color-dark-2: var(--navy-700);
@@ -47,6 +54,8 @@
   --color-on-dark-muted: rgb(255 255 255 / 0.75);
   --color-star: var(--star);
   --hero-overlay: linear-gradient(180deg, rgb(0 26 77 / 0.55), rgb(0 35 98 / 0.75));
+  /* inner-page title band: navy 80% + left-to-right fade (template page title) */
+  --banner-overlay: linear-gradient(90deg, rgb(0 35 98) 0%, rgb(0 35 98 / 0) 100%), linear-gradient(0deg, rgb(0 35 98 / 0.8), rgb(0 35 98 / 0.8));
 
   /* ---------- Type: Manrope headings, Inter body ---------- */
   --text-xs: 0.8125rem;
@@ -56,12 +65,16 @@
   --text-xl: 1.375rem;
   --text-h4: clamp(1.25rem, 1.1rem + 0.5vw, 1.625rem); /* 26px */
   --text-h2: clamp(2rem, 1.4rem + 2.2vw, 3rem); /* 48px */
+  --text-h3: clamp(1.5rem, 1.3rem + 0.8vw, 2rem); /* 32px */
   --text-h1: clamp(2.5rem, 1.6rem + 3.4vw, 4rem); /* 64px */
   --text-mega: clamp(3rem, 1.4rem + 6.4vw, 6.25rem); /* 100px rotating hero word */
-  --leading-tight: 1.1;
+  --leading-tight: 1.15;
   --leading-heading: 1.3;
   --leading-body: 1.875; /* 16/30 */
-  --tracking-heading: -0.04em;
+  --tracking-heading: -0.04em; /* h1 */
+  --tracking-h2: -2px;
+  --tracking-h3: -0.4px;
+  --tracking-h4: -0.2px;
   --measure: 70ch;
 
   /* ---------- Shape ---------- */
@@ -74,12 +87,13 @@
 
   /* ---------- Motion ---------- */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration: 350ms;
+  --duration: 300ms;
+  --anim-entrance: 1.25s;
 
   /* ---------- Layout ---------- */
-  --container: 1320px;
+  --container: 1334px; /* 1304px content + side padding */
   --gutter: clamp(1rem, 4vw, 1.875rem);
-  --section-y: clamp(4rem, 2.5rem + 4vw, 6.25rem); /* 100px */
+  --section-y: clamp(3.75rem, 2.5rem + 3.2vw, 6.25rem); /* 100px desktop, 60px mobile */
 }
 
 @media (prefers-reduced-motion: reduce) {

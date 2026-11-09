@@ -63,6 +63,9 @@ export default buildConfig({
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URL || '' },
+    // Dev schema push diffs hundreds of tables (localized blocks) on every reload and can take
+    // minutes. It is off by default; run `npm run db:push` after changing collections/blocks.
+    push: process.env.PAYLOAD_DB_PUSH === 'true',
     migrationDir: path.resolve(dirname, 'migrations'),
   }),
   email: smtpConfigured

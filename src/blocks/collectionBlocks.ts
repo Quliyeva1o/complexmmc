@@ -60,7 +60,11 @@ export const ProjectsCarouselBlock = make('projectsCarousel', 'Layihələr karus
 export const ServicesGridBlock = make('servicesGrid', 'Xidmətlər grid', 'services', [
   {
     name: 'layout', label: 'Görünüş', type: 'select', defaultValue: 'grid',
-    options: [{ label: 'Grid', value: 'grid' }, { label: 'Tablar (şəkil + bəndlər)', value: 'tabs' }],
+    options: [
+      { label: 'Grid', value: 'grid' },
+      { label: 'Tablar (şəkil + bəndlər)', value: 'tabs' },
+      { label: 'Böyük şəkilli kartlar (tünd fon)', value: 'overlay' },
+    ],
   },
 ])
 

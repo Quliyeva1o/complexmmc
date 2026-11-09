@@ -164,6 +164,7 @@ export async function seedPages(ctx: Ctx) {
           source: 'auto',
           limit: 12,
         },
+        { blockType: 'servicesGrid', source: 'auto', limit: 3, layout: 'overlay' },
         {
           blockType: 'stats',
           settings: { theme: 'dark' },
@@ -179,7 +180,7 @@ export async function seedPages(ctx: Ctx) {
           header: header(t('Referanslarımız', 'Our references', 'Наши референсы')[l], h.referencesHeader.h2, h.referencesHeader.intro),
           source: 'auto',
           limit: 8,
-          showBrandMarquee: true,
+          showBrandMarquee: false,
         },
         {
           blockType: 'projectsCarousel',
@@ -303,7 +304,7 @@ export async function seedPages(ctx: Ctx) {
           ],
         },
         { blockType: 'team', header: header(t('Komanda', 'Team', 'Команда')[l], t('Peşəkar komandamız', 'Our professional team', 'Наша команда')[l]), source: 'auto', limit: 4 },
-        { blockType: 'references', header: header(t('Referanslarımız', 'Our references', 'Наши референсы')[l], L(home, l).referencesHeader.h2), source: 'auto', limit: 8, showBrandMarquee: true },
+        { blockType: 'references', header: header(t('Referanslarımız', 'Our references', 'Наши референсы')[l], L(home, l).referencesHeader.h2), source: 'auto', limit: 8, showBrandMarquee: false },
         {
           blockType: 'cta',
           heading: t('Layihənizi bizimlə həyata keçirin', 'Bring your project to life with us', 'Реализуйте свой проект с нами')[l],

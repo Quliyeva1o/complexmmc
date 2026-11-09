@@ -2,7 +2,7 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import Image from 'next/image'
 
 import { UiIcon } from '@/components/icons/UiIcon'
-import { Button, cx, Eyebrow, Section, SectionHeader, TwoTone } from '@/components/ui/primitives'
+import { Button, cx, Section, SectionHeader } from '@/components/ui/primitives'
 import { getGlobal } from '@/lib/data'
 import { mediaProps } from '@/lib/media'
 import { resolveLink } from '@/lib/urls'
@@ -63,12 +63,7 @@ export function AboutIntroBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
           )}
         </div>
         <div data-reveal>
-          {block.header?.eyebrow && <Eyebrow>{block.header.eyebrow}</Eyebrow>}
-          {block.header?.heading && (
-            <h2 className="mt-5">
-              <TwoTone text={block.header.heading} />
-            </h2>
-          )}
+          <SectionHeader align="start" eyebrow={block.header?.eyebrow} heading={block.header?.heading} className="mb-0" />
           {block.body && (
             <div className="prose-pool mt-6">
               <RichText data={block.body} />
@@ -188,13 +183,8 @@ export async function CTABlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
     <section className="relative isolate overflow-hidden bg-dark py-20 text-white">
       {img && <Image src={img.src} alt="" fill sizes="100vw" className="-z-20 object-cover" />}
       <div className="absolute inset-0 -z-10 bg-[image:var(--hero-overlay)]" />
-      <div className="container-x flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:text-left" data-reveal>
-        <div className="max-w-2xl">
-          <h2 className="text-white">
-            <TwoTone text={block.heading} />
-          </h2>
-          {block.text && <p className="mt-4 text-white/80">{block.text}</p>}
-        </div>
+      <div className="container-x flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
+        <SectionHeader dark align="start" eyebrow={ctx.d.contact} heading={block.heading} intro={block.text} className="mb-0 max-w-2xl text-left" />
         <div className="flex flex-wrap items-center justify-center gap-4">
           {cta && <Button href={cta.href}>{cta.label}</Button>}
           {phone && (
@@ -232,12 +222,7 @@ export function MediaContentBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
           </div>
         )}
         <div data-reveal>
-          {block.header?.eyebrow && <Eyebrow>{block.header.eyebrow}</Eyebrow>}
-          {block.header?.heading && (
-            <h2 className="mt-5">
-              <TwoTone text={block.header.heading} />
-            </h2>
-          )}
+          <SectionHeader align="start" eyebrow={block.header?.eyebrow} heading={block.header?.heading} className="mb-0" />
           {block.body && (
             <div className="prose-pool mt-6">
               <RichText data={block.body} />

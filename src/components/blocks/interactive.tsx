@@ -171,10 +171,15 @@ export function LeadForm({
   formId,
   labels,
   compact = false,
+  withEmail = false,
+  variant = 'default',
 }: {
   formId: number | string
-  labels: { name: string; phone: string; message: string; send: string; sending: string; sent: string; error: string }
+  labels: { name: string; phone: string; message: string; send: string; sending: string; sent: string; error: string; email?: string }
   compact?: boolean
+  withEmail?: boolean
+  /** "template" = Pooluxe contact form: stacked 46px fields, full-width pill button */
+  variant?: 'default' | 'template'
 }) {
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -188,7 +193,7 @@ export function LeadForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           form: formId,
-          submissionData: ['name', 'phone', 'message']
+          submissionData: ['name', 'phone', ...(withEmail ? ['email'] : []), 'message']
             .map((field) => ({ field, value: String(fd.get(field) ?? '') }))
             .concat([{ field: 'page', value: window.location.pathname }]),
         }),
@@ -204,6 +209,32 @@ export function LeadForm({
         {labels.sent}
       </p>
     )
+  if (variant === 'template') {
+    const tf = 'w-full rounded-[4px] border border-[#D1D5DB] bg-black/[0.024] p-2.5 text-[14px] leading-[24px] text-[#111827] outline-none transition-colors placeholder:text-[#6b7280] focus:border-primary'
+    return (
+      <form onSubmit={onSubmit} className="flex flex-col">
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+        <div className="flex flex-col gap-4">
+          <input name="name" required placeholder={labels.name} aria-label={labels.name} className={cx(tf, 'h-[46px]')} autoComplete="name" />
+          {withEmail && <input name="email" type="email" placeholder={labels.email} aria-label={labels.email} className={cx(tf, 'h-[46px]')} autoComplete="email" />}
+          <input name="phone" required type="tel" placeholder={labels.phone} aria-label={labels.phone} className={cx(tf, 'h-[46px]')} autoComplete="tel" />
+          <textarea name="message" placeholder={labels.message} aria-label={labels.message} className={cx(tf, 'h-[100px] resize-y')} />
+        </div>
+        <button
+          type="submit"
+          disabled={state === 'sending'}
+          className="mt-2.5 w-full rounded-[25px] bg-primary px-5 py-1.5 text-base leading-[30px] font-bold text-heading transition-colors duration-300 hover:bg-dark hover:text-white disabled:opacity-60"
+        >
+          {state === 'sending' ? labels.sending : labels.send}
+        </button>
+        {state === 'error' && (
+          <p role="alert" className="mt-3 text-sm text-red-700">
+            {labels.error}
+          </p>
+        )}
+      </form>
+    )
+  }
   const field = 'w-full rounded-[var(--radius-sm)] border border-border bg-white px-4 py-3 text-heading outline-none transition-colors placeholder:text-muted focus:border-primary'
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
@@ -212,6 +243,7 @@ export function LeadForm({
         <input name="name" required placeholder={labels.name} aria-label={labels.name} className={field} autoComplete="name" />
         <input name="phone" required type="tel" placeholder={labels.phone} aria-label={labels.phone} className={field} autoComplete="tel" />
       </div>
+      {withEmail && <input name="email" type="email" placeholder={labels.email} aria-label={labels.email} className={field} autoComplete="email" />}
       <textarea name="message" rows={compact ? 3 : 5} placeholder={labels.message} aria-label={labels.message} className={field} />
       <button
         type="submit"

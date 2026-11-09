@@ -113,16 +113,25 @@ export const Services = contentCollection({
           ],
         },
         excerpt,
+        {
+          name: 'headline', label: 'Giriş başlığı (H2)', type: 'text', localized: true,
+          admin: { description: 'Səhifədə şəklin yanındakı böyük başlıq. Boş qalsa, başlığın ":"-dan sonrakı hissəsi və ya başlığın özü göstərilir.' },
+        },
         { name: 'icon', label: 'İkon (SVG)', type: 'upload', relationTo: 'media' },
         cover,
         banner,
         { name: 'body', label: 'Mətn', type: 'richText', localized: true },
         {
-          name: 'counter', label: 'Sayğac', type: 'group',
-          fields: [{ type: 'row', fields: [
-            { name: 'value', label: 'Rəqəm', type: 'number' },
-            { name: 'label', label: 'Etiket', type: 'text', localized: true },
-          ] }],
+          name: 'counter', label: 'Sayğac bloku', type: 'group',
+          admin: { description: 'Boş qalsa, ümumi "20+ il təcrübə" göstərilir.' },
+          fields: [
+            { type: 'row', fields: [
+              { name: 'value', label: 'Rəqəm', type: 'number' },
+              { name: 'label', label: 'Etiket', type: 'text', localized: true },
+            ] },
+            { name: 'title', label: 'Yanındakı başlıq', type: 'text', localized: true },
+            { name: 'text', label: 'Yanındakı mətn', type: 'textarea', localized: true },
+          ],
         },
         {
           name: 'features', label: 'Xüsusiyyətlər (01–06)', type: 'array',

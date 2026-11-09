@@ -24,6 +24,8 @@
   --color-on-dark: var(--color-on-dark);
   --color-on-dark-muted: var(--color-on-dark-muted);
   --color-star: var(--color-star);
+  --color-card-tint: var(--color-card-tint);
+  --color-header-sticky: var(--color-header-sticky);
 
   --font-sans: var(--font-body), system-ui, sans-serif;
   --font-display: var(--font-heading), var(--font-body), system-ui, sans-serif;
@@ -35,6 +37,7 @@
   --text-xl: var(--text-xl);
   --text-h4: var(--text-h4);
   --text-h2: var(--text-h2);
+  --text-h3: var(--text-h3);
   --text-h1: var(--text-h1);
   --text-mega: var(--text-mega);
 
@@ -72,13 +75,21 @@
     letter-spacing: var(--tracking-heading);
     text-wrap: balance;
   }
+  h1 {
+    letter-spacing: var(--tracking-heading);
+  }
   h2 {
     font-size: var(--text-h2);
     line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-h2);
+  }
+  h3 {
+    letter-spacing: var(--tracking-h3);
   }
   h4 {
     font-size: var(--text-h4);
-    letter-spacing: -0.01em;
+    line-height: 1.3;
+    letter-spacing: var(--tracking-h4);
   }
   :focus-visible {
     outline: 2px solid var(--color-primary);
@@ -180,20 +191,94 @@
     }
   }
 
-  /* Scroll reveal — CSS only (scroll-driven animations). Browsers without support
-     simply show the content; nothing is ever hidden waiting for JavaScript. */
-  @supports (animation-timeline: view()) {
-    [data-reveal] {
-      animation: reveal-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 35%;
+  /* V3 hero words: template text slider with Swiper "zoom" effect — 3s per word, 0.9s transition */
+  .hero-zoom {
+    display: grid;
+  }
+  .hero-zoom > span {
+    grid-area: 1 / 1;
+    opacity: 0;
+    animation: hero-zoom 9s infinite;
+  }
+  .hero-zoom > span:first-child {
+    opacity: 1;
+  }
+  @keyframes hero-zoom {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    10%,
+    28% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    38%,
+    100% {
+      opacity: 0;
+      transform: scale(1.4);
     }
   }
-  @keyframes reveal-up {
+
+  /* Entrance animations — same as the template (Elementor fadeInUp / fadeInRight, 1.25s).
+     Elements are hidden only while JS runs and IntersectionObserver is available;
+     a safety timer in EntranceAnimations reveals everything if anything goes wrong. */
+  .js-anim [data-reveal]:not(.is-in) {
+    visibility: hidden;
+  }
+  .js-anim [data-reveal].is-in {
+    animation: var(--reveal-name, fadeInUp) var(--anim-entrance) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal='right'] {
+    --reveal-name: fadeInRight;
+  }
+  @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(28px);
+      transform: translate3d(0, 100%, 0);
     }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translate3d(100%, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Template button: text slides down, a copy slides in from above, background turns navy */
+  .btn-slide {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-slide > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+  .btn-slide > span[aria-hidden] {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    transform: translateY(-100%);
+  }
+  .btn-slide:hover > span:first-child,
+  .btn-slide:focus-visible > span:first-child {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  .btn-slide:hover > span[aria-hidden],
+  .btn-slide:focus-visible > span[aria-hidden] {
+    transform: translateY(0);
   }
 
   /* Brand logo marquee */
@@ -213,16 +298,64 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-rotator > span {
+  .hero-rotator > span,
+  .hero-zoom > span {
     animation: none;
+  }
+  .hero-zoom > span:not(:first-child) {
+    display: none;
   }
   .hero-rotator > span:not(:first-child) {
     display: none;
   }
-  [data-reveal] {
+  .js-anim [data-reveal] {
+    visibility: visible !important;
     animation: none !important;
+  }
+  .btn-slide > span {
+    transition: none;
   }
   .marquee {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------ Sections carried over from turanprojects.az */
+@keyframes opFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes opImageIn {
+  from { opacity: 0; transform: translateX(28px) scale(1.02); box-shadow: 0 10px 24px rgba(10, 30, 48, 0.08); }
+  to { opacity: 1; transform: translateX(0) scale(1); box-shadow: 0 30px 70px rgba(10, 30, 48, 0.2); }
+}
+@keyframes opBarFill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@keyframes baBounceX {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+@keyframes baFadeOut {
+  to { opacity: 0; }
+}
+.op-text-in { animation: opFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.op-image-in { animation: opImageIn 1.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.op-bar-run { animation: opBarFill var(--op-dur, 2000ms) linear forwards; }
+.ba-picker-arrow { animation: baBounceX 1.4s ease-in-out infinite; }
+.ba-hint { animation: baFadeOut 0.5s ease 3s forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .op-text-in, .op-image-in, .ba-picker-arrow, .ba-hint { animation: none; }
+}
+
+/* Blog post body — template icon-box list: 40px cyan number circles, 24px titles */
+.prose-post { line-height: 30px; }
+.prose-post ol { list-style: none; padding-left: 0; counter-reset: pl; display: flex; flex-direction: column; gap: 20px; }
+.prose-post ol > li { counter-increment: pl; position: relative; padding-left: 60px; min-height: 40px; }
+.prose-post ol > li::before {
+  content: counter(pl); position: absolute; left: 0; top: -5px; width: 40px; height: 40px; border-radius: 50px;
+  background: var(--color-primary); color: var(--color-heading); text-align: center; line-height: 40px; font-size: 16px;
+}
+.prose-post ol > li > strong:first-child { display: block; font-family: var(--font-heading); font-size: 24px; line-height: 1; color: var(--color-heading); margin-bottom: 14px; }

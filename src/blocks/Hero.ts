@@ -8,6 +8,18 @@ export const HeroBlock: Block = {
   interfaceName: 'HeroBlock',
   fields: [
     {
+      name: 'variant',
+      label: 'Görünüş (variant)',
+      type: 'select',
+      defaultValue: 'rotating',
+      admin: { description: 'V1 = sol tərəfdə başlıq + Pulsuz baxış kartı; V2 = böyük başlıq + video + xidmət kartları; V3 = fırlanan böyük sözlər.' },
+      options: [
+        { label: 'V1 — Klassik (sol tərəf)', value: 'classic' },
+        { label: 'V2 — Video + xidmət kartları', value: 'video' },
+        { label: 'V3 — Fırlanan sözlər', value: 'rotating' },
+      ],
+    },
+    {
       name: 'rotatingWords',
       label: 'Dəyişən sətirlər',
       type: 'array',
@@ -16,6 +28,13 @@ export const HeroBlock: Block = {
       fields: [{ name: 'text', label: 'Mətn', type: 'text', localized: true, required: true }],
     },
     { name: 'heading', label: 'Başlıq (H1)', type: 'text', localized: true, required: true },
+    {
+      name: 'shortHeading',
+      label: 'Qısa başlıq (V2 üçün, 2–4 söz)',
+      type: 'text',
+      localized: true,
+      admin: { description: 'V2 variantında çox böyük H1 kimi göstərilir. Açar söz saxlayın, məs: "Bakıda *hovuz* tikintisi". * arası cyan rəngdə olur.' },
+    },
     { name: 'subheading', label: 'Alt mətn', type: 'textarea', localized: true },
     linkField('primaryCta', 'Əsas düymə'),
     linkField('secondaryCta', 'İkinci düymə'),
@@ -42,6 +61,7 @@ export const HeroBlock: Block = {
         { name: 'title', label: 'Başlıq', type: 'text', localized: true },
         { name: 'text', label: 'Mətn', type: 'text', localized: true },
         { name: 'phone', label: 'Telefon', type: 'text' },
+        { name: 'image', label: 'Dairəvi şəkil (V1)', type: 'upload', relationTo: 'media' },
       ],
     },
     blockSettings,
