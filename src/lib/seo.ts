@@ -7,6 +7,13 @@ import { mediaProps } from './media'
 
 const SITE = () => (process.env.NEXT_PUBLIC_SERVER_URL || 'https://complexmmc.az').replace(/\/$/, '')
 
+/** Cut at a word boundary so the snippet isn't truncated mid-word by search engines. */
+const clip = (s: string | undefined, max: number) => {
+  if (!s || s.length <= max) return s
+  const cut = s.slice(0, max - 1)
+  return cut.slice(0, cut.lastIndexOf(' ') > max * 0.6 ? cut.lastIndexOf(' ') : cut.length).replace(/[\s,;:–—-]+$/, '') + '…'
+}
+
 type SeoInput = {
   locale: Locale
   /** Path of this page in every locale that has it, e.g. { az: '/about', en: '/en/about' }. */
@@ -25,11 +32,14 @@ type SeoInput = {
 export async function buildMetadata({ locale, paths, meta, fallbackTitle, fallbackDescription, absoluteTitle }: SeoInput): Promise<Metadata> {
   const settings = await getGlobal<SiteSetting>('site-settings', locale, 1)
   const base = SITE()
-  const self = paths[locale] ?? '/'
+  // An untranslated language copy has no entry of its own → canonical points to the AZ original.
+  const self = paths[locale] ?? paths[defaultLocale] ?? '/'
   const title = meta?.title || fallbackTitle || settings.companyName
   const template = settings.titleTemplate || '%s | Complex MMC'
-  const fullTitle = absoluteTitle ? title : template.replace('%s', title)
-  const description = meta?.description || fallbackDescription || settings.defaultDescription || undefined
+  // Brand suffix only when it fits (Google shows ~60–65 chars) and the title doesn't already carry it
+  const withBrand = template.replace('%s', title)
+  const fullTitle = absoluteTitle || title.includes(settings.companyName || 'Complex MMC') || withBrand.length > 65 ? title : withBrand
+  const description = clip(meta?.description || fallbackDescription || settings.defaultDescription || undefined, 160)
   const ogImg = mediaProps((meta?.image as Media) ?? (settings.defaultOgImage as Media), 'og')
 
   const languages: Record<string, string> = {}

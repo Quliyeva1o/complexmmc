@@ -41,15 +41,58 @@ export const findDocs = <T = Record<string, unknown>>(
 export const findBySlug = async <T = Record<string, unknown>>(collection: CollectionSlug, slug: string, locale: Locale, depth = 2) =>
   (await findDocs<T>(collection, locale, { where: { slug: { equals: slug } }, limit: 1, depth, sort: 'createdAt' }))[0] ?? null
 
-/** The same document's path in every locale that has a slug (for hreflang + language switch). */
+type AllLocaleDoc = {
+  id: number
+  slug?: Record<string, string | null> | null
+  title?: Record<string, string | null> | null
+  meta?: { title?: Record<string, string | null> | null } | Record<string, { title?: string | null } | null> | null
+}
+const LOCALE_SELECT = { slug: true, title: true, meta: { title: true } } as never
+
+const metaTitle = (doc: AllLocaleDoc, l: string) => {
+  const m = doc.meta as Record<string, unknown> | null | undefined
+  if (!m) return null
+  const t = m.title as Record<string, string | null> | undefined
+  if (t && typeof t === 'object') return t[l] ?? null // localized field inside the group
+  return ((m[l] as { title?: string | null } | undefined)?.title ?? null) // localized group
+}
+
+/**
+ * Locales in which a document really exists: it has its own slug, and it is not an untranslated
+ * copy of the AZ version (same slug + title + SEO title). Those copies came from AZ-only pages of
+ * the old site; listing them would create duplicate content in other languages.
+ */
+export function realLocales(doc: AllLocaleDoc): Partial<Record<Locale, string>> {
+  const out: Partial<Record<Locale, string>> = {}
+  const az = { slug: doc.slug?.az, title: doc.title?.az, meta: metaTitle(doc, 'az') }
+  for (const [l, s] of Object.entries(doc.slug ?? {})) {
+    if (!s) continue
+    const copy = l !== 'az' && s === az.slug && doc.title?.[l] === az.title && metaTitle(doc, l) === az.meta
+    if (!copy) out[l as Locale] = s
+  }
+  return out
+}
+
+/** Every published document of a collection with its real per-locale slugs (sitemap). */
+export const findAllLocaleSlugs = (collection: CollectionSlug) =>
+  unstable_cache(
+    async () => {
+      const res = await (await payloadClient()).find({ collection, locale: 'all', depth: 0, limit: 2000, pagination: false, where: { _status: { equals: 'published' } }, select: LOCALE_SELECT })
+      return (res.docs as unknown as AllLocaleDoc[]).map((d) => ({ id: d.id, slugs: realLocales(d) }))
+    },
+    ['all-locale-slugs', collection],
+    { tags: [collection] },
+  )()
+
+/** The same document's path in every locale where it really exists (hreflang + language switch). */
 export const getAlternates = (collection: CollectionSlug, id: number, toPath: (slug: string, locale: Locale) => string) =>
   unstable_cache(
     async () => {
-      const doc = (await (await payloadClient()).findByID({ collection, id, locale: 'all', depth: 0, select: { slug: true } as never })) as { slug?: Record<string, string | null> }
+      const doc = (await (await payloadClient()).findByID({ collection, id, locale: 'all', depth: 0, select: LOCALE_SELECT })) as unknown as AllLocaleDoc
       const out: Partial<Record<Locale, string>> = {}
-      for (const [l, s] of Object.entries(doc.slug ?? {})) if (s) out[l as Locale] = toPath(s, l as Locale)
+      for (const [l, s] of Object.entries(realLocales(doc))) if (s) out[l as Locale] = toPath(s, l as Locale)
       return out
     },
-    ['alternates', collection, String(id)],
+    ['alternates-v2', collection, String(id)],
     { tags: [collection] },
   )()

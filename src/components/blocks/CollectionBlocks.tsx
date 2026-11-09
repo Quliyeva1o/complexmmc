@@ -9,6 +9,7 @@ import { Button, Section, SectionHeader } from '@/components/ui/primitives'
 import { ServiceCard } from '@/components/ui/ServiceCard'
 import { ServiceOverlayCard } from '@/components/ui/ServiceOverlayCard'
 import { findDocs, getGlobal } from '@/lib/data'
+import { faqLd, ldScript } from '@/lib/jsonld'
 import { mediaProps } from '@/lib/media'
 import { docPath, resolveLink } from '@/lib/urls'
 import type {
@@ -394,6 +395,8 @@ export async function FAQBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
       : Promise.resolve([] as Form[]),
   ])
   const phone = settings.phones?.find((p) => p.primary)?.number ?? settings.phones?.[0]?.number
+  // FAQPage structured data for every FAQ section (home, contact, FAQ page, …)
+  const ld = faqs.length ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([faqLd(faqs)!]) }} /> : null
   const list = (
     <div className="divide-y divide-border border-t border-border">
       {faqs.map((f, i) => (
@@ -417,6 +420,7 @@ export async function FAQBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
     const cols = [faqs.slice(0, half), faqs.slice(half)].filter((c) => c.length)
     return (
       <Section {...blockTheme(block)}>
+        {ld}
         <SectionHeader
           eyebrow={block.header?.eyebrow || ctx.d.haveQuestions}
           heading={block.header?.heading}
@@ -436,6 +440,7 @@ export async function FAQBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   }
   return (
     <Section {...blockTheme(block)}>
+        {ld}
       <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
         <div data-reveal>
           <SectionHeader align="start" eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} className="mb-0" />
