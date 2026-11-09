@@ -1,20 +1,34 @@
-// Placeholder until Stage 4 (homepage). Proves locale routing + tokens work.
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
+import { RenderBlocks } from '@/components/blocks/RenderBlocks'
+import { PageShell } from '@/components/layout/PageShell'
+import { type Locale, localeCodes, localePrefix } from '@/i18n/config'
+import { findBySlug, getGlobal } from '@/lib/data'
+import { ldScript, organizationLd, websiteLd } from '@/lib/jsonld'
+import { buildMetadata } from '@/lib/seo'
+import type { Page, SiteSetting } from '@/payload-types'
+
+/** Home pages: / (az), /en, /ru — content from the "home" page in admin. */
+export const revalidate = 3600
+
+const homePaths = Object.fromEntries(localeCodes.map((l) => [l, localePrefix(l) || '/'])) as Record<Locale, string>
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params
+  const page = await findBySlug<Page>('pages', 'home', locale)
+  return buildMetadata({ locale, paths: homePaths, meta: page?.meta, fallbackTitle: 'Complex MMC' })
+}
+
+export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params
+  const [page, settings] = await Promise.all([findBySlug<Page>('pages', 'home', locale), getGlobal<SiteSetting>('site-settings', locale, 1)])
+  if (!page) notFound()
+  const firstIsHero = page.layout?.[0]?.blockType === 'hero'
   return (
-    <main className="container-x py-24">
-      <p className="text-sm font-semibold uppercase tracking-widest text-accent">Complex MMC</p>
-      <h1 className="mt-3 text-4xl font-bold">Sayt qurulur — {locale.toUpperCase()}</h1>
-      <p className="mt-4 max-w-xl text-muted">
-        Admin panel: <a className="text-primary underline" href="/admin">/admin</a>
-      </p>
-      <div className="mt-10 flex flex-wrap gap-3">
-        {['bg-primary', 'bg-primary-bright', 'bg-accent', 'bg-dark', 'bg-sand', 'bg-primary-soft'].map(
-          (c) => (
-            <span key={c} className={`${c} h-14 w-24 rounded-md border border-border`} title={c} />
-          ),
-        )}
-      </div>
-    </main>
+    <PageShell locale={locale} alternates={homePaths} overlayHeader={firstIsHero}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([organizationLd(settings, locale), websiteLd(settings, locale)]) }} />
+      <RenderBlocks blocks={page.layout} locale={locale} />
+    </PageShell>
   )
 }

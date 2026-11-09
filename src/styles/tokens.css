@@ -1,68 +1,85 @@
 /* =====================================================================
-   Complex MMC — design tokens (THE single source of colors).
-   Change the palette here. Components use ONLY the semantic --color-*
-   variables (or the Tailwind classes mapped to them in globals.css).
-   Admin → Parametrlər → Tema can override the semantic values at runtime.
+   Complex MMC — design tokens (THE single source of design values).
+   Visual language follows the Pooluxe template chosen by the client:
+   navy text, cyan accent/buttons, dark-navy sections, pill badges.
+   Components use ONLY the semantic --color-* variables (or the Tailwind
+   classes mapped to them in globals.css). Admin → Parametrlər → Tema can
+   override the semantic values at runtime.
    ===================================================================== */
 :root {
-  /* Aqua scale */
-  --aqua-50: #eefbfc;
-  --aqua-100: #d2f4f7;
-  --aqua-200: #a8e8ef;
-  --aqua-300: #6fd4e1;
-  --aqua-400: #33b9cc;
-  --aqua-500: #129cb1; /* brand aqua — decor, icons, large shapes */
-  --aqua-600: #0c7e91; /* buttons — AA contrast with white text */
-  --aqua-700: #0e6575;
-  --aqua-800: #11525f;
-  --aqua-900: #12424d;
-  --aqua-950: #082a32; /* dark sections, footer */
+  /* ---------- Palette: water (cyan / aqua) ---------- */
+  --aqua-50: #ecfbfd;
+  --aqua-100: #cff5fa;
+  --aqua-300: #7ee3ef;
+  --aqua-400: #26cadd; /* accent: buttons, highlighted heading parts */
+  --aqua-500: #14b3c6; /* accent hover */
+  --aqua-600: #0e8fa0;
 
-  /* Warm accent — sauna / hammam / wood */
-  --sand-50: #faf6f0;
-  --sand-200: #eadcc8;
-  --teak-500: #b9814f;
-  --teak-700: #8a5a33;
+  /* ---------- Palette: navy ---------- */
+  --navy-50: #f2f4f8;
+  --navy-100: #e6e8ee;
+  --navy-700: #0a3d8f;
+  --navy-800: #002362; /* dark sections (packages, stats, footer) */
+  --navy-900: #001a4d; /* headings, button text */
 
-  /* Neutrals */
-  --ink: #0f2a30;
-  --muted: #5a7176;
-  --line: #dce8ea;
+  /* ---------- Neutrals ---------- */
   --white: #ffffff;
-  --off-white: #f7fbfb;
+  --line: #dddddd;
+  --star: #ffaf02;
 
   /* ---------- Semantic tokens (use these) ---------- */
-  --color-primary: var(--aqua-600);
-  --color-primary-hover: var(--aqua-700);
+  --color-primary: var(--aqua-400);
+  --color-primary-hover: var(--aqua-500);
   --color-primary-soft: var(--aqua-50);
-  --color-primary-bright: var(--aqua-500);
-  --color-accent: var(--teak-500);
-  --color-accent-strong: var(--teak-700);
-  --color-heading: var(--aqua-950);
-  --color-text: var(--ink);
-  --color-text-muted: var(--muted);
-  --color-bg: var(--off-white);
+  --color-on-primary: var(--navy-900);
+  --color-accent: var(--aqua-400); /* second part of two-tone headings */
+  --color-heading: var(--navy-900);
+  --color-text: rgb(0 26 77 / 0.75);
+  --color-text-muted: rgb(0 26 77 / 0.6);
+  --color-bg: var(--white);
   --color-surface: var(--white);
-  --color-sand: var(--sand-50);
+  --color-soft: var(--navy-50); /* light grey-blue section background */
+  --color-badge: rgb(0 26 77 / 0.05); /* pill eyebrow background */
   --color-border: var(--line);
-  --color-dark: var(--aqua-950);
-  --color-on-dark: #e6f6f8;
-  --color-on-primary: var(--white);
+  --color-dark: var(--navy-800);
+  --color-dark-2: var(--navy-700);
+  --color-on-dark: var(--white);
+  --color-on-dark-muted: rgb(255 255 255 / 0.75);
+  --color-star: var(--star);
+  --hero-overlay: linear-gradient(180deg, rgb(0 26 77 / 0.55), rgb(0 35 98 / 0.75));
 
-  --gradient-water: linear-gradient(135deg, var(--aqua-400), var(--aqua-700));
+  /* ---------- Type: Manrope headings, Inter body ---------- */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-h4: clamp(1.25rem, 1.1rem + 0.5vw, 1.625rem); /* 26px */
+  --text-h2: clamp(2rem, 1.4rem + 2.2vw, 3rem); /* 48px */
+  --text-h1: clamp(2.5rem, 1.6rem + 3.4vw, 4rem); /* 64px */
+  --text-mega: clamp(3rem, 1.4rem + 6.4vw, 6.25rem); /* 100px rotating hero word */
+  --leading-tight: 1.1;
+  --leading-heading: 1.3;
+  --leading-body: 1.875; /* 16/30 */
+  --tracking-heading: -0.04em;
+  --measure: 70ch;
 
-  /* Shape & motion */
+  /* ---------- Shape ---------- */
   --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.5rem;
-  --radius-pill: 999px;
-  --shadow-card: 0 1px 2px rgb(8 42 50 / 0.06), 0 8px 24px -8px rgb(8 42 50 / 0.12);
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration: 450ms;
+  --radius-card: 1rem; /* 16px cards */
+  --radius-media: 0.9375rem; /* 15px images */
+  --radius-pill: 1.875rem; /* 30px buttons */
+  --radius-badge: 1.5625rem; /* 25px eyebrow badges */
+  --shadow-card: 0 10px 40px -12px rgb(0 26 77 / 0.15);
 
-  /* Layout */
-  --container: 1240px;
-  --gutter: clamp(1rem, 4vw, 2rem);
+  /* ---------- Motion ---------- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 350ms;
+
+  /* ---------- Layout ---------- */
+  --container: 1320px;
+  --gutter: clamp(1rem, 4vw, 1.875rem);
+  --section-y: clamp(4rem, 2.5rem + 4vw, 6.25rem); /* 100px */
 }
 
 @media (prefers-reduced-motion: reduce) {

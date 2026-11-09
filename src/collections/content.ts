@@ -21,7 +21,9 @@ const banner: Field = {
   admin: { description: 'Daxili səhifənin yuxarısındakı fon şəkli.' },
 }
 const layout = (blocks = detailBlocks): Field => ({
-  name: 'layout', label: 'Bölmələr', type: 'blocks', blocks, localized: false,
+  // localized: each language keeps its own block list (nested arrays inside blocks lose
+  // other locales when stored as shared rows in Postgres)
+  name: 'layout', label: 'Bölmələr', type: 'blocks', blocks, localized: true,
 })
 const faqs: Field = {
   name: 'faqs', label: 'FAQ (bu səhifədə)', type: 'relationship', relationTo: 'faqs', hasMany: true,
@@ -48,7 +50,7 @@ export const Pages = contentCollection({
     title,
     banner,
     { name: 'intro', label: 'Banner alt mətni', type: 'textarea', localized: true },
-    { name: 'layout', label: 'Bölmələr', type: 'blocks', blocks: pageBlocks },
+    { name: 'layout', label: 'Bölmələr', type: 'blocks', blocks: pageBlocks, localized: true },
   ],
 })
 

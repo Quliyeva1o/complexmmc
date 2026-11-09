@@ -267,10 +267,11 @@ async function run() {
     const faqs = await faqsFor(d)
     const cat = categoryIds[serviceCategoryOf(s.az!)]
     const { base, locales } = localized(d, (x, l) => {
-      const c = (sl.locales[l]?.cards as Any[] | undefined)?.find((k) => k.href === x.path)
+      // the service page's own lead text (listing cards were extracted unreliably)
+      void sl
       return {
         title: x.h1,
-        excerpt: c?.excerpt || x.excerpt,
+        excerpt: x.excerpt,
         body: rt(x.bodyHtml),
         features: (x.benefits as string[]).map((b) => ({ title: b })),
         slug: lastSeg(x.path),

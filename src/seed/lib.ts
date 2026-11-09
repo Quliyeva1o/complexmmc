@@ -166,7 +166,8 @@ function mergeRowIds(current: unknown, data: unknown): unknown {
     if ('root' in (data as object)) return data
     const out: Record<string, unknown> = { ...(data as object) }
     for (const [k, v] of Object.entries(data as object)) {
-      out[k] = mergeRowIds((current as Record<string, unknown>)[k], v)
+      // localized block lists (layout) have their own rows per language — never reuse ids
+      out[k] = k === 'layout' ? v : mergeRowIds((current as Record<string, unknown>)[k], v)
     }
     return out
   }

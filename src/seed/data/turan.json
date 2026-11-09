@@ -1,5 +1,5 @@
 {
- "extractedAt": "2026-11-09T08:17:08.997Z",
+ "extractedAt": "2026-11-09T10:05:54.162Z",
  "docs": [
   {
    "type": "home",
@@ -413,9 +413,30 @@
       "footnote": "Average construction time: 4–8 weeks"
      },
      "why": {
-      "h2": "",
-      "items": [],
-      "counters": []
+      "h2": "Quality & Professionalism",
+      "items": [
+       {
+        "title": "Modern Solutions",
+        "text": "We use the latest technologies in pool and spa projects."
+       },
+       {
+        "title": "Professional Team",
+        "text": "Reliable, quality execution by experienced specialists."
+       },
+       {
+        "title": "Custom Design",
+        "text": "We provide bespoke design and planning for every client."
+       },
+       {
+        "title": "Officially Licensed",
+        "text": "We hold an official construction license from the Republic of Azerbaijan."
+       }
+      ],
+      "counters": [
+       "Projects completed successfully",
+       "Years of experience",
+       "Customer satisfaction"
+      ]
      },
      "beforeAfter": {
       "h2": "See the transformation yourself",

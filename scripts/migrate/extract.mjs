@@ -252,7 +252,7 @@ function home($) {
   const partners = sectionByHeading(/Dünya Markalarının|World Brands|мировых брендов/i)
   const warranty = sectionByHeading(/Zəmanət|Warranty|Гарантия/i)
   const process = sectionByHeading(/mərhələsi|stages|этапов/i)
-  const why = sectionByHeading(/Keyfiyyət və Peşəkarlıq|Quality and Professionalism|Качество/i)
+  const why = sectionByHeading(/Keyfiyyət və Peşəkarlıq|Quality (and|&) Professionalism|Качество/i)
   const ba = sectionByHeading(/Dəyişimi|transformation|изменени/i)
   const heroH1 = $('h1').first()
   return {

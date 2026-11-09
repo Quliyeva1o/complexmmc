@@ -1,20 +1,25 @@
 import type { Metadata, Viewport } from 'next'
-import { Manrope } from 'next/font/google'
+import { Inter, Manrope } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import { isLocale, localeCodes } from '@/i18n/config'
 import '@/styles/globals.css'
 
-// Manrope: Latin-ext (ə, ğ, ı, ş) + Cyrillic. Self-hosted by next/font, no external request.
-const body = Manrope({
+// Template typography: Manrope headings + Inter body. Both cover Azerbaijani (ə ş ğ İ ı) and Cyrillic.
+const heading = Manrope({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  variable: '--font-heading',
+  display: 'swap',
+})
+const body = Inter({
   subsets: ['latin', 'latin-ext', 'cyrillic'],
   variable: '--font-body',
   display: 'swap',
 })
 
 export const viewport: Viewport = {
-  themeColor: '#082a32',
+  themeColor: '#002362',
   width: 'device-width',
   initialScale: 1,
 }
@@ -38,8 +43,10 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound()
 
   return (
-    <html lang={locale} className={body.variable}>
-      <body>{children}</body>
+    <html lang={locale} className={`${heading.variable} ${body.variable}`} suppressHydrationWarning>
+      <body>
+        {children}
+      </body>
     </html>
   )
 }
