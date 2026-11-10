@@ -21,7 +21,8 @@
     "seed:pages": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/pages-only.ts",
     "db:push": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_DB_PUSH=true payload run src/seed/push.ts",
     "seed:calculator": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/calculator.ts",
-    "seed:mosaics": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/mosaics.ts"
+    "seed:mosaics": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/mosaics.ts",
+    "seed:catalog": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/catalog.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.93.0",

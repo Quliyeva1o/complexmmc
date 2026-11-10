@@ -6842,6 +6842,18 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Hovuz örtükləri kimi ölçüyə görə qiymətlənən məhsullar üçün: { "widths": [2.5, 3, …], "rows": [{ "length": 2.5, "prices": [12126, …] }] }
+   */
+  priceMatrix?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   datasheet?: (number | null) | Media;
   /**
    * Boş qoysanız başlıqdan avtomatik yaranır. Yalnız latın hərfləri, rəqəm və "-".
@@ -12010,6 +12022,7 @@ export interface ProductsSelect<T extends boolean = true> {
         price?: T;
         id?: T;
       };
+  priceMatrix?: T;
   datasheet?: T;
   slug?: T;
   meta?:

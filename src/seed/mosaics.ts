@@ -46,6 +46,10 @@ for (const r of rows) {
   }
   const loc = (l: 'az' | 'en' | 'ru') => ({
     title,
+    meta: {
+      title: { az: `${title} hovuz mozaikası qiyməti`, en: `${title} pool mosaic price`, ru: `${title} мозаика для бассейна — цена` }[l],
+      description: { az: `${title} şüşə hovuz mozaikası (${r.origin}). Ölçülər və qiymətlər: ${r.sizes.map((x) => `${sizeLabel(x.size, 'az')} — ${x.price} ₼/m²`).join(', ')}.`, en: `${title} glass pool mosaic. Sizes and prices: ${r.sizes.map((x) => `${sizeLabel(x.size, 'en')} — ${x.price} AZN/m²`).join(', ')}.`, ru: `${title} стеклянная мозаика для бассейна. Размеры и цены: ${r.sizes.map((x) => `${sizeLabel(x.size, 'ru')} — ${x.price} ₼/м²`).join(', ')}.` }[l].slice(0, 155),
+    },
     origin: { az: r.origin, en: r.origin === 'Türkiyə' ? 'Turkey' : 'Spain', ru: r.origin === 'Türkiyə' ? 'Турция' : 'Испания' }[l],
     spec: { az: 'Silikonlu şüşə hovuz mozaikası', en: 'Glass pool mosaic on silicone mesh', ru: 'Стеклянная мозаика для бассейна на силиконовой сетке' }[l],
     excerpt: {

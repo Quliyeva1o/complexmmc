@@ -74,13 +74,13 @@ export function realLocales(doc: AllLocaleDoc): Partial<Record<Locale, string>> 
 }
 
 /** Every published document of a collection with its real per-locale slugs (sitemap). */
-export const findAllLocaleSlugs = (collection: CollectionSlug) =>
+export const findAllLocaleSlugs = (collection: CollectionSlug, publishedOnly = true) =>
   unstable_cache(
     async () => {
-      const res = await (await payloadClient()).find({ collection, locale: 'all', depth: 0, limit: 2000, pagination: false, where: { _status: { equals: 'published' } }, select: LOCALE_SELECT })
+      const res = await (await payloadClient()).find({ collection, locale: 'all', depth: 0, limit: 2000, pagination: false, where: publishedOnly ? { _status: { equals: 'published' } } : undefined, select: LOCALE_SELECT })
       return (res.docs as unknown as AllLocaleDoc[]).map((d) => ({ id: d.id, slugs: realLocales(d) }))
     },
-    ['all-locale-slugs', collection],
+    ['all-locale-slugs', collection, String(publishedOnly)],
     { tags: [collection] },
   )()
 

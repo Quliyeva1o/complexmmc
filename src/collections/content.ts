@@ -428,6 +428,10 @@ export const Products = contentCollection({
         { name: 'price', label: 'Qiymət (AZN)', type: 'number' },
       ] }],
     },
+    {
+      name: 'priceMatrix', label: 'Qiymət cədvəli (uzunluq × en)', type: 'json',
+      admin: { description: 'Hovuz örtükləri kimi ölçüyə görə qiymətlənən məhsullar üçün: { "widths": [2.5, 3, …], "rows": [{ "length": 2.5, "prices": [12126, …] }] }' },
+    },
     { name: 'datasheet', label: 'PDF sənəd', type: 'upload', relationTo: 'media' },
   ],
 })

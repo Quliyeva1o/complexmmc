@@ -26,13 +26,15 @@ type Doc = {
   images?: (Media | number)[] | null
 }
 
-const SOURCES: { collection: CollectionSlug; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }[] = [
+const SOURCES: { collection: CollectionSlug; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']; noDrafts?: boolean }[] = [
   { collection: 'pages', priority: 0.8, changeFrequency: 'weekly' },
   { collection: 'categories', priority: 0.9, changeFrequency: 'weekly' },
   { collection: 'services', priority: 0.9, changeFrequency: 'monthly' },
   { collection: 'service-areas', priority: 0.7, changeFrequency: 'monthly' },
   { collection: 'projects', priority: 0.7, changeFrequency: 'monthly' },
   { collection: 'posts', priority: 0.6, changeFrequency: 'monthly' },
+  { collection: 'product-categories', priority: 0.6, changeFrequency: 'monthly', noDrafts: true },
+  { collection: 'products', priority: 0.5, changeFrequency: 'monthly' },
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -40,11 +42,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const src of SOURCES) {
     // Locales where each document really exists (own slug, not an untranslated AZ copy)
-    const real = new Map((await findAllLocaleSlugs(src.collection)).map((d) => [d.id, d.slugs]))
+    const real = new Map((await findAllLocaleSlugs(src.collection, !src.noDrafts)).map((d) => [d.id, d.slugs]))
     // Same documents in each language: id -> { locale -> doc }
     const byId = new Map<number, Partial<Record<Locale, Doc>>>()
     for (const locale of localeCodes) {
-      const docs = await findDocs<Doc>(src.collection, locale, { where: { _status: { equals: 'published' } }, depth: 1, limit: 1000 })
+      const docs = await findDocs<Doc>(src.collection, locale, { where: src.noDrafts ? undefined : { _status: { equals: 'published' } }, depth: 1, limit: 1000 })
       for (const d of docs) {
         if (!d.slug || d.meta?.noindex || real.get(d.id)?.[locale] !== d.slug) continue
         byId.set(d.id, { ...byId.get(d.id), [locale]: d })

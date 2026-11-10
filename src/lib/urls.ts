@@ -14,6 +14,7 @@ export const COLLECTION_BASE: Record<string, string> = {
   posts: '/blog',
   products: '/products',
   'post-categories': '/blog/kateqoriya',
+  'product-categories': '/products/kateqoriya',
 }
 
 export function docPath(collection: string, slug: string | null | undefined, locale: Locale) {

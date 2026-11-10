@@ -134,3 +134,31 @@ export function articleLd(o: { headline: string; description?: string | null; pa
     publisher: { '@id': `${base}/#organization` },
   }
 }
+
+/** A catalogue product with its price range (AggregateOffer in AZN). */
+export function productLd(o: { name: string; description?: string | null; path: string; image?: string | null; sku?: string | null; brand?: string | null; category?: string | null; low?: number | null; high?: number | null; count?: number }) {
+  const base = SITE()
+  return {
+    '@type': 'Product',
+    '@id': `${base}${o.path}#product`,
+    name: o.name,
+    description: o.description || undefined,
+    url: base + o.path,
+    image: o.image ? base + o.image : undefined,
+    sku: o.sku || undefined,
+    category: o.category || undefined,
+    brand: o.brand ? { '@type': 'Brand', name: o.brand } : undefined,
+    offers:
+      o.low != null
+        ? {
+            '@type': 'AggregateOffer',
+            priceCurrency: 'AZN',
+            lowPrice: o.low,
+            highPrice: o.high ?? o.low,
+            offerCount: o.count ?? 1,
+            availability: 'https://schema.org/InStock',
+            seller: { '@id': `${base}/#organization` },
+          }
+        : undefined,
+  }
+}

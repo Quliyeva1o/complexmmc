@@ -26,7 +26,7 @@ export const revalidate = 3600
 export const dynamicParams = true
 
 // List pages with their own routes (or later stages) are excluded from the catch-all.
-const RESERVED = new Set(['home', 'services', 'projects'])
+const RESERVED = new Set(['home', 'services', 'projects', 'blog', 'products'])
 const published = { _status: { equals: 'published' } }
 
 export async function generateStaticParams() {
