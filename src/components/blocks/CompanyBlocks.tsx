@@ -5,10 +5,11 @@ import { Gallery, type GalleryImg } from '@/components/inner/Gallery'
 import { UiIcon } from '@/components/icons/UiIcon'
 import { Button, Section, SectionHeader } from '@/components/ui/primitives'
 import { findDocs, getGlobal } from '@/lib/data'
+import { getEstimateConfig } from '@/lib/estimate/config'
 import { mediaProps } from '@/lib/media'
 import { docPath, resolveLink } from '@/lib/urls'
-import type { Category, Certificate, Form, Media, ServiceArea, SiteSetting, Team, Testimonial } from '@/payload-types'
-import { EstimateForm } from './EstimateForm'
+import type { Category, Certificate, Form, Media, Product, ServiceArea, SiteSetting, Team, Testimonial } from '@/payload-types'
+import { type MosaicOption, PoolCalculator } from './PoolCalculator'
 import { LeadForm } from './interactive'
 import { blockTheme, type BlockCtx } from './shared'
 
@@ -362,44 +363,29 @@ export function VideoBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   )
 }
 
-/* ------------------------------------------------------------------ Calculator placeholder (full wizard in Stage 7) */
-const ESTIMATE_SIDE = {
-  az: { eyebrow: 'Pulsuz qiymət təklifi', text: 'Dəqiq qiymət ölçüdən, materiallardan və əlavələrdən asılıdır. Mütəxəssisimiz obyektə pulsuz baxış keçirib yazılı təklif hazırlayır.', items: ['Pulsuz baxış və məsləhət', 'Fərdi layihələndirmə', 'Lisenziyalı tikinti', 'Konstruksiyaya 12 il yazılı zəmanət'] },
-  en: { eyebrow: 'Free quote', text: 'The exact price depends on size, materials and extras. Our specialist visits your site for free and prepares a written quote.', items: ['Free site visit and consultation', 'Custom design', 'Licensed construction', '12-year written structural warranty'] },
-  ru: { eyebrow: 'Бесплатный расчёт', text: 'Точная цена зависит от размера, материалов и дополнительных опций. Специалист бесплатно приедет на объект и подготовит письменное предложение.', items: ['Бесплатный выезд и консультация', 'Индивидуальный проект', 'Лицензированное строительство', '12 лет письменной гарантии на конструкцию'] },
-} as const
-
-/* Template "Cost Estimator": 856px form panel + 403px navy info card */
+/* Pool cost calculator (template "Cost Estimator" layout). Prices: admin "Qiymət kalkulyatoru"
+   global (falls back to the defaults built from real estimates); mosaics: Products › Mozaika. */
 export async function CalculatorBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
-  const [form, s] = await Promise.all([
+  const [form, config, mosaicCat] = await Promise.all([
     findDocs<Form>('forms', ctx.locale, { limit: 1, depth: 0, sort: 'createdAt' }).then((r) => r[0]),
-    getGlobal<SiteSetting>('site-settings', ctx.locale, 0),
+    getEstimateConfig(ctx.locale),
+    findDocs<{ id: number }>('product-categories', 'az', { where: { slug: { equals: 'mozaika' } }, limit: 1, depth: 0 }).then((r) => r[0]),
   ])
-  const side = ESTIMATE_SIDE[ctx.locale]
-  const phone = s.phones?.find((p) => p.primary)?.number ?? s.phones?.[0]?.number
+  const products = mosaicCat
+    ? await findDocs<Product>('products', ctx.locale, { where: { and: [{ category: { equals: mosaicCat.id } }, { _status: { equals: 'published' } }] }, depth: 1, limit: 300, sort: 'priceFrom' })
+    : []
+  const mosaics: MosaicOption[] = products.map((p) => ({
+    id: String(p.id),
+    name: p.title,
+    brand: p.title.split(' ')[0],
+    image: mediaProps((p.images?.[0] ?? null) as Media, 'card')?.src ?? null,
+    variants: (p.variants ?? []).filter((v) => v.price).map((v) => ({ label: v.label, price: v.price! })),
+  })).filter((m) => m.variants.length)
   return (
     <section id={blockTheme(block).id} className="px-[15px]">
-      <div className="mx-auto flex max-w-[1304px] flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row lg:items-start">
-        <div className="min-w-0 flex-1 lg:max-w-[856px]" data-reveal>
-          {form && <EstimateForm locale={ctx.locale} formId={form.id} />}
-        </div>
-        <aside className="w-full shrink-0 rounded-[15px] bg-dark p-10 lg:w-[403px]" data-reveal>
-          <SectionHeader dark align="start" eyebrow={block.header?.eyebrow || side.eyebrow} heading={block.header?.heading} className="mb-0" />
-          <p className="mt-5 leading-[30px] text-white/80">{block.header?.intro || side.text}</p>
-          <ul className="mt-[45px] border-t border-[rgb(222_226_230/0.5)] pt-[25px] pb-[30px]">
-            {side.items.map((it) => (
-              <li key={it} className="flex items-center gap-[5px] leading-[30px] text-white">
-                <UiIcon name="check" className="shrink-0 text-[18px] text-primary" />
-                {it}
-              </li>
-            ))}
-          </ul>
-          {phone && (
-            <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="font-display text-[26px] font-bold text-white transition-colors hover:text-primary">
-              {phone}
-            </a>
-          )}
-        </aside>
+      <div className="mx-auto max-w-[1304px] py-[60px] md:py-[100px]">
+        <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
+        <PoolCalculator locale={ctx.locale} config={{ prices: config.prices, places: config.places, extras: config.extras, rangePercent: config.rangePercent, unknownPlacePercent: config.unknownPlacePercent }} mosaics={mosaics} mode={config.mode} defaultDepth={config.defaultDepth} disclaimer={config.disclaimer} formId={form?.id} />
       </div>
     </section>
   )

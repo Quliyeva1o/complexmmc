@@ -182,60 +182,78 @@ export const Theme = base('theme', 'Tema (rənglər)', [
 ], 'Parametrlər')
 
 /* ---------------------------------------------------------------- Calculator */
+/**
+ * Pool cost calculator data. Quantities are calculated in code (src/lib/estimate/model.ts);
+ * here admins keep the prices up to date. Empty lists fall back to the defaults built from
+ * the company's real estimates (src/lib/estimate/defaults.ts).
+ */
 export const Calculator = base('calculator', 'Qiymət kalkulyatoru', [
   {
-    name: 'mode', label: 'Rejim', type: 'radio', defaultValue: 'lead',
+    name: 'mode', label: 'Rejim', type: 'radio', defaultValue: 'price',
     options: [
-      { label: 'Yalnız müraciət al (qiymət göstərmə)', value: 'lead' },
       { label: 'Təxmini qiyməti göstər', value: 'price' },
+      { label: 'Yalnız müraciət al (qiymət göstərmə)', value: 'lead' },
     ],
   },
   { type: 'row', fields: [
-    { name: 'currency', label: 'Valyuta', type: 'text', defaultValue: 'AZN' },
-    { name: 'rangePercent', label: 'Diapazon ± %', type: 'number', defaultValue: 15 },
-    { name: 'minPrice', label: 'Minimum qiymət', type: 'number' },
+    { name: 'rangePercent', label: 'Dəqiq qiymətlər üçün diapazon ± %', type: 'number', defaultValue: 10, min: 0, max: 50 },
+    { name: 'unknownPlacePercent', label: 'Siyahıda olmayan / təsdiqlənməmiş yer üçün ± %', type: 'number', defaultValue: 30, min: 0, max: 100 },
+    { name: 'defaultDepth', label: 'Standart dərinlik (m)', type: 'number', defaultValue: 1.5, min: 0.6, max: 3 },
   ] },
   {
-    name: 'objectTypes', label: 'Obyekt / hovuz növləri', type: 'array',
-    fields: [
-      { type: 'row', fields: [
-        { name: 'label', label: 'Ad', type: 'text', localized: true, required: true },
-        { name: 'key', label: 'Açar', type: 'text', required: true },
-        { name: 'basePerM2', label: 'Baza qiymət (AZN/m²)', type: 'number' },
-        { name: 'fixed', label: 'Sabit əlavə (AZN)', type: 'number' },
-      ] },
-      { name: 'usesDepth', label: 'Dərinlik soruşulsun', type: 'checkbox', defaultValue: true },
+    type: 'tabs',
+    tabs: [
+      {
+        label: 'Vahid qiymətlər',
+        description: 'Açar sözə görə qiymət (AZN). "Premium" sütunu Premium paket seçiləndə istifadə olunur; boşdursa, adi qiymət götürülür. Boş siyahı = smetalardan götürülmüş standart qiymətlər.',
+        fields: [{
+          name: 'prices', label: 'Qiymətlər', type: 'array',
+          admin: { initCollapsed: true },
+          fields: [{ type: 'row', fields: [
+            { name: 'key', label: 'Açar', type: 'text', required: true, admin: { width: '40%' } },
+            { name: 'price', label: 'Standart (AZN)', type: 'number', required: true, admin: { width: '30%' } },
+            { name: 'premium', label: 'Premium (AZN)', type: 'number', admin: { width: '30%' } },
+          ] }],
+        }],
+      },
+      {
+        label: 'Yerlər (rayonlar)',
+        description: 'Nəqliyyat və köməkçi xərclər (bütün iş üçün), beton pompası (bir dəfəlik), torpaq maşını (bir reys). "Təsdiqlənib" = real smetadan götürülüb, dəqiq göstərilir.',
+        fields: [{
+          name: 'places', label: 'Yerlər', type: 'array',
+          admin: { initCollapsed: true },
+          fields: [
+            { type: 'row', fields: [
+              { name: 'key', label: 'Açar', type: 'text', required: true },
+              { name: 'name', label: 'Ad', type: 'text', localized: true, required: true },
+              { name: 'zone', label: 'Zona', type: 'select', defaultValue: 'absheron', options: [
+                { label: 'Abşeron', value: 'absheron' }, { label: 'Bakı şəhəri', value: 'baku' }, { label: 'Qərb (Novxanı, Sumqayıt)', value: 'west' }, { label: 'Regionlar', value: 'regions' },
+              ] },
+            ] },
+            { type: 'row', fields: [
+              { name: 'transport', label: 'Nəqliyyat və köməkçi (AZN)', type: 'number', required: true },
+              { name: 'pump', label: 'Beton pompası (AZN/dəfə)', type: 'number', required: true },
+              { name: 'truck', label: 'Torpaq maşını (AZN/reys)', type: 'number', required: true },
+              { name: 'confirmed', label: 'Təsdiqlənib', type: 'checkbox', defaultValue: false },
+            ] },
+          ],
+        }],
+      },
+      {
+        label: 'Əlavələr',
+        description: 'Min = Maks olarsa dəqiq qiymət göstərilir, fərqlidirsə aralıq.',
+        fields: [{
+          name: 'extras', label: 'Əlavələr', type: 'array',
+          admin: { initCollapsed: true },
+          fields: [{ type: 'row', fields: [
+            { name: 'key', label: 'Açar', type: 'text', required: true },
+            { name: 'name', label: 'Ad', type: 'text', localized: true, required: true },
+            { name: 'min', label: 'Min (AZN)', type: 'number', required: true },
+            { name: 'max', label: 'Maks (AZN)', type: 'number', required: true },
+          ] }],
+        }],
+      },
     ],
-  },
-  {
-    name: 'finishes', label: 'Üzlük növləri', type: 'array',
-    fields: [{ type: 'row', fields: [
-      { name: 'label', label: 'Ad', type: 'text', localized: true, required: true },
-      { name: 'coefficient', label: 'Əmsal', type: 'number', defaultValue: 1 },
-    ] }],
-  },
-  {
-    name: 'depths', label: 'Dərinlik variantları', type: 'array',
-    fields: [{ type: 'row', fields: [
-      { name: 'label', label: 'Ad', type: 'text', localized: true, required: true },
-      { name: 'coefficient', label: 'Əmsal', type: 'number', defaultValue: 1 },
-    ] }],
-  },
-  {
-    name: 'addons', label: 'Əlavələr', type: 'array',
-    fields: [{ type: 'row', fields: [
-      { name: 'label', label: 'Ad', type: 'text', localized: true, required: true },
-      { name: 'price', label: 'Qiymət', type: 'number' },
-      { name: 'unit', label: 'Vahid', type: 'select', defaultValue: 'fixed',
-        options: [{ label: 'Sabit', value: 'fixed' }, { label: 'm²-ə görə', value: 'perM2' }] },
-    ] }],
-  },
-  {
-    name: 'areas', label: 'Ərazilər', type: 'array',
-    fields: [{ type: 'row', fields: [
-      { name: 'label', label: 'Ad', type: 'text', localized: true, required: true },
-      { name: 'coefficient', label: 'Əmsal', type: 'number', defaultValue: 1 },
-    ] }],
   },
   { name: 'disclaimer', label: 'Nəticə altındakı qeyd', type: 'textarea', localized: true },
   { name: 'notifyForm', label: 'Müraciət forması', type: 'relationship', relationTo: 'forms' },

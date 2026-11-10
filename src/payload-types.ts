@@ -12772,46 +12772,36 @@ export interface Theme {
  */
 export interface Calculator {
   id: number;
-  mode?: ('lead' | 'price') | null;
-  currency?: string | null;
+  mode?: ('price' | 'lead') | null;
   rangePercent?: number | null;
-  minPrice?: number | null;
-  objectTypes?:
+  unknownPlacePercent?: number | null;
+  defaultDepth?: number | null;
+  prices?:
     | {
-        label: string;
         key: string;
-        basePerM2?: number | null;
-        fixed?: number | null;
-        usesDepth?: boolean | null;
+        price: number;
+        premium?: number | null;
         id?: string | null;
       }[]
     | null;
-  finishes?:
+  places?:
     | {
-        label: string;
-        coefficient?: number | null;
+        key: string;
+        name: string;
+        zone?: ('absheron' | 'baku' | 'west' | 'regions') | null;
+        transport: number;
+        pump: number;
+        truck: number;
+        confirmed?: boolean | null;
         id?: string | null;
       }[]
     | null;
-  depths?:
+  extras?:
     | {
-        label: string;
-        coefficient?: number | null;
-        id?: string | null;
-      }[]
-    | null;
-  addons?:
-    | {
-        label: string;
-        price?: number | null;
-        unit?: ('fixed' | 'perM2') | null;
-        id?: string | null;
-      }[]
-    | null;
-  areas?:
-    | {
-        label: string;
-        coefficient?: number | null;
+        key: string;
+        name: string;
+        min: number;
+        max: number;
         id?: string | null;
       }[]
     | null;
@@ -13007,46 +12997,36 @@ export interface ThemeSelect<T extends boolean = true> {
  */
 export interface CalculatorSelect<T extends boolean = true> {
   mode?: T;
-  currency?: T;
   rangePercent?: T;
-  minPrice?: T;
-  objectTypes?:
+  unknownPlacePercent?: T;
+  defaultDepth?: T;
+  prices?:
     | T
     | {
-        label?: T;
         key?: T;
-        basePerM2?: T;
-        fixed?: T;
-        usesDepth?: T;
-        id?: T;
-      };
-  finishes?:
-    | T
-    | {
-        label?: T;
-        coefficient?: T;
-        id?: T;
-      };
-  depths?:
-    | T
-    | {
-        label?: T;
-        coefficient?: T;
-        id?: T;
-      };
-  addons?:
-    | T
-    | {
-        label?: T;
         price?: T;
-        unit?: T;
+        premium?: T;
         id?: T;
       };
-  areas?:
+  places?:
     | T
     | {
-        label?: T;
-        coefficient?: T;
+        key?: T;
+        name?: T;
+        zone?: T;
+        transport?: T;
+        pump?: T;
+        truck?: T;
+        confirmed?: T;
+        id?: T;
+      };
+  extras?:
+    | T
+    | {
+        key?: T;
+        name?: T;
+        min?: T;
+        max?: T;
         id?: T;
       };
   disclaimer?: T;

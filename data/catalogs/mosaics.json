@@ -1,0 +1,874 @@
+[
+ {
+  "slug": "betas-bp-501",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-501",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 56.1
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 99.14
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 119.95
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-501.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-502",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-502",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 56.1
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 99.14
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 119.95
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-502.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-591",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-591",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 61.69
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 105.43
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 126.56
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-591.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-442500",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-442500",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 61.69
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 105.43
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 126.56
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-442500.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-252",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-252",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 99.14
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 125.66
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 159.73
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-252.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-530",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-530",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 56.1
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 99.14
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 119.95
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-530.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-507",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-507",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 56.1
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 99.14
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 119.95
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-507.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-520",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-520",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 61.69
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 105.43
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 126.56
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-520.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-523",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-523",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 56.1
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 99.14
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 119.95
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-523.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-521",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-521",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 61.69
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 105.43
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 126.56
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-521.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-951",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-951",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 88.13
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 114.24
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 147.9
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-951.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-213",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-213",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 93.64
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 119.95
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 153.82
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-213.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-206",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-206",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 93.64
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 119.95
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 153.82
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-206.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-214",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-214",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 99.14
+   },
+   {
+    "size": "3.8x3.8 cm",
+    "price": 125.66
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 159.73
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-214.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-180",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-180",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 82.62
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-180.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "betas-bp-216",
+  "brand": "Betaş",
+  "origin": "Türkiyə",
+  "name": "BP-216",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 99.14
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 125.66
+   }
+  ],
+  "image": "data/catalogs/mosaics/betas-bp-216.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 8"
+ },
+ {
+  "slug": "squamers-identity-siroko",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Siroko",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-siroko.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-addis",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Addis",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-addis.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-jenysia",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Jenysia",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-jenysia.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-phiphi",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Phiphi",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-phiphi.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-midori",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Midori",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-midori.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-papuan",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Papuan",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-papuan.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-esturion",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Esturion",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-esturion.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-atai",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Atai",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-atai.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-kintsugi",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Kintsugi",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-kintsugi.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-kidako",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Kidako",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-kidako.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-baleen",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Baleen",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-baleen.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-oranda",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Oranda",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-oranda.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-essence-marine",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Essence Marine",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 90.45
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 181.08
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-essence-marine.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-kubu-okoze",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Kubu Okoze",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 109.29
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-kubu-okoze.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-brigit",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Brigit",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 109.29
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-brigit.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-identity-shark",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Shark",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 109.29
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-shark.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 9"
+ },
+ {
+  "slug": "squamers-genuine-tetra",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Genuine Tetra",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 85.8
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-genuine-tetra.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-genuine-koi",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Genuine Koi",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 85.8
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-genuine-koi.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-genuine-gn-201",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Genuine GN 201",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 67.42
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 146.59
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-genuine-gn-201.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-genuine-gn-202",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Genuine GN 202",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 67.42
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 146.59
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-genuine-gn-202.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-genuine-gn-105",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Genuine GN 105",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 67.42
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 146.59
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-genuine-gn-105.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-genuine-gn-104",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Genuine GN 104",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 67.42
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 146.59
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-genuine-gn-104.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-kubu-namazu",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Kubu Namazu",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 211.26
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-kubu-namazu.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-kubu-sand-rock-bone",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Kubu Sand Rock Bone",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-kubu-sand-rock-bone.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-identity-malawi",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Malawi",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-malawi.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-identity-fiji",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Fiji",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-fiji.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-identity-caiman",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Caiman",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-caiman.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-identity-jinyu",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Identity Jinyu",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 125.03
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-identity-jinyu.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-essence-calm",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Essence Calm",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 103.47
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 181.08
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-essence-calm.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-essence-ocean",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Essence Ocean",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 103.47
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 181.08
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-essence-ocean.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-essence-coast-light",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Essence Coast Light",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 103.47
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 181.08
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-essence-coast-light.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ },
+ {
+  "slug": "squamers-essence-posidonia",
+  "brand": "Squamers",
+  "origin": "İspaniya",
+  "name": "Essence Posidonia",
+  "sizes": [
+   {
+    "size": "2.5x2.5 cm",
+    "price": 103.47
+   },
+   {
+    "size": "5.0x5.0 cm",
+    "price": 181.08
+   }
+  ],
+  "image": "data/catalogs/mosaics/squamers-essence-posidonia.webp",
+  "source": "2026 Qiymet kataloqu rev 01 01.04.2026, səh. 10"
+ }
+]
