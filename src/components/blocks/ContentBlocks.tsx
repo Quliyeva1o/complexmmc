@@ -41,52 +41,75 @@ export function AboutIntroBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const big = mediaProps(block.imageLarge as Media, 'large')
   const small = mediaProps(block.imageSmall as Media, 'card')
   const cta = resolveLink(block.cta, ctx.locale)
+  const bullets = (block.bullets ?? []) as { id?: string; text: string }[]
+  const grid = block.bulletsAsGrid && bullets.length > 0
   return (
-    <Section {...blockTheme(block)}>
-      <div className="grid items-center gap-14 lg:grid-cols-2">
-        <div className="relative pb-16 lg:pr-16" data-reveal>
-          {big && (
-            <div className="relative aspect-[5/6] overflow-hidden rounded-[var(--radius-media)] lg:w-[85%]">
-              <Image src={big.src} alt={big.alt} fill sizes="(min-width:1024px) 40vw, 100vw" className="object-cover" />
-            </div>
-          )}
-          {small && (
-            <div className="absolute right-0 bottom-0 aspect-square w-[46%] overflow-hidden rounded-[var(--radius-media)] border-8 border-white shadow-[var(--shadow-card)]">
-              <Image src={small.src} alt={small.alt} fill sizes="25vw" className="object-cover" />
-            </div>
-          )}
-          {block.badge?.value && (
-            <div className="absolute top-8 left-6 rounded-[var(--radius-card)] bg-primary px-6 py-4 text-on-primary shadow-[var(--shadow-card)]">
-              <p className="font-display text-4xl leading-none font-extrabold">{block.badge.value}</p>
-              <p className="mt-1 text-sm font-semibold">{block.badge.label}</p>
-            </div>
-          )}
+    <>
+      {/* Template "About Us" intro: 582×370 photo + 250×250 photo overlapping its corner, text right */}
+      <Section {...blockTheme(block)}>
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="relative pr-[50px] pb-[50px]" data-reveal>
+            {big && (
+              <div className="relative aspect-[582/370] overflow-hidden rounded-[15px]">
+                <Image src={big.src} alt={big.alt} fill sizes="(min-width:1024px) 582px, 100vw" className="object-cover" />
+              </div>
+            )}
+            {small && (
+              <div className="absolute right-0 bottom-0 aspect-square w-[40%] max-w-[250px] overflow-hidden rounded-[15px]">
+                <Image src={small.src} alt={small.alt} fill sizes="250px" className="object-cover" />
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col gap-5" data-reveal>
+            <SectionHeader align="start" eyebrow={block.header?.eyebrow} heading={block.header?.heading} className="mb-0" />
+            {block.body && (
+              <div className="prose-pool max-w-none">
+                <RichText data={block.body} />
+              </div>
+            )}
+            {!grid && bullets.length > 0 && (
+              <ul className="grid gap-3">
+                {bullets.map((b) => (
+                  <li key={b.id ?? b.text} className="flex gap-3 text-heading">
+                    <UiIcon name="check" className="mt-1.5 shrink-0 text-primary" />
+                    <span>{b.text}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {cta && (
+              <div>
+                <Button href={cta.href}>{cta.label}</Button>
+              </div>
+            )}
+          </div>
         </div>
-        <div data-reveal>
-          <SectionHeader align="start" eyebrow={block.header?.eyebrow} heading={block.header?.heading} className="mb-0" />
-          {block.body && (
-            <div className="prose-pool mt-6">
-              <RichText data={block.body} />
-            </div>
-          )}
-          {block.bullets?.length > 0 && (
-            <ul className="mt-6 grid gap-3">
-              {block.bullets.map((b: any) => (
-                <li key={b.id} className="flex gap-3 text-heading">
-                  <UiIcon name="check" className="mt-1.5 shrink-0 text-primary" />
-                  <span>{b.text}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {cta && (
-            <Button href={cta.href} className="mt-9">
-              {cta.label}
-            </Button>
-          )}
-        </div>
-      </div>
-    </Section>
+      </Section>
+
+      {/* Template "Why Choose Us": cyan 10% band, 3 columns of 80px navy number squares */}
+      {grid && (
+        <section className="bg-card-tint px-[15px]">
+          <div className="mx-auto max-w-[1304px] py-[60px] md:py-[100px]">
+            <SectionHeader eyebrow={block.gridHeader?.eyebrow} heading={block.gridHeader?.heading} intro={block.gridHeader?.intro} className="mb-5" />
+            <ol className="grid gap-x-[30px] gap-y-10 pt-5 sm:grid-cols-2 lg:grid-cols-3">
+              {bullets.map((b, i) => {
+                const [title, ...rest] = b.text.split(/\s+[—–-]\s+/)
+                const desc = rest.join(' — ')
+                return (
+                  <li key={b.id ?? b.text} className="flex gap-5" data-reveal>
+                    <span className="grid size-20 shrink-0 place-items-center rounded-[15px] bg-header-sticky text-[40px] leading-none text-white">{i + 1}</span>
+                    <div>
+                      <h3 className="mb-[14px] text-[20px] leading-none tracking-normal">{desc ? title : b.text}</h3>
+                      {desc && <p className="leading-[30px]">{desc}</p>}
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+          </div>
+        </section>
+      )}
+    </>
   )
 }
 
@@ -127,18 +150,24 @@ export function ProcessBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   return (
     <Section theme={block.settings?.theme === 'dark' ? 'light' : (block.settings?.theme ?? 'light')} id={block.settings?.anchorId || undefined}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
-      <ol className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Template "How it works": centred columns, 80px cyan circle, 20px title, arrow between columns */}
+      <ol className="grid gap-x-[30px] gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s, i) => (
-          <li key={s.id ?? i} className="relative" data-reveal>
-            <div className="flex items-center gap-4">
-              <span className="grid size-14 shrink-0 place-items-center rounded-full bg-primary font-display text-lg font-extrabold text-on-primary">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              {i < steps.length - 1 && <span className="hidden h-px flex-1 border-t-2 border-dashed border-primary/40 lg:block" aria-hidden="true" />}
+          <li key={s.id ?? i} className="relative flex flex-col items-center gap-5 px-[5px] text-center" data-reveal>
+            <span className="grid size-20 shrink-0 place-items-center rounded-full bg-primary font-display text-[30px] leading-none font-bold text-heading">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h3 className="mb-[14px] text-[20px] leading-none tracking-normal">{s.title}</h3>
+              {s.duration && <p className="mb-3 inline-flex rounded-[25px] bg-soft px-[15px] py-2 text-[14px] leading-[14px]">{s.duration}</p>}
+              {s.description && <p className="leading-[30px]">{s.description}</p>}
             </div>
-            <h3 className="mt-6 text-xl">{s.title}</h3>
-            {s.duration && <p className="mt-2 inline-flex rounded-[var(--radius-badge)] bg-badge px-3 py-0.5 text-sm font-semibold text-heading">{s.duration}</p>}
-            {s.description && <p className="mt-3">{s.description}</p>}
+            {/* arrow in the gap to the next column (not after the last step of a row) */}
+            {(i + 1) % 4 !== 0 && i < steps.length - 1 && (
+              <svg viewBox="0 0 24 24" className="absolute top-[132px] -right-[27px] hidden size-6 fill-heading lg:block" aria-hidden="true">
+                <path d="M23.124,9.879,18.538,5.293,17.124,6.707l4.262,4.263L0,11l0,2,21.446-.03-4.323,4.323,1.414,1.414,4.587-4.586A3.007,3.007,0,0,0,23.124,9.879Z" />
+              </svg>
+            )}
           </li>
         ))}
       </ol>

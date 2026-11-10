@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { PageBanner, SiteCTA } from '@/components/inner/InnerParts'
+import { PageBanner } from '@/components/inner/InnerParts'
 import { PageShell } from '@/components/layout/PageShell'
 import { ServiceCard } from '@/components/ui/ServiceCard'
 import { type Locale, localePrefix, localeCodes } from '@/i18n/config'
@@ -35,8 +35,8 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([breadcrumbLd([{ name: d.breadcrumbHome, path: home }, { name: d.services, path: paths[locale] }])]) }} />
       <PageBanner title={page?.title ?? d.services} intro={page?.intro} image={page?.banner} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.services }]} />
 
-      <section className="py-[var(--section-y)]">
-        <ul className="container-x grid gap-[30px] sm:grid-cols-2 lg:grid-cols-3">
+      <section className="px-[15px]">
+        <ul className="mx-auto grid max-w-[1304px] gap-[30px] py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-3">
           {services.map((s) => {
             const cat = (s.category ?? []).find((c) => typeof c === 'object') as Category | undefined
             return (
@@ -47,8 +47,6 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
           })}
         </ul>
       </section>
-
-      <SiteCTA locale={locale} d={d} />
     </PageShell>
   )
 }

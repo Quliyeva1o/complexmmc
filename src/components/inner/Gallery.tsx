@@ -7,7 +7,7 @@ import { UiIcon } from '@/components/icons/UiIcon'
 import { cx } from '@/components/ui/primitives'
 
 export type GalleryImg = { src: string; alt: string; full: string; cat?: string; caption?: string }
-type Labels = { close: string; prev: string; next: string; open: string; all?: string }
+type Labels = { close: string; prev: string; next: string; open: string; all?: string; view?: string }
 
 /**
  * Photo grid with a keyboard-accessible lightbox (template project / gallery pages).
@@ -53,7 +53,7 @@ export function Gallery({
   return (
     <>
       {filters && filters.length > 1 && (
-        <div className="mb-10 flex flex-wrap justify-center gap-3" role="group">
+        <div className="mb-[30px] flex flex-wrap justify-center gap-2.5" role="group">
           {[{ key: '', label: labels.all ?? 'All' }, ...filters].map((f) => (
             <button
               key={f.key || 'all'}
@@ -61,8 +61,9 @@ export function Gallery({
               aria-pressed={(cat ?? '') === f.key}
               onClick={() => setCat(f.key || null)}
               className={cx(
-                'rounded-[var(--radius-badge)] px-5 py-2 font-display text-sm font-bold transition-colors',
-                (cat ?? '') === f.key ? 'bg-primary text-on-primary' : 'bg-badge text-heading hover:bg-primary-soft',
+                // template filter buttons: 6px radius, 8/20 padding, 16px/600; active + hover = cyan with white text
+                'rounded-[6px] px-5 py-2 text-base leading-4 font-semibold transition-colors duration-300',
+                (cat ?? '') === f.key ? 'bg-primary text-white' : 'bg-transparent text-text hover:bg-primary hover:text-white',
               )}
             >
               {f.label}
@@ -71,7 +72,7 @@ export function Gallery({
         </div>
       )}
 
-      <ul className={cx('grid gap-4', layout === 'grid' ? 'grid-cols-2 lg:grid-cols-3' : 'grid-cols-2 md:grid-cols-3')}>
+      <ul className={cx('grid', layout === 'grid' ? 'gap-[18px] sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-2 gap-4 md:grid-cols-3')}>
         {shown.map((img, i) => (
           <li key={img.src} className={layout === 'feature' && i === 0 ? 'col-span-2 row-span-2' : undefined}>
             <button
@@ -79,8 +80,8 @@ export function Gallery({
               onClick={() => setOpen(i)}
               aria-label={`${labels.open}: ${img.alt}`}
               className={cx(
-                'group relative block w-full overflow-hidden rounded-[var(--radius-media)]',
-                fit === 'contain' ? 'aspect-[3/4] bg-white p-4 shadow-[var(--shadow-card)] ring-1 ring-heading/5' : 'aspect-square bg-soft',
+                'group relative block w-full overflow-hidden rounded-[15px]',
+                fit === 'contain' ? 'aspect-[3/4] bg-white p-4 shadow-[var(--shadow-card)] ring-1 ring-heading/5' : layout === 'grid' ? 'aspect-[423/238] bg-soft' : 'aspect-square bg-soft',
               )}
             >
               <Image
@@ -88,13 +89,12 @@ export function Gallery({
                 alt={img.alt}
                 fill
                 sizes={layout === 'feature' && i === 0 ? '(min-width:768px) 66vw, 100vw' : '(min-width:1024px) 33vw, 50vw'}
-                className={cx(fit === 'contain' ? 'object-contain p-4' : 'object-cover transition-transform duration-700 group-hover:scale-105')}
+                className={cx(fit === 'contain' ? 'object-contain p-4' : 'object-cover transition-transform duration-[400ms] group-hover:scale-105')}
               />
               {fit === 'cover' && (
-                <span className="absolute inset-0 grid place-items-center bg-[rgb(0_26_77/0.45)] opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true">
-                  <span className="grid size-12 place-items-center rounded-full bg-primary text-xl text-on-primary">
-                    <UiIcon name="plus" />
-                  </span>
+                // template hover: black 60% overlay with a white "View" label
+                <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-[18px] leading-[30px] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true">
+                  {labels.view ?? <UiIcon name="plus" />}
                 </span>
               )}
             </button>

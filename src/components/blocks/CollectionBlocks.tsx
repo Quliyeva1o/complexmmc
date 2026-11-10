@@ -422,7 +422,7 @@ export async function FAQBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
       <Section {...blockTheme(block)}>
         {ld}
         <SectionHeader
-          eyebrow={block.header?.eyebrow || ctx.d.haveQuestions}
+          eyebrow={block.header?.eyebrow || (block.header?.heading ? ctx.d.haveQuestions : undefined)}
           heading={block.header?.heading}
           intro={block.header?.intro}
         />

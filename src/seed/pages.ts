@@ -280,7 +280,13 @@ export async function seedPages(ctx: Ctx) {
           imageLarge: aboutBig,
           imageSmall: aboutSmall,
           badge: { value: '20+', label: t('İllik təcrübə', 'Years of experience', 'Лет опыта')[l] },
+          bulletsAsGrid: true,
+          gridHeader: {
+            eyebrow: t('Niyə bizi seçməlisiniz?', 'Why choose us?', 'Почему мы?')[l],
+            heading: t('Keyfiyyət və Peşəkarlıq', 'Quality & Professionalism', 'Качество и профессионализм')[l],
+          },
         },
+        { blockType: 'team', header: header(t('Komanda', 'Team', 'Команда')[l], t('Peşəkar komandamız', 'Our professional team', 'Наша команда')[l]), source: 'auto', limit: 4 },
         {
           blockType: 'mediaContent',
           header: header(a.story.eyebrow, a.story.h2),
@@ -303,7 +309,6 @@ export async function seedPages(ctx: Ctx) {
             { value: 12, suffix: t(' il', ' yrs', ' лет')[l], label: t('Konstruksiyaya zəmanət', 'Structural warranty', 'Гарантия на конструкцию')[l] },
           ],
         },
-        { blockType: 'team', header: header(t('Komanda', 'Team', 'Команда')[l], t('Peşəkar komandamız', 'Our professional team', 'Наша команда')[l]), source: 'auto', limit: 4 },
         { blockType: 'references', header: header(t('Referanslarımız', 'Our references', 'Наши референсы')[l], L(home, l).referencesHeader.h2), source: 'auto', limit: 8, showBrandMarquee: false },
         {
           blockType: 'cta',
@@ -406,7 +411,7 @@ export async function seedPages(ctx: Ctx) {
   await savePage(ctx, 'faq', t('faq', 'faq', 'faq'), (l) => ({
     title: t('Tez-tez soruşulan suallar', 'Frequently asked questions', 'Частые вопросы')[l],
     intro: t('Hovuz, sauna, hamam və SPA tikintisi ilə bağlı ən çox verilən suallar.', 'The most common questions about pool, sauna, hammam and SPA construction.', 'Самые частые вопросы о строительстве бассейнов, саун, хамамов и СПА.')[l],
-    layout: [{ blockType: 'faq', header: header(), source: 'auto', limit: 100, showContactForm: true }],
+    layout: [{ blockType: 'faq', header: header(), source: 'auto', limit: 100, showContactForm: false }],
     meta: { title: t('FAQ — Hovuz və SPA tikintisi', 'FAQ — Pool & SPA construction', 'FAQ — Строительство бассейнов и СПА')[l] },
   }))
   await savePage(ctx, 'gallery', t('qalereya', 'gallery', 'galereya'), (l) => ({

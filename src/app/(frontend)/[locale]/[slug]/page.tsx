@@ -175,7 +175,7 @@ async function CategoryPage({ cat, locale, d, path, home, alternates }: Common &
                     image={mediaProps(p.cover as Media, 'card')}
                     excerpt={p.excerpt}
                     facts={{ size: p.size, days: p.durationDays, place: p.location }}
-                    labels={{ view: d.viewProject, daysUnit: d.days }}
+                    labels={{ view: d.viewProject, daysUnit: d.days, completedIn: d.completedIn }}
                   />
                 </li>
               ))}
@@ -228,7 +228,7 @@ async function AreaPage({ area, locale, d, path, home, alternates }: Common & { 
                     image={mediaProps(p.cover as Media, 'card')}
                     excerpt={p.excerpt}
                     facts={{ size: p.size, days: p.durationDays, place: p.location }}
-                    labels={{ view: d.viewProject, daysUnit: d.days }}
+                    labels={{ view: d.viewProject, daysUnit: d.days, completedIn: d.completedIn }}
                   />
                 </li>
               ))}

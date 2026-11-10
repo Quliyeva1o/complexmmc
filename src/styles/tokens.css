@@ -91,7 +91,7 @@
   --anim-entrance: 1.25s;
 
   /* ---------- Layout ---------- */
-  --container: 1334px; /* 1304px content + side padding */
+  --container: calc(1304px + 2 * var(--gutter)); /* template content width is always 1304px */
   --gutter: clamp(1rem, 4vw, 1.875rem);
   --section-y: clamp(3.75rem, 2.5rem + 3.2vw, 6.25rem); /* 100px desktop, 60px mobile */
 }

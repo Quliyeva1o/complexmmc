@@ -1,17 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { UiIcon } from '@/components/icons/UiIcon'
-
 /**
- * Template "Latest Projects" card: photo, title, a meta line (place · size · duration),
- * short description and a "View project" pill.
+ * Template project card (Pooluxe "Project Style 1"), measured 1:1:
+ * 415×233 photo (15px radius, grows to 1.1 on hover) · 20px gap · 26px title ·
+ * grey pills (location, "completed in N days") · 16/30 three-line excerpt.
  */
 export function ProjectCard({
   href,
   title,
   image,
-  category,
   excerpt,
   facts,
   labels,
@@ -19,61 +17,39 @@ export function ProjectCard({
   href: string
   title: string
   image?: { src: string; alt: string } | null
+  /** kept for callers; the template card shows no category badge */
   category?: string
   excerpt?: string | null
   facts: { size?: string | null; days?: number | null; place?: string | null }
-  labels: { view: string; daysUnit: string }
+  labels: { view: string; daysUnit: string; completedIn?: string }
 }) {
+  const pill = 'inline-flex items-center rounded-[25px] bg-soft px-[15px] py-2 text-[14px] leading-[14px]'
+  const done = facts.days ? (labels.completedIn ? labels.completedIn.replace('{n}', String(facts.days)) : `${facts.days} ${labels.daysUnit}`) : null
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] ring-1 ring-heading/5" data-reveal>
-      <Link href={href} className="relative block aspect-[4/3] overflow-hidden bg-soft" tabIndex={-1} aria-hidden="true">
+    <article className="group flex h-full flex-col gap-5" data-reveal>
+      <Link href={href} className="relative block aspect-[415/233] overflow-hidden rounded-[15px] bg-soft" tabIndex={-1} aria-hidden="true">
         {image && (
           <Image
             src={image.src}
             alt={image.alt}
             fill
-            sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(min-width: 1024px) 415px, (min-width: 640px) 50vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
           />
         )}
-        {category && <span className="absolute top-4 left-4 rounded-[var(--radius-badge)] bg-white px-3 py-1 text-sm font-semibold text-heading">{category}</span>}
       </Link>
-      <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-xl leading-snug">
-          <Link href={href} className="transition-colors hover:text-primary">
-            {title}
-          </Link>
-        </h3>
-        <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-          {facts.place && (
-            <span className="flex items-center gap-1.5">
-              <UiIcon name="pin" className="text-primary" />
-              {facts.place}
-            </span>
-          )}
-          {facts.size && (
-            <span className="flex items-center gap-1.5">
-              <UiIcon name="ruler" className="text-primary" />
-              {facts.size}
-            </span>
-          )}
-          {facts.days ? (
-            <span className="flex items-center gap-1.5">
-              <UiIcon name="calendar" className="text-primary" />
-              {facts.days} {labels.daysUnit}
-            </span>
-          ) : null}
-        </p>
-        {excerpt && <p className="mt-3 line-clamp-3">{excerpt}</p>}
-        <div className="mt-auto pt-6">
-          <Link
-            href={href}
-            className="inline-flex min-h-[42px] items-center rounded-[var(--radius-pill)] border border-heading/15 px-5 text-sm font-bold text-heading transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary"
-          >
-            {labels.view}
-          </Link>
-        </div>
-      </div>
+      <h3 className="text-[22px] leading-none tracking-normal md:text-[26px]">
+        <Link href={href} className="leading-[1.2]">
+          {title}
+        </Link>
+      </h3>
+      {(facts.place || done) && (
+        <ul className="flex flex-wrap gap-[15px]">
+          {facts.place && <li className={pill}>{facts.place}</li>}
+          {done && <li className={pill}>{done}</li>}
+        </ul>
+      )}
+      {excerpt && <p className="line-clamp-3 leading-[30px]">{excerpt}</p>}
     </article>
   )
 }

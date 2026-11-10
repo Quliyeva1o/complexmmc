@@ -167,7 +167,7 @@ export default async function ServicePage({ params }: P) {
                         image={mediaProps(p.cover as Media, 'card')}
                         excerpt={p.excerpt}
                         facts={{ size: p.size, days: p.durationDays, place: p.location }}
-                        labels={{ view: d.viewProject, daysUnit: d.days }}
+                        labels={{ view: d.viewProject, daysUnit: d.days, completedIn: d.completedIn }}
                       />
                     </li>
                   ))}

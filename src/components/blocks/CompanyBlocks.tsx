@@ -8,6 +8,7 @@ import { findDocs, getGlobal } from '@/lib/data'
 import { mediaProps } from '@/lib/media'
 import { docPath, resolveLink } from '@/lib/urls'
 import type { Category, Certificate, Form, Media, ServiceArea, SiteSetting, Team, Testimonial } from '@/payload-types'
+import { EstimateForm } from './EstimateForm'
 import { LeadForm } from './interactive'
 import { blockTheme, type BlockCtx } from './shared'
 
@@ -32,22 +33,23 @@ export async function TeamBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   return (
     <Section {...blockTheme(block)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
-      <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Template "Team" card: 304×439 photo (16px radius, grows 1.1 on hover), white name box inset 19px */}
+      <ul className="grid gap-[30px] sm:grid-cols-2 lg:grid-cols-4">
         {team.map((m) => {
           const img = mediaProps(m.photo as Media, 'card')
           return (
-            <li key={m.id} className="group text-center" data-reveal>
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-soft">
-                {img ? (
-                  <Image src={img.src} alt={img.alt || m.name} fill sizes="(min-width:1024px) 25vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                ) : (
-                  <span className="absolute inset-0 grid place-items-center font-display text-6xl font-extrabold text-primary/40" aria-hidden="true">
-                    {initials(m.name)}
-                  </span>
-                )}
+            <li key={m.id} className="group relative aspect-[304/439] overflow-hidden rounded-[16px] bg-soft" data-reveal>
+              {img ? (
+                <Image src={img.src} alt={img.alt || m.name} fill sizes="(min-width:1024px) 304px, 50vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              ) : (
+                <span className="absolute inset-0 grid place-items-center pb-24 font-display text-6xl font-extrabold text-primary/40" aria-hidden="true">
+                  {initials(m.name)}
+                </span>
+              )}
+              <div className="absolute inset-x-[19px] bottom-[19px] z-10 rounded-[8px] bg-white px-3 py-5 text-center">
+                <h3 className="mb-[5px] text-[20px] leading-none tracking-normal">{m.name}</h3>
+                <p className="leading-[30px]">{m.position}</p>
               </div>
-              <h3 className="mt-5 text-xl">{m.name}</h3>
-              <p className="mt-1 text-text">{m.position}</p>
             </li>
           )
         })}
@@ -97,7 +99,7 @@ export async function GalleryBlock({ block, ctx }: { block: B; ctx: BlockCtx }) 
         images={images}
         layout="grid"
         filters={block.showFilters ? [...cats].map(([key, label]) => ({ key, label })) : undefined}
-        labels={{ close: ctx.d.close, prev: ctx.d.prev, next: ctx.d.next, open: ctx.d.openImage, all: ctx.d.all }}
+        labels={{ close: ctx.d.close, prev: ctx.d.prev, next: ctx.d.next, open: ctx.d.openImage, all: ctx.d.all, view: ctx.d.view }}
       />
     </Section>
   )
@@ -243,26 +245,30 @@ export async function TestimonialsBlock({ block, ctx }: { block: B; ctx: BlockCt
   return (
     <Section {...blockTheme(block)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
-      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Template "Testimonial" card: #F4F7FB, 15px radius, 30px padding; avatar + name + date row, stars, quote */}
+      <ul className="grid gap-[30px] md:grid-cols-2 lg:grid-cols-3">
         {items.map((r) => {
           const img = mediaProps(r.photo as Media, 'thumb')
+          const date = r.date ? new Intl.DateTimeFormat({ az: 'az-Latn-AZ', en: 'en-GB', ru: 'ru-RU' }[ctx.locale], { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(r.date)) : null
           return (
-            <li key={r.id} className="rounded-[var(--radius-card)] bg-white p-8 shadow-[var(--shadow-card)] ring-1 ring-heading/5" data-reveal>
-              <p className="text-star" aria-label={`${r.rating ?? 5}/5`}>
-                {'★'.repeat(r.rating ?? 5)}
-              </p>
-              <blockquote className="mt-4">“{r.quote}”</blockquote>
-              <footer className="mt-6 flex items-center gap-3">
-                {img ? (
-                  <Image src={img.src} alt={r.name} width={48} height={48} className="size-12 rounded-full object-cover" />
-                ) : (
-                  <span className="grid size-12 place-items-center rounded-full bg-primary-soft font-display font-bold text-heading">{initials(r.name)}</span>
-                )}
-                <span>
-                  <span className="block font-display font-bold text-heading">{r.name}</span>
-                  {r.role && <span className="text-sm">{r.role}</span>}
-                </span>
-              </footer>
+            <li key={r.id} className="rounded-[15px] bg-soft p-[30px]" data-reveal>
+              <figure>
+                <figcaption className="flex items-center gap-[15px]">
+                  {img ? (
+                    <Image src={img.src} alt={r.name} width={40} height={40} className="size-10 rounded-full object-cover" />
+                  ) : (
+                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary font-display text-sm font-bold text-heading">{initials(r.name)}</span>
+                  )}
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display leading-[30px] font-bold text-heading">{r.name}</span>
+                    {(date || r.role) && <span className="block text-[14px] leading-[20px]">{date ?? r.role}</span>}
+                  </span>
+                </figcaption>
+                <p className="mt-6 text-[18px] tracking-[2px] text-star" aria-label={`${r.rating ?? 5}/5`}>
+                  {'★'.repeat(r.rating ?? 5)}
+                </p>
+                <blockquote className="mt-3 leading-[30px]">“{r.quote}”</blockquote>
+              </figure>
             </li>
           )
         })}
@@ -357,20 +363,44 @@ export function VideoBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
 }
 
 /* ------------------------------------------------------------------ Calculator placeholder (full wizard in Stage 7) */
+const ESTIMATE_SIDE = {
+  az: { eyebrow: 'Pulsuz qiymət təklifi', text: 'Dəqiq qiymət ölçüdən, materiallardan və əlavələrdən asılıdır. Mütəxəssisimiz obyektə pulsuz baxış keçirib yazılı təklif hazırlayır.', items: ['Pulsuz baxış və məsləhət', 'Fərdi layihələndirmə', 'Lisenziyalı tikinti', 'Konstruksiyaya 12 il yazılı zəmanət'] },
+  en: { eyebrow: 'Free quote', text: 'The exact price depends on size, materials and extras. Our specialist visits your site for free and prepares a written quote.', items: ['Free site visit and consultation', 'Custom design', 'Licensed construction', '12-year written structural warranty'] },
+  ru: { eyebrow: 'Бесплатный расчёт', text: 'Точная цена зависит от размера, материалов и дополнительных опций. Специалист бесплатно приедет на объект и подготовит письменное предложение.', items: ['Бесплатный выезд и консультация', 'Индивидуальный проект', 'Лицензированное строительство', '12 лет письменной гарантии на конструкцию'] },
+} as const
+
+/* Template "Cost Estimator": 856px form panel + 403px navy info card */
 export async function CalculatorBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
-  const form = (await findDocs<Form>('forms', ctx.locale, { limit: 1, depth: 0, sort: 'createdAt' }))[0]
+  const [form, s] = await Promise.all([
+    findDocs<Form>('forms', ctx.locale, { limit: 1, depth: 0, sort: 'createdAt' }).then((r) => r[0]),
+    getGlobal<SiteSetting>('site-settings', ctx.locale, 0),
+  ])
+  const side = ESTIMATE_SIDE[ctx.locale]
+  const phone = s.phones?.find((p) => p.primary)?.number ?? s.phones?.[0]?.number
   return (
-    <Section {...blockTheme(block)}>
-      <div className="mx-auto max-w-3xl rounded-[var(--radius-card)] bg-white p-8 shadow-[var(--shadow-card)] ring-1 ring-heading/5 md:p-12">
-        <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro || ctx.d.freeQuoteText} />
-        {form && (
-          <LeadForm
-            withEmail
-            formId={form.id}
-            labels={{ name: ctx.d.name, phone: ctx.d.phone, email: ctx.d.emailField, message: ctx.d.message, send: ctx.d.send, sending: ctx.d.sending, sent: ctx.d.sent, error: ctx.d.formError }}
-          />
-        )}
+    <section id={blockTheme(block).id} className="px-[15px]">
+      <div className="mx-auto flex max-w-[1304px] flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row lg:items-start">
+        <div className="min-w-0 flex-1 lg:max-w-[856px]" data-reveal>
+          {form && <EstimateForm locale={ctx.locale} formId={form.id} />}
+        </div>
+        <aside className="w-full shrink-0 rounded-[15px] bg-dark p-10 lg:w-[403px]" data-reveal>
+          <SectionHeader dark align="start" eyebrow={block.header?.eyebrow || side.eyebrow} heading={block.header?.heading} className="mb-0" />
+          <p className="mt-5 leading-[30px] text-white/80">{block.header?.intro || side.text}</p>
+          <ul className="mt-[45px] border-t border-[rgb(222_226_230/0.5)] pt-[25px] pb-[30px]">
+            {side.items.map((it) => (
+              <li key={it} className="flex items-center gap-[5px] leading-[30px] text-white">
+                <UiIcon name="check" className="shrink-0 text-[18px] text-primary" />
+                {it}
+              </li>
+            ))}
+          </ul>
+          {phone && (
+            <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="font-display text-[26px] font-bold text-white transition-colors hover:text-primary">
+              {phone}
+            </a>
+          )}
+        </aside>
       </div>
-    </Section>
+    </section>
   )
 }

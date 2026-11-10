@@ -395,12 +395,21 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * "Başlıq — mətn" formatında yazsanız, "Niyə biz" bölməsində başlıq və mətn ayrıca göstərilir.
+             */
             bullets?:
               | {
                   text: string;
                   id?: string | null;
                 }[]
               | null;
+            bulletsAsGrid?: boolean | null;
+            gridHeader?: {
+              eyebrow?: string | null;
+              heading?: string | null;
+              intro?: string | null;
+            };
             imageLarge?: (number | null) | Media;
             imageSmall?: (number | null) | Media;
             badge?: {
@@ -1833,12 +1842,21 @@ export interface Category {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * "Başlıq — mətn" formatında yazsanız, "Niyə biz" bölməsində başlıq və mətn ayrıca göstərilir.
+             */
             bullets?:
               | {
                   text: string;
                   id?: string | null;
                 }[]
               | null;
+            bulletsAsGrid?: boolean | null;
+            gridHeader?: {
+              eyebrow?: string | null;
+              heading?: string | null;
+              intro?: string | null;
+            };
             imageLarge?: (number | null) | Media;
             imageSmall?: (number | null) | Media;
             badge?: {
@@ -3081,12 +3099,21 @@ export interface Service {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * "Başlıq — mətn" formatında yazsanız, "Niyə biz" bölməsində başlıq və mətn ayrıca göstərilir.
+             */
             bullets?:
               | {
                   text: string;
                   id?: string | null;
                 }[]
               | null;
+            bulletsAsGrid?: boolean | null;
+            gridHeader?: {
+              eyebrow?: string | null;
+              heading?: string | null;
+              intro?: string | null;
+            };
             imageLarge?: (number | null) | Media;
             imageSmall?: (number | null) | Media;
             badge?: {
@@ -4330,12 +4357,21 @@ export interface Project {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * "Başlıq — mətn" formatında yazsanız, "Niyə biz" bölməsində başlıq və mətn ayrıca göstərilir.
+             */
             bullets?:
               | {
                   text: string;
                   id?: string | null;
                 }[]
               | null;
+            bulletsAsGrid?: boolean | null;
+            gridHeader?: {
+              eyebrow?: string | null;
+              heading?: string | null;
+              intro?: string | null;
+            };
             imageLarge?: (number | null) | Media;
             imageSmall?: (number | null) | Media;
             badge?: {
@@ -5750,12 +5786,21 @@ export interface ServiceArea {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * "Başlıq — mətn" formatında yazsanız, "Niyə biz" bölməsində başlıq və mətn ayrıca göstərilir.
+             */
             bullets?:
               | {
                   text: string;
                   id?: string | null;
                 }[]
               | null;
+            bulletsAsGrid?: boolean | null;
+            gridHeader?: {
+              eyebrow?: string | null;
+              heading?: string | null;
+              intro?: string | null;
+            };
             imageLarge?: (number | null) | Media;
             imageSmall?: (number | null) | Media;
             badge?: {
@@ -7571,6 +7616,14 @@ export interface PagesSelect<T extends boolean = true> {
                     text?: T;
                     id?: T;
                   };
+              bulletsAsGrid?: T;
+              gridHeader?:
+                | T
+                | {
+                    eyebrow?: T;
+                    heading?: T;
+                    intro?: T;
+                  };
               imageLarge?: T;
               imageSmall?: T;
               badge?:
@@ -8482,6 +8535,14 @@ export interface CategoriesSelect<T extends boolean = true> {
                     text?: T;
                     id?: T;
                   };
+              bulletsAsGrid?: T;
+              gridHeader?:
+                | T
+                | {
+                    eyebrow?: T;
+                    heading?: T;
+                    intro?: T;
+                  };
               imageLarge?: T;
               imageSmall?: T;
               badge?:
@@ -9350,6 +9411,14 @@ export interface ServicesSelect<T extends boolean = true> {
                     text?: T;
                     id?: T;
                   };
+              bulletsAsGrid?: T;
+              gridHeader?:
+                | T
+                | {
+                    eyebrow?: T;
+                    heading?: T;
+                    intro?: T;
+                  };
               imageLarge?: T;
               imageSmall?: T;
               badge?:
@@ -10201,6 +10270,14 @@ export interface ServiceAreasSelect<T extends boolean = true> {
                 | {
                     text?: T;
                     id?: T;
+                  };
+              bulletsAsGrid?: T;
+              gridHeader?:
+                | T
+                | {
+                    eyebrow?: T;
+                    heading?: T;
+                    intro?: T;
                   };
               imageLarge?: T;
               imageSmall?: T;
@@ -11073,6 +11150,14 @@ export interface ProjectsSelect<T extends boolean = true> {
                 | {
                     text?: T;
                     id?: T;
+                  };
+              bulletsAsGrid?: T;
+              gridHeader?:
+                | T
+                | {
+                    eyebrow?: T;
+                    heading?: T;
+                    intro?: T;
                   };
               imageLarge?: T;
               imageSmall?: T;

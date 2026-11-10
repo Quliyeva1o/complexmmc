@@ -37,7 +37,25 @@ export const AboutIntroBlock: Block = {
       name: 'bullets',
       label: 'Bəndlər',
       type: 'array',
+      admin: { description: '"Başlıq — mətn" formatında yazsanız, "Niyə biz" bölməsində başlıq və mətn ayrıca göstərilir.' },
       fields: [{ name: 'text', label: 'Mətn', type: 'text', localized: true, required: true }],
+    },
+    {
+      name: 'bulletsAsGrid',
+      label: 'Bəndləri ayrıca "Niyə biz" bölməsi kimi göstər (nömrəli kartlar)',
+      type: 'checkbox',
+      defaultValue: false,
+    },
+    {
+      name: 'gridHeader',
+      label: '"Niyə biz" bölməsinin başlığı',
+      type: 'group',
+      admin: { condition: (_: unknown, s: { bulletsAsGrid?: boolean }) => !!s?.bulletsAsGrid },
+      fields: [
+        { name: 'eyebrow', label: 'Üst yazı', type: 'text', localized: true },
+        { name: 'heading', label: 'Başlıq', type: 'text', localized: true },
+        { name: 'intro', label: 'Giriş mətni', type: 'textarea', localized: true },
+      ],
     },
     {
       type: 'row',
