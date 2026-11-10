@@ -363,3 +363,95 @@ Smetalar gələnə qədər kalkulyator "yalnız müraciət" rejimində işləyir
 - **Alınıb (2026-11-09):** məhsul qiymət kataloqu PDF (`media/` qovluğunda) – Mərhələ 8b-də idxal olunacaq. Qeyd: `media/` Payload-un yükləmə qovluğudur və git-ə düşmür; kataloqu idxaldan əvvəl ayrıca `data/catalogs/` qovluğuna köçürəcəyik.
 - **Kateqoriya ikon zolağı:** §3.1-dəki 10 elementlik siyahı ilə başlayıram; istənilən vaxt admin-dən dəyişir.
 - **Hostinq:** deploy mərhələsində (tövsiyə: VPS — Node + Postgres + Nginx).
+
+---
+
+## 11. Dizayn yenilənməsi — minimalist, vahid sistem (2026-11-10)
+
+**Məqsəd:** yazılar daha kiçik və sakit, ölçülər hər yerdə eyni qaydaya tabe, desktop və mobil səliqəli. Pooluxe-un quruluşu (ağ / rəngli fonlu bölmələrin növbələşməsi) qalır, amma kobud iri başlıqlar yox — minimalist görünüş. turanprojects-dən hero videosu və düymə stili götürülür.
+
+### Addım 1 — Dizayn sistemi (tokenlər) ✅ əsas
+Hər şey `tokens.css`-də bir yerdə, komponentlər yalnız tokenləri istifadə edir:
+- **Tipoqrafiya şkalası** (desktop → mobil, `clamp` ilə): H1 44→30, H2 34→26, H3 22→19, H4 18→17, gövdə 16/1.7, kiçik 14, etiket 12. Başlıqlarda letter-spacing −0.02em (H1/H2), −0.01em (H3), gövdədə 0; etiketlər +0.12em.
+- **Boşluq şkalası** (4px əsaslı): 4, 8, 12, 16, 24, 32, 48, 64, 96. Başlıq → mətn arası 16, bölmə başlığı → məzmun 40–48, bölmələr arası 96 (mobil 64).
+- **Radiuslar:** 8 (input/kiçik), 12 (kart), 16 (böyük media), tam (pill).
+- **Kölgələr:** 2 səviyyə (kart, hover).
+- **Hərəkət:** 200 / 300 / 500 ms + vahid easing; giriş animasiyaları qısa və erkən (aşağıda).
+- **Rənglər semantik tokenlərlə:** `--primary`, `--primary-ink`, `--surface`, `--surface-alt`, `--ink`, `--muted`, `--line`, `--dark` …
+
+### Addım 2 — Palitra seçici
+- 4–5 hazır palitra (tokenlər üzərində): **Okean** (indiki cyan + navy), **Laguna** (yumşaq teal + qrafit), **Turan** (turanprojects teal #0B9AA6 + #122844), **Mərmər** (qum/bej + tünd göy), **Gecə** (tünd fon, açıq aksent).
+- Saytın küncündə müvəqqəti **"Palitra"** düyməsi: klik → palitralar paneli, seçim dərhal tətbiq olunur (yaddaşda saxlanır). Siz seçəndən sonra düymə silinir və seçilən palitra standart olur.
+
+### Addım 3 — Bütün komponentlərin sistemə keçirilməsi
+- **Başlıqlar:** ölçülər kiçilir, başlıq ilə mətn arası düzəlir (indi bəzi yerlərdə çox yaxındır).
+- **Düymələr:** turanprojects stili — 48–52px hündürlük, sağda dairəvi ox ikonu; əsas (dolu) və ikinci (şəffaf/çərçivəli) variant.
+- **Formlar (əlaqə, kalkulyator, FAQ yanındakı):** yeni input dizaynı — 48px, 8px radius, aydın label, fokus halqası, səhv vəziyyəti; düymə yeni stildə.
+- **Nişanlar/tag-lər** (Xidmətlərimiz bölməsindəki tablar və s.) kiçilir: 13–14px, yığcam padding.
+- **"Necə işləyirik" nömrələri:** iri cyan dairələr yerinə kiçik, sakit nömrələr (məs. nazik çərçivəli 40px dairə, aksent yalnız nömrədə).
+- **Kartlar:** vahid radius, padding (24/32), kölgə və hover.
+
+### Addım 4 — Bölmə ritmi (Pooluxe kimi ağ / rəngli növbələşmə)
+Ana səhifə və daxili səhifələrdə bölmələr növbə ilə ağ və yumşaq rəngli fonda olur (`surface` ↔ `surface-alt`), tünd fon yalnız 1–2 vurğu bölməsində (CTA, statistika). Admin-də hər bloka "fon" seçimi artıq var — standart növbələşmə avtomatik verilir.
+
+### Addım 5 — Hero (turanprojects kimi)
+- Fon **videosu** (turanprojects-in videosu + poster şəkli) — admin-dən dəyişdirilə bilər; mobil/zəif internetdə poster.
+- Mərkəzdə: kiçik etiket, 2 sətirlik başlıq (yeni şkala ilə), qısa mətn, 2 düymə (yeni stil), altında "Tikdiyimiz obyektlər" sətri.
+- Mövcud V3 fırlanan sözlər isteğə görə qala bilər.
+
+### Addım 6 — Animasiyalar
+- Giriş animasiyaları indi 1.25 s və gecikmə ilə gəlir — 0.5–0.6 s-ə, kiçik hərəkətlə (12–16px) və element ekrana daxil olmamış başlayacaq şəkildə (rootMargin) qısaldılır. Ardıcıl gecikmələr maks. 60–80 ms.
+- `prefers-reduced-motion` dəstəyi qalır.
+
+### Addım 7 — FAQ akkordeonu
+- Bir sual açılanda digəri avtomatik bağlanır; açılma/bağlanma yumşaq (hündürlük animasiyası, ~300 ms), ikon fırlanır. Klaviatura və ekran oxuyucu dəstəyi qorunur.
+
+### Addım 8 — Responsiv yoxlama və cilalama
+- Hər səhifə 375 / 768 / 1024 / 1440 enində yoxlanır: ölçülər, boşluqlar, sətir sınmaları, toxunma hədəfləri (≥44px).
+- Lighthouse (performans + əlçatanlıq) yoxlaması.
+
+**İş qaydası:** hər addımdan sonra sizə göstərirəm, təsdiqinizdən sonra növbətinə keçirəm.
+
+## 12. Admin panel — səliqəli, dizayn sisteminə uyğun (2026-11-10)
+
+**Hədəf:** admin hər gün işlədilən alət kimi rahat olsun: müraciətlər birinci, sonra layihə / əvvəl-sonra / məhsul əlavə etmək; nadir lazım olan "Məzmun" ən aşağıda, bağlı.
+
+### Addım 1 — Admin üçün dizayn sistemi
+- Saytın tokenləri admində: Manrope başlıqlar + Inter mətn, eyni rənglər (turkuaz əsas, #122844 başlıq), 8/12/16px künclər, yumşaq kölgə.
+- Payload-un öz CSS dəyişənləri (`--theme-*`, düymələr, inputlar, cədvəllər, kartlar) bizim tokenlərə bağlanır (`custom.scss`): 40–44px inputlar, aydın etiketlər, sakit cədvəl sətirləri, nizamlı boşluqlar.
+- Giriş səhifəsi və yuxarı sol küncdə Complex MMC loqosu, admin favicon.
+
+### Addım 2 — Yeni menyu (sol panel), istifadə sırası ilə
+1. **Müraciətlər** — *Əlaqə müraciətləri*, *Qiymət müraciətləri* (ayrıca siyahılar), yeni müraciət sayı nişanı.
+2. **Layihələr** — Layihələr, **Əvvəl & Sonra**, Referanslar.
+3. **Məhsullar** — Məhsullar, Məhsul kateqoriyaları.
+4. **Bloq** — Yazılar, kateqoriyalar, teqlər.
+5. **Şirkət** — Komanda, sertifikatlar, rəylər, qalereya, brendlər.
+6. **Parametrlər** — Sayt, Header, Footer, Tema, Kalkulyator.
+7. **Məzmun** (bağlı, ən aşağıda) — Səhifələr, İstiqamətlər, Xidmətlər, Ərazilər, FAQ, Formalar.
+8. **Sistem** (bağlı) — Media, İstifadəçilər, Yönləndirmələr.
+- Özəl sol panel komponenti: qrupların açıq/bağlı vəziyyəti yadda qalır, aktiv səhifə aydın görünür.
+
+### Addım 3 — İdarə paneli (Dashboard)
+- Yuxarıda: **Yeni müraciətlər** (əlaqə / qiymət sayı) + son 5 müraciət — ad, telefon, növ, vaxt; telefona/WhatsApp-a bir kliklə.
+- **Tez əməliyyatlar** düymələri: Yeni layihə · Əvvəl & Sonra əlavə et · Yeni məhsul · Yeni bloq yazısı.
+- Sayta keçid, son dəyişdirilən layihələr.
+
+### Addım 4 — Müraciətlər rahat oxunsun
+- Siyahıda sütunlar: **Ad, Telefon, Növ (əlaqə / qiymət), Səhifə, Tarix, Status**.
+- **Status:** Yeni → Baxıldı → Cavablandı (rəngli nişan); açılanda avtomatik "Baxıldı".
+- Qiymət müraciətində kalkulyator seçimləri və təxmini məbləğ oxunaqlı kartda göstərilir.
+- Filtr: növ, status, tarix.
+
+### Addım 5 — Əvvəl & Sonra ayrıca bölmə
+- Yeni kolleksiya **Əvvəl & Sonra**: başlıq, layihə (əlaqə), əvvəl şəkli, sonra şəkli, qeyd, sıra, "ana səhifədə göstər".
+- Ana səhifədəki blok bu kolleksiyadan avtomatik götürür; indiki cütlər ora köçürülür (heç nə itmir).
+- Layihə səhifəsində həmin layihənin cütləri də buradan gəlir.
+
+### Addım 6 — Formalar səliqəli
+- Layihə, məhsul, bloq formaları tablara bölünür: **Əsas · Şəkillər · Detallar · SEO**; vacib sahələr yuxarıda, qısa izahlar.
+- Siyahılarda kiçik şəkil (thumbnail), dərc statusu, axtarış sahələri.
+- **Rəng sahələri:** HEX kodun yanında rəng nümunəsi + rəng seçici; Tema bölməsi saytın palitrasına bağlanır (indi heç yerdə tətbiq olunmur). Palitra seçiləndən sonra saytdakı müvəqqəti "Palitra" düyməsi silinir.
+
+### Addım 7 — Yoxlama
+- Desktop və planşetdə hər bölmə; yeni müraciət göndərib dashboard-da görünməsi; layihə / əvvəl-sonra / məhsul əlavə etmə axını əvvəldən sona.

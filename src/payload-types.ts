@@ -72,6 +72,7 @@ export interface Config {
     services: Service;
     'service-areas': ServiceArea;
     projects: Project;
+    'before-after': BeforeAfter;
     'project-categories': ProjectCategory;
     faqs: Faq;
     references: Reference;
@@ -108,6 +109,7 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     'service-areas': ServiceAreasSelect<false> | ServiceAreasSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'before-after': BeforeAfterSelect<false> | BeforeAfterSelect<true>;
     'project-categories': ProjectCategoriesSelect<false> | ProjectCategoriesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     references: ReferencesSelect<false> | ReferencesSelect<true>;
@@ -462,6 +464,9 @@ export interface Page {
               heading?: string | null;
               intro?: string | null;
             };
+            /**
+             * Boş saxlayın: cütlər «Layihələr → Əvvəl & Sonra» bölməsindən avtomatik götürülür.
+             */
             pairs?:
               | {
                   title: string;
@@ -522,6 +527,14 @@ export interface Page {
             items?: (number | Service)[] | null;
             limit?: number | null;
             layout?: ('grid' | 'tabs' | 'overlay') | null;
+            /**
+             * İstiqamətlər = Hovuz, SPA, Sauna, Türk hamamı… səhifələri (kateqoriyalar).
+             */
+            show?: ('services' | 'categories') | null;
+            /**
+             * Boş qalsa bütün dərc olunmuş istiqamətlər admin sırası ilə göstərilir.
+             */
+            categoryItems?: (number | Category)[] | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -1909,6 +1922,9 @@ export interface Category {
               heading?: string | null;
               intro?: string | null;
             };
+            /**
+             * Boş saxlayın: cütlər «Layihələr → Əvvəl & Sonra» bölməsindən avtomatik götürülür.
+             */
             pairs?:
               | {
                   title: string;
@@ -1969,6 +1985,14 @@ export interface Category {
             items?: (number | Service)[] | null;
             limit?: number | null;
             layout?: ('grid' | 'tabs' | 'overlay') | null;
+            /**
+             * İstiqamətlər = Hovuz, SPA, Sauna, Türk hamamı… səhifələri (kateqoriyalar).
+             */
+            show?: ('services' | 'categories') | null;
+            /**
+             * Boş qalsa bütün dərc olunmuş istiqamətlər admin sırası ilə göstərilir.
+             */
+            categoryItems?: (number | Category)[] | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -3166,6 +3190,9 @@ export interface Service {
               heading?: string | null;
               intro?: string | null;
             };
+            /**
+             * Boş saxlayın: cütlər «Layihələr → Əvvəl & Sonra» bölməsindən avtomatik götürülür.
+             */
             pairs?:
               | {
                   title: string;
@@ -3226,6 +3253,14 @@ export interface Service {
             items?: (number | Service)[] | null;
             limit?: number | null;
             layout?: ('grid' | 'tabs' | 'overlay') | null;
+            /**
+             * İstiqamətlər = Hovuz, SPA, Sauna, Türk hamamı… səhifələri (kateqoriyalar).
+             */
+            show?: ('services' | 'categories') | null;
+            /**
+             * Boş qalsa bütün dərc olunmuş istiqamətlər admin sırası ilə göstərilir.
+             */
+            categoryItems?: (number | Category)[] | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -4118,6 +4153,7 @@ export interface Project {
   id: number;
   _order?: string | null;
   title: string;
+  excerpt?: string | null;
   projectCategories?: (number | ProjectCategory)[] | null;
   reference?: (number | null) | Reference;
   location?: string | null;
@@ -4125,13 +4161,19 @@ export interface Project {
   durationDays?: number | null;
   year?: number | null;
   workType?: string | null;
-  featured?: boolean | null;
-  excerpt?: string | null;
   cover?: (number | null) | Media;
   /**
    * Daxili səhifənin yuxarısındakı fon şəkli.
    */
   banner?: (number | null) | Media;
+  gallery?: (number | Media)[] | null;
+  beforeAfter?:
+    | {
+        before: number | Media;
+        after: number | Media;
+        id?: string | null;
+      }[]
+    | null;
   body?: {
     root: {
       type: string;
@@ -4154,14 +4196,8 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
-  gallery?: (number | Media)[] | null;
-  beforeAfter?:
-    | {
-        before: number | Media;
-        after: number | Media;
-        id?: string | null;
-      }[]
-    | null;
+  services?: (number | Service)[] | null;
+  testimonial?: (number | null) | Testimonial;
   layout?:
     | (
         | {
@@ -4424,6 +4460,9 @@ export interface Project {
               heading?: string | null;
               intro?: string | null;
             };
+            /**
+             * Boş saxlayın: cütlər «Layihələr → Əvvəl & Sonra» bölməsindən avtomatik götürülür.
+             */
             pairs?:
               | {
                   title: string;
@@ -4484,6 +4523,14 @@ export interface Project {
             items?: (number | Service)[] | null;
             limit?: number | null;
             layout?: ('grid' | 'tabs' | 'overlay') | null;
+            /**
+             * İstiqamətlər = Hovuz, SPA, Sauna, Türk hamamı… səhifələri (kateqoriyalar).
+             */
+            show?: ('services' | 'categories') | null;
+            /**
+             * Boş qalsa bütün dərc olunmuş istiqamətlər admin sırası ilə göstərilir.
+             */
+            categoryItems?: (number | Category)[] | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -5347,8 +5394,6 @@ export interface Project {
           }
       )[]
     | null;
-  services?: (number | Service)[] | null;
-  testimonial?: (number | null) | Testimonial;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -5359,6 +5404,7 @@ export interface Project {
     canonical?: string | null;
     noindex?: boolean | null;
   };
+  featured?: boolean | null;
   /**
    * Boş qoysanız başlıqdan avtomatik yaranır. Yalnız latın hərfləri, rəqəm və "-".
    */
@@ -5411,6 +5457,26 @@ export interface Reference {
   createdAt: string;
 }
 /**
+ * Yalnız real müştəri rəyləri. Bölmə hazırda saytda söndürülüb.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  _order?: string | null;
+  name: string;
+  role?: string | null;
+  photo?: (number | null) | Media;
+  rating?: number | null;
+  quote: string;
+  date?: string | null;
+  source?: ('google' | 'instagram' | 'direct') | null;
+  project?: (number | null) | Project;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
@@ -5434,17 +5500,8 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  publishedAt?: string | null;
-  author?: (number | null) | Team;
-  authorName?: string | null;
-  categories?: (number | PostCategory)[] | null;
-  tags?: (number | Tag)[] | null;
   relatedPosts?: (number | Post)[] | null;
   faqs?: (number | Faq)[] | null;
-  /**
-   * Boş qoysanız başlıqdan avtomatik yaranır. Yalnız latın hərfləri, rəqəm və "-".
-   */
-  slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -5455,9 +5512,46 @@ export interface Post {
     canonical?: string | null;
     noindex?: boolean | null;
   };
+  publishedAt?: string | null;
+  author?: (number | null) | Team;
+  authorName?: string | null;
+  categories?: (number | PostCategory)[] | null;
+  tags?: (number | Tag)[] | null;
+  /**
+   * Boş qoysanız başlıqdan avtomatik yaranır. Yalnız latın hərfləri, rəqəm və "-".
+   */
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  _order?: string | null;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category?: (number | null) | Category;
+  showOnFaqPage?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -5527,34 +5621,6 @@ export interface Tag {
     canonical?: string | null;
     noindex?: boolean | null;
   };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faqs".
- */
-export interface Faq {
-  id: number;
-  _order?: string | null;
-  question: string;
-  answer: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  category?: (number | null) | Category;
-  showOnFaqPage?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -5853,6 +5919,9 @@ export interface ServiceArea {
               heading?: string | null;
               intro?: string | null;
             };
+            /**
+             * Boş saxlayın: cütlər «Layihələr → Əvvəl & Sonra» bölməsindən avtomatik götürülür.
+             */
             pairs?:
               | {
                   title: string;
@@ -5913,6 +5982,14 @@ export interface ServiceArea {
             items?: (number | Service)[] | null;
             limit?: number | null;
             layout?: ('grid' | 'tabs' | 'overlay') | null;
+            /**
+             * İstiqamətlər = Hovuz, SPA, Sauna, Türk hamamı… səhifələri (kateqoriyalar).
+             */
+            show?: ('services' | 'categories') | null;
+            /**
+             * Boş qalsa bütün dərc olunmuş istiqamətlər admin sırası ilə göstərilir.
+             */
+            categoryItems?: (number | Category)[] | null;
             cta?: {
               label?: string | null;
               type?: ('internal' | 'custom') | null;
@@ -6806,13 +6883,8 @@ export interface Product {
   title: string;
   category: number | ProductCategory;
   brand?: (number | null) | Brand;
-  origin?: string | null;
-  sku?: string | null;
-  priceFrom?: number | null;
-  inStock?: boolean | null;
   spec?: string | null;
   excerpt?: string | null;
-  images?: (number | Media)[] | null;
   description?: {
     root: {
       type: string;
@@ -6828,13 +6900,9 @@ export interface Product {
     };
     [k: string]: unknown;
   } | null;
-  specs?:
-    | {
-        key: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
+  priceFrom?: number | null;
+  sku?: string | null;
+  inStock?: boolean | null;
   variants?:
     | {
         label: string;
@@ -6854,11 +6922,16 @@ export interface Product {
     | number
     | boolean
     | null;
+  images?: (number | Media)[] | null;
   datasheet?: (number | null) | Media;
-  /**
-   * Boş qoysanız başlıqdan avtomatik yaranır. Yalnız latın hərfləri, rəqəm və "-".
-   */
-  slug?: string | null;
+  origin?: string | null;
+  specs?:
+    | {
+        key: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -6869,6 +6942,10 @@ export interface Product {
     canonical?: string | null;
     noindex?: boolean | null;
   };
+  /**
+   * Boş qoysanız başlıqdan avtomatik yaranır. Yalnız latın hərfləri, rəqəm və "-".
+   */
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -7095,22 +7172,23 @@ export interface Form {
   createdAt: string;
 }
 /**
- * Yalnız real müştəri rəyləri. Bölmə hazırda saytda söndürülüb.
+ * Əvvəl və sonra şəkillərini yükləyin, layihəni seçin. Sıranı siyahıda sürüşdürərək dəyişə bilərsiniz.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
+ * via the `definition` "before-after".
  */
-export interface Testimonial {
+export interface BeforeAfter {
   id: number;
   _order?: string | null;
-  name: string;
-  role?: string | null;
-  photo?: (number | null) | Media;
-  rating?: number | null;
-  quote: string;
-  date?: string | null;
-  source?: ('google' | 'instagram' | 'direct') | null;
+  title: string;
+  before: number | Media;
+  after: number | Media;
+  /**
+   * Layihə səhifəsində də göstərilir.
+   */
   project?: (number | null) | Project;
+  caption?: string | null;
+  showOnHome?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -7203,11 +7281,18 @@ export interface Redirect {
   createdAt: string;
 }
 /**
+ * Saytdakı formalardan gələn müraciətlər. Yeni müraciəti açanda status avtomatik «Baxıldı» olur.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
   id: number;
+  kind?: ('contact' | 'quote') | null;
+  status?: ('new' | 'seen' | 'done') | null;
+  name?: string | null;
+  phone?: string | null;
+  page?: string | null;
   form: number | Form;
   submissionData?:
     | {
@@ -7354,6 +7439,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'before-after';
+        value: number | BeforeAfter;
       } | null)
     | ({
         relationTo: 'project-categories';
@@ -7716,6 +7805,8 @@ export interface PagesSelect<T extends boolean = true> {
               items?: T;
               limit?: T;
               layout?: T;
+              show?: T;
+              categoryItems?: T;
               cta?:
                 | T
                 | {
@@ -8635,6 +8726,8 @@ export interface CategoriesSelect<T extends boolean = true> {
               items?: T;
               limit?: T;
               layout?: T;
+              show?: T;
+              categoryItems?: T;
               cta?:
                 | T
                 | {
@@ -9511,6 +9604,8 @@ export interface ServicesSelect<T extends boolean = true> {
               items?: T;
               limit?: T;
               layout?: T;
+              show?: T;
+              categoryItems?: T;
               cta?:
                 | T
                 | {
@@ -10371,6 +10466,8 @@ export interface ServiceAreasSelect<T extends boolean = true> {
               items?: T;
               limit?: T;
               layout?: T;
+              show?: T;
+              categoryItems?: T;
               cta?:
                 | T
                 | {
@@ -10990,6 +11087,7 @@ export interface ServiceAreasSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   _order?: T;
   title?: T;
+  excerpt?: T;
   projectCategories?: T;
   reference?: T;
   location?: T;
@@ -10997,18 +11095,8 @@ export interface ProjectsSelect<T extends boolean = true> {
   durationDays?: T;
   year?: T;
   workType?: T;
-  featured?: T;
-  excerpt?: T;
   cover?: T;
   banner?: T;
-  body?: T;
-  highlights?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        id?: T;
-      };
   gallery?: T;
   beforeAfter?:
     | T
@@ -11017,6 +11105,16 @@ export interface ProjectsSelect<T extends boolean = true> {
         after?: T;
         id?: T;
       };
+  body?: T;
+  highlights?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  services?: T;
+  testimonial?: T;
   layout?:
     | T
     | {
@@ -11251,6 +11349,8 @@ export interface ProjectsSelect<T extends boolean = true> {
               items?: T;
               limit?: T;
               layout?: T;
+              show?: T;
+              categoryItems?: T;
               cta?:
                 | T
                 | {
@@ -11847,8 +11947,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  services?: T;
-  testimonial?: T;
   meta?:
     | T
     | {
@@ -11858,10 +11956,26 @@ export interface ProjectsSelect<T extends boolean = true> {
         canonical?: T;
         noindex?: T;
       };
+  featured?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "before-after_select".
+ */
+export interface BeforeAfterSelect<T extends boolean = true> {
+  _order?: T;
+  title?: T;
+  before?: T;
+  after?: T;
+  project?: T;
+  caption?: T;
+  showOnHome?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -12000,21 +12114,12 @@ export interface ProductsSelect<T extends boolean = true> {
   title?: T;
   category?: T;
   brand?: T;
-  origin?: T;
-  sku?: T;
-  priceFrom?: T;
-  inStock?: T;
   spec?: T;
   excerpt?: T;
-  images?: T;
   description?: T;
-  specs?:
-    | T
-    | {
-        key?: T;
-        value?: T;
-        id?: T;
-      };
+  priceFrom?: T;
+  sku?: T;
+  inStock?: T;
   variants?:
     | T
     | {
@@ -12023,8 +12128,16 @@ export interface ProductsSelect<T extends boolean = true> {
         id?: T;
       };
   priceMatrix?: T;
+  images?: T;
   datasheet?: T;
-  slug?: T;
+  origin?: T;
+  specs?:
+    | T
+    | {
+        key?: T;
+        value?: T;
+        id?: T;
+      };
   meta?:
     | T
     | {
@@ -12034,6 +12147,7 @@ export interface ProductsSelect<T extends boolean = true> {
         canonical?: T;
         noindex?: T;
       };
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -12070,14 +12184,8 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   cover?: T;
   content?: T;
-  publishedAt?: T;
-  author?: T;
-  authorName?: T;
-  categories?: T;
-  tags?: T;
   relatedPosts?: T;
   faqs?: T;
-  slug?: T;
   meta?:
     | T
     | {
@@ -12087,6 +12195,12 @@ export interface PostsSelect<T extends boolean = true> {
         canonical?: T;
         noindex?: T;
       };
+  publishedAt?: T;
+  author?: T;
+  authorName?: T;
+  categories?: T;
+  tags?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -12366,6 +12480,11 @@ export interface FormsSelect<T extends boolean = true> {
  * via the `definition` "form-submissions_select".
  */
 export interface FormSubmissionsSelect<T extends boolean = true> {
+  kind?: T;
+  status?: T;
+  name?: T;
+  phone?: T;
+  page?: T;
   form?: T;
   submissionData?:
     | T
@@ -12764,18 +12883,20 @@ export interface Footer {
 export interface Theme {
   id: number;
   /**
-   * Söndürülübsə src/styles/tokens.css-dəki default palitra işləyir.
+   * Bütün saytın rəngləri bu palitradan gəlir.
+   */
+  palette?: ('okean' | 'laguna' | 'turan' | 'mermer' | 'gece') | null;
+  /**
+   * Açıq olsa aşağıdakı rənglər palitranın üstündən yazılır.
    */
   enabled?: boolean | null;
   primary?: string | null;
   primaryHover?: string | null;
-  primarySoft?: string | null;
-  accent?: string | null;
+  primaryStrong?: string | null;
   heading?: string | null;
   text?: string | null;
   bg?: string | null;
   darkSection?: string | null;
-  sand?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -12990,16 +13111,15 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "theme_select".
  */
 export interface ThemeSelect<T extends boolean = true> {
+  palette?: T;
   enabled?: T;
   primary?: T;
   primaryHover?: T;
-  primarySoft?: T;
-  accent?: T;
+  primaryStrong?: T;
   heading?: T;
   text?: T;
   bg?: T;
   darkSection?: T;
-  sand?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

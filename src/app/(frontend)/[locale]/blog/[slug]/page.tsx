@@ -81,7 +81,7 @@ export default async function PostPage({ params }: P) {
           {/* ---------------------------------------------------------- article */}
           <article className="min-w-0 flex-1 lg:max-w-[818px]">
             <div className="flex flex-col gap-5 px-2.5 py-2.5">
-              <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] leading-[1.2]">
+              <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
                 <li>
                   <AuthorMeta name={authorName} photo={author ? mediaProps(author.photo as Media, 'thumb') : null} />
                 </li>
@@ -92,14 +92,14 @@ export default async function PostPage({ params }: P) {
                   </li>
                 )}
                 {postCats.map((c) => (
-                  <li key={c.id} className="rounded-[25px] bg-badge px-3 py-[5px] text-[12px] text-heading">
+                  <li key={c.id} className="rounded-full bg-badge px-3 py-[5px] text-xs text-heading">
                     {c.title}
                   </li>
                 ))}
               </ul>
-              {p.excerpt && <p className="leading-[30px]">{p.excerpt}</p>}
+              {p.excerpt && <p >{p.excerpt}</p>}
               {cover && (
-                <div className="relative aspect-[798/532] overflow-hidden rounded-[15px]">
+                <div className="relative aspect-[798/532] overflow-hidden rounded-[var(--radius-card)]">
                   <Image src={cover.src} alt={cover.alt} fill priority sizes="(min-width:1024px) 798px, 100vw" className="object-cover" />
                 </div>
               )}
@@ -112,7 +112,7 @@ export default async function PostPage({ params }: P) {
           <aside className="flex w-full shrink-0 flex-col gap-5 lg:w-[441px]">
             {related.length > 0 && (
               <section>
-                <h2 className="mb-5 text-[26px] leading-none tracking-normal">{d.relatedPosts}</h2>
+                <h2 className="mb-5 text-h3">{d.relatedPosts}</h2>
                 <ul className="flex flex-col gap-[30px]">
                   {related.map((r) => {
                     const img = mediaProps(r.cover as Media, 'thumb')
@@ -123,13 +123,13 @@ export default async function PostPage({ params }: P) {
                           {img && <Image src={img.src} alt="" fill sizes="110px" className="object-cover" />}
                         </Link>
                         <div className="min-w-0">
-                          <h3 className="line-clamp-2 text-[18px] leading-[26px] tracking-normal md:text-[20px]">
-                            <Link href={href} className="transition-colors duration-500 hover:text-primary">
+                          <h3 className="line-clamp-2 text-h4">
+                            <Link href={href} className="transition-colors duration-300 hover:text-primary">
                               {r.title}
                             </Link>
                           </h3>
                           {r.publishedAt && (
-                            <time dateTime={r.publishedAt} className="mt-1.5 block text-[14px] leading-[1.2]">
+                            <time dateTime={r.publishedAt} className="mt-1.5 block text-sm">
                               {formatDate(r.publishedAt, locale)}
                             </time>
                           )}
@@ -142,10 +142,10 @@ export default async function PostPage({ params }: P) {
             )}
             {topics.length > 0 && (
               <section className="pt-10">
-                <h2 className="mb-[25px] text-[26px] leading-none tracking-normal">{d.popularTags}</h2>
+                <h2 className="mb-[25px] text-h3">{d.popularTags}</h2>
                 <ul className="flex flex-wrap gap-2">
                   {topics.map((c) => (
-                    <li key={c.id} className="rounded-[25px] bg-primary px-3 py-[5px] text-[12px] leading-4 text-heading">
+                    <li key={c.id} className="rounded-full bg-primary px-3 py-[5px] text-xs text-heading">
                       {c.title}
                     </li>
                   ))}

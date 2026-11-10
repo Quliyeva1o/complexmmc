@@ -95,7 +95,7 @@ export default async function ServicePage({ params }: P) {
                         href={href}
                         aria-current={on ? 'page' : undefined}
                         className={cx(
-                          'flex min-h-[60px] items-center justify-between gap-2 rounded-[10px] px-[25px] py-[15px] font-display text-[18px] leading-[1.5] font-bold transition-colors duration-300 ease-in-out lg:text-[20px]',
+                          'flex min-h-12 items-center justify-between gap-2 rounded-[var(--radius-sm)] px-4 py-3 text-[15px] font-medium transition-colors duration-[var(--duration-fast)]',
                           on ? 'bg-header-sticky text-white' : 'bg-soft text-heading hover:bg-header-sticky hover:text-white',
                         )}
                       >
@@ -116,21 +116,21 @@ export default async function ServicePage({ params }: P) {
                 <SectionHeader align="start" eyebrow={badge} heading={headline} intro={s.excerpt} className="mb-0" />
               </div>
               {cover && (
-                <div className="relative aspect-square overflow-hidden rounded-[15px]">
+                <div className="relative aspect-square overflow-hidden rounded-[var(--radius-card)]">
                   <Image src={cover.src} alt={cover.alt} fill priority sizes="(min-width:1024px) 467px, 100vw" className="object-cover" />
                 </div>
               )}
             </section>
 
             {/* ---------------------------------------------------------- counter box */}
-            <section className="mt-5 flex flex-col gap-x-10 gap-y-[30px] rounded-[15px] bg-primary/20 p-[30px] md:flex-row md:items-center md:p-10">
+            <section className="mt-5 flex flex-col gap-x-10 gap-y-[30px] rounded-[var(--radius-card)] bg-primary/20 p-[30px] md:flex-row md:items-center md:p-10">
               <div className="shrink-0">
-                <p className="font-body text-[56px] leading-none font-semibold text-primary md:text-[72px]">{counter.value}+</p>
-                <p className="mt-1 leading-[30px]">{counter.label}</p>
+                <p className="font-display text-[clamp(2.5rem,2rem+2vw,3.5rem)] leading-none font-bold tracking-[-0.02em] text-primary-strong">{counter.value}+</p>
+                <p className="mt-1">{counter.label}</p>
               </div>
               <div>
-                <h3 className="mb-[25px] text-[22px] leading-none tracking-normal md:text-[26px]">{counter.title}</h3>
-                <p className="leading-[30px]">{counter.text}</p>
+                <h3 className="mb-[25px] text-h3">{counter.title}</h3>
+                <p >{counter.text}</p>
               </div>
             </section>
 
@@ -141,13 +141,13 @@ export default async function ServicePage({ params }: P) {
             {features.length > 0 && (
               <ol className="grid gap-[30px] pt-[30px] pb-10 md:grid-cols-2">
                 {features.map((f, i) => (
-                  <li key={f.id ?? i} data-reveal className="relative rounded-[15px] bg-card-tint p-10 transition-colors duration-[400ms] ease-in-out">
-                    <span className="mb-[30px] flex size-[70px] items-center justify-center rounded-[16px] bg-primary text-[32px] text-dark">
+                  <li key={f.id ?? i} data-reveal className="relative rounded-[var(--radius-card)] bg-card-tint p-10 transition-colors duration-[400ms] ease-in-out">
+                    <span className="mb-6 flex size-12 items-center justify-center rounded-[var(--radius-media)] bg-primary-soft text-2xl text-primary-strong">
                       <UiIcon name={FEATURE_ICONS[i % FEATURE_ICONS.length]} />
                     </span>
-                    <span className="absolute top-[30px] right-10 font-body text-[14px] leading-[30px] font-bold text-heading">{String(i + 1).padStart(2, '0')}</span>
-                    <h3 className="mb-[14px] text-[22px] leading-none tracking-normal md:text-[24px]">{f.title}</h3>
-                    {f.description && <p className="mt-[15px] leading-[30px]">{f.description}</p>}
+                    <span className="absolute top-[30px] right-10 font-body text-sm font-bold text-heading">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 className="mb-[14px] text-h3">{f.title}</h3>
+                    {f.description && <p className="mt-[15px]">{f.description}</p>}
                   </li>
                 ))}
               </ol>
@@ -176,7 +176,7 @@ export default async function ServicePage({ params }: P) {
             )}
 
             {/* ---------------------------------------------------------- dark CTA box */}
-            <section className="flex flex-col gap-5 rounded-[15px] bg-dark p-[30px] md:flex-row md:items-center md:justify-between md:p-10">
+            <section className="flex flex-col gap-5 rounded-[var(--radius-card)] bg-dark p-[30px] md:flex-row md:items-center md:justify-between md:p-10">
               <SectionHeader dark align="start" eyebrow={d.contact} heading={d.svcCtaTitle} intro={d.svcCtaText} className="mb-0 p-2.5 md:max-w-[612px]" />
               <Button href={quoteHref[locale]} className="shrink-0 self-start md:self-center">
                 {d.startProject}

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { type FormEvent, type ReactNode, useId, useRef, useState } from 'react'
 
 import { UiIcon } from '@/components/icons/UiIcon'
-import { cx } from '@/components/ui/primitives'
+import { ButtonContent, buttonClass, cx, FIELD, FIELD_LABEL } from '@/components/ui/primitives'
 
 /* ------------------------------------------------------------------ Before / After comparison slider */
 export type BAPair = { title: string; caption?: string; before: { src: string; alt: string }; after: { src: string; alt: string } }
@@ -96,7 +96,7 @@ export function PillTabs({ tabs }: { tabs: { id: string; label: string; content:
   const base = useId()
   return (
     <div>
-      <div role="tablist" className="mb-10 flex flex-wrap justify-center gap-3">
+      <div role="tablist" className="mb-10 flex flex-wrap justify-center gap-2">
         {tabs.map((t, i) => (
           <button
             key={t.id}
@@ -106,8 +106,8 @@ export function PillTabs({ tabs }: { tabs: { id: string; label: string; content:
             aria-controls={`${base}-p${i}`}
             onClick={() => setActive(i)}
             className={cx(
-              'rounded-[var(--radius-badge)] px-6 py-2.5 font-display font-bold transition-colors',
-              i === active ? 'bg-primary text-on-primary' : 'bg-badge text-heading hover:bg-primary-soft',
+              'inline-flex h-10 items-center rounded-[var(--radius-pill)] border px-4 text-sm font-medium transition-colors duration-[var(--duration-fast)]',
+              i === active ? 'border-heading bg-heading text-white' : 'border-border text-heading hover:border-heading/30',
             )}
           >
             {t.label}
@@ -140,7 +140,7 @@ export function FilterGrid({
   return (
     <div>
       {filters.length > 1 && (
-        <div className="mb-10 flex flex-wrap justify-center gap-3" role="group">
+        <div className="mb-10 flex flex-wrap justify-center gap-2" role="group">
           {[{ key: '', label: allLabel }, ...filters].map((x) => (
             <button
               key={x.key || 'all'}
@@ -148,8 +148,8 @@ export function FilterGrid({
               aria-pressed={(f ?? '') === x.key}
               onClick={() => setF(x.key || null)}
               className={cx(
-                'rounded-[var(--radius-badge)] px-5 py-2 font-display text-sm font-bold transition-colors',
-                (f ?? '') === x.key ? 'bg-primary text-on-primary' : 'bg-badge text-heading hover:bg-primary-soft',
+                'inline-flex h-10 items-center rounded-[var(--radius-pill)] border px-4 text-sm font-medium transition-colors duration-[var(--duration-fast)]',
+                (f ?? '') === x.key ? 'border-heading bg-heading text-white' : 'border-border text-heading hover:border-heading/30',
               )}
             >
               {x.label}
@@ -163,6 +163,18 @@ export function FilterGrid({
         ))}
       </ul>
     </div>
+  )
+}
+
+function Field({ name, label, type = 'text', required = false, auto }: { name: string; label: string; type?: string; required?: boolean; auto?: string }) {
+  return (
+    <label className="grid gap-2">
+      <span className={FIELD_LABEL}>
+        {label}
+        {required && <span className="text-primary-strong"> *</span>}
+      </span>
+      <input name={name} type={type} required={required} autoComplete={auto} className={cx(FIELD, 'h-12')} />
+    </label>
   )
 }
 
@@ -209,48 +221,22 @@ export function LeadForm({
         {labels.sent}
       </p>
     )
-  if (variant === 'template') {
-    const tf = 'w-full rounded-[4px] border border-[#D1D5DB] bg-black/[0.024] p-2.5 text-[14px] leading-[24px] text-[#111827] outline-none transition-colors placeholder:text-[#6b7280] focus:border-primary'
-    return (
-      <form onSubmit={onSubmit} className="flex flex-col">
-        <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-        <div className="flex flex-col gap-4">
-          <input name="name" required placeholder={labels.name} aria-label={labels.name} className={cx(tf, 'h-[46px]')} autoComplete="name" />
-          {withEmail && <input name="email" type="email" placeholder={labels.email} aria-label={labels.email} className={cx(tf, 'h-[46px]')} autoComplete="email" />}
-          <input name="phone" required type="tel" placeholder={labels.phone} aria-label={labels.phone} className={cx(tf, 'h-[46px]')} autoComplete="tel" />
-          <textarea name="message" placeholder={labels.message} aria-label={labels.message} className={cx(tf, 'h-[100px] resize-y')} />
-        </div>
-        <button
-          type="submit"
-          disabled={state === 'sending'}
-          className="mt-2.5 w-full rounded-[25px] bg-primary px-5 py-1.5 text-base leading-[30px] font-bold text-heading transition-colors duration-300 hover:bg-dark hover:text-white disabled:opacity-60"
-        >
-          {state === 'sending' ? labels.sending : labels.send}
-        </button>
-        {state === 'error' && (
-          <p role="alert" className="mt-3 text-sm text-red-700">
-            {labels.error}
-          </p>
-        )}
-      </form>
-    )
-  }
-  const field = 'w-full rounded-[var(--radius-sm)] border border-border bg-white px-4 py-3 text-heading outline-none transition-colors placeholder:text-muted focus:border-primary'
+  // one form style site-wide: visible labels, 48px fields, focus ring, the site button
+  const stacked = variant === 'template' || compact
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-      <div className={cx('grid gap-4', !compact && 'sm:grid-cols-2')}>
-        <input name="name" required placeholder={labels.name} aria-label={labels.name} className={field} autoComplete="name" />
-        <input name="phone" required type="tel" placeholder={labels.phone} aria-label={labels.phone} className={field} autoComplete="tel" />
+      <div className={cx('grid gap-4', !stacked && 'sm:grid-cols-2')}>
+        <Field name="name" label={labels.name} required auto="name" />
+        <Field name="phone" label={labels.phone} type="tel" required auto="tel" />
       </div>
-      {withEmail && <input name="email" type="email" placeholder={labels.email} aria-label={labels.email} className={field} autoComplete="email" />}
-      <textarea name="message" rows={compact ? 3 : 5} placeholder={labels.message} aria-label={labels.message} className={field} />
-      <button
-        type="submit"
-        disabled={state === 'sending'}
-        className="inline-flex min-h-[46px] items-center justify-center rounded-[var(--radius-pill)] bg-primary px-8 font-bold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-60"
-      >
-        {state === 'sending' ? labels.sending : labels.send}
+      {withEmail && labels.email && <Field name="email" label={labels.email} type="email" auto="email" />}
+      <label className="grid gap-2">
+        <span className={FIELD_LABEL}>{labels.message}</span>
+        <textarea name="message" rows={compact ? 3 : 4} className={cx(FIELD, 'resize-y py-3 leading-[1.6]')} />
+      </label>
+      <button type="submit" disabled={state === 'sending'} className={cx(buttonClass('primary'), 'mt-2', stacked ? 'w-full' : 'justify-self-start')}>
+        <ButtonContent>{state === 'sending' ? labels.sending : labels.send}</ButtonContent>
       </button>
       {state === 'error' && (
         <p role="alert" className="text-sm text-red-700">

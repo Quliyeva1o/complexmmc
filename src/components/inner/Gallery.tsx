@@ -80,7 +80,7 @@ export function Gallery({
               onClick={() => setOpen(i)}
               aria-label={`${labels.open}: ${img.alt}`}
               className={cx(
-                'group relative block w-full overflow-hidden rounded-[15px]',
+                'group relative block w-full overflow-hidden rounded-[var(--radius-card)]',
                 fit === 'contain' ? 'aspect-[3/4] bg-white p-4 shadow-[var(--shadow-card)] ring-1 ring-heading/5' : layout === 'grid' ? 'aspect-[423/238] bg-soft' : 'aspect-square bg-soft',
               )}
             >
@@ -93,7 +93,7 @@ export function Gallery({
               />
               {fit === 'cover' && (
                 // template hover: black 60% overlay with a white "View" label
-                <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-[18px] leading-[30px] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true">
+                <span className="absolute inset-0 flex items-center justify-center bg-black/50 text-base text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true">
                   {labels.view ?? <UiIcon name="plus" />}
                 </span>
               )}

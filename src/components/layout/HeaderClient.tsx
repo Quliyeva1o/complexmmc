@@ -82,7 +82,7 @@ export function HeaderClient({
                 <Link
                   href={item.href}
                   className={cx(
-                    'flex items-center gap-1 whitespace-nowrap px-[15px] py-[25px] text-[15px] leading-[30px] font-semibold transition-colors duration-500',
+                    'flex items-center gap-1 whitespace-nowrap px-3.5 py-6 text-[15px] font-medium transition-colors duration-[var(--duration)]',
                     light ? 'text-white hover:text-primary' : 'text-heading hover:text-primary',
                   )}
                 >
@@ -93,7 +93,7 @@ export function HeaderClient({
                   <ul className="invisible absolute top-full left-0 w-60 origin-top scale-y-0 rounded-[3px] bg-white py-2 shadow-[var(--shadow-card)] transition-transform duration-300 group-focus-within:visible group-focus-within:scale-y-100 group-hover:visible group-hover:scale-y-100">
                     {item.children.map((c) => (
                       <li key={c.href}>
-                        <Link href={c.href} className="block px-[15px] py-1 text-sm leading-[30px] text-[#606060] transition-colors hover:bg-primary hover:text-heading">
+                        <Link href={c.href} className="block px-[15px] py-1 text-sm text-text transition-colors hover:bg-primary hover:text-heading">
                           {c.label}
                         </Link>
                       </li>
@@ -123,9 +123,9 @@ export function HeaderClient({
             ))}
           </div>
           {cta && (
-            <Button href={cta.href} className="hidden md:inline-flex">
-              {cta.label}
-            </Button>
+            <span className="hidden md:block">
+              <Button href={cta.href}>{cta.label}</Button>
+            </span>
           )}
           <button
             type="button"

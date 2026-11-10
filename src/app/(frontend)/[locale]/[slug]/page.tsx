@@ -139,7 +139,7 @@ async function CategoryPage({ cat, locale, d, path, home, alternates }: Common &
 
         {services.length > 0 && (
           <section className="mt-16">
-            <h2 className="mb-6 text-[clamp(1.625rem,1.3rem+1.2vw,2.25rem)]">{d.categoryServices}</h2>
+            <h2 className="mb-6 text-h2">{d.categoryServices}</h2>
             <ul className="grid gap-5 sm:grid-cols-2">
               {services.map((s) => {
                 const img = mediaProps(s.cover as Media, 'thumb')
@@ -165,7 +165,7 @@ async function CategoryPage({ cat, locale, d, path, home, alternates }: Common &
 
         {projects.length > 0 && (
           <section className="mt-16">
-            <h2 className="mb-6 text-[clamp(1.625rem,1.3rem+1.2vw,2.25rem)]">{d.relatedProjects}</h2>
+            <h2 className="mb-6 text-h2">{d.relatedProjects}</h2>
             <ul className="grid gap-6 sm:grid-cols-2">
               {projects.map((p) => (
                 <li key={p.id}>
@@ -218,7 +218,7 @@ async function AreaPage({ area, locale, d, path, home, alternates }: Common & { 
         <Prose data={area.body} />
         {projects.length > 0 && (
           <section className="mt-16">
-            <h2 className="mb-6 text-[clamp(1.625rem,1.3rem+1.2vw,2.25rem)]">{d.areaProjects}</h2>
+            <h2 className="mb-6 text-h2">{d.areaProjects}</h2>
             <ul className="grid gap-6 sm:grid-cols-2">
               {projects.map((p) => (
                 <li key={p.id}>

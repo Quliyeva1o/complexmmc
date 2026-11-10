@@ -23,7 +23,10 @@
     "seed:calculator": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/calculator.ts",
     "seed:mosaics": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/mosaics.ts",
     "seed:catalog": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/catalog.ts",
-    "content:highlights": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/apply-highlights.ts"
+    "content:highlights": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/apply-highlights.ts",
+    "content:hero-video": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/hero-video.ts",
+    "content:home-services": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/home-services.ts",
+    "content:before-after": "cross-env NODE_OPTIONS=--no-deprecation payload run src/content/before-after.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.93.0",

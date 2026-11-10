@@ -65,30 +65,30 @@ export function PostCard({
   const dm = date ? dayMonth(date, locale) : null
   return (
     <article className="relative">
-      <Link href={href} tabIndex={-1} aria-hidden="true" className="group/img relative block aspect-[415/276] overflow-hidden rounded-[15px] bg-soft">
+      <Link href={href} tabIndex={-1} aria-hidden="true" className="group/img relative block aspect-[415/276] overflow-hidden rounded-[var(--radius-media)] bg-soft">
         {image && (
           <Image
             src={image.src}
             alt={image.alt}
             fill
             sizes="(min-width:1024px) 415px, (min-width:640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover/img:translate-y-[15px] group-hover/img:scale-110"
+            className="object-cover transition-transform duration-500 group-hover/img:scale-105"
           />
         )}
       </Link>
       {dm && (
-        <div className="pointer-events-none absolute top-0 right-0 m-[25px] rounded-[4px] bg-black/15 px-5 pt-5 pb-1.5 text-center text-white backdrop-blur-[10px]" aria-hidden="true">
-          <span className="block font-display text-[36px] leading-none font-bold tracking-[-0.2px]">{dm.day}</span>
-          <span className="block leading-[20px]">{dm.month}</span>
+        <div className="pointer-events-none absolute top-0 right-0 m-4 rounded-[var(--radius-sm)] bg-white/90 px-3 py-2 text-center text-heading backdrop-blur-md" aria-hidden="true">
+          <span className="block font-display text-lg leading-none font-bold">{dm.day}</span>
+          <span className="mt-1 block text-xs leading-none">{dm.month}</span>
         </div>
       )}
-      <H className="mt-[25px] mb-5 text-[20px] leading-[1.2] tracking-normal">
-        <Link href={href} className="transition-colors duration-500 hover:text-primary">
+      <H className="mt-5 mb-3 text-h4">
+        <Link href={href} className="transition-colors duration-300 hover:text-primary-strong">
           {title}
         </Link>
       </H>
-      {excerpt && <p className="line-clamp-3 leading-[30px]">{excerpt}</p>}
-      <ul className="mt-5 mb-[5px] inline-flex flex-wrap items-center text-[14px] leading-[1.2]">
+      {excerpt && <p className="line-clamp-3 text-card">{excerpt}</p>}
+      <ul className="mt-4 inline-flex flex-wrap items-center text-sm leading-none text-muted">
         <li>
           <AuthorMeta name={author.name} photo={author.photo} />
         </li>

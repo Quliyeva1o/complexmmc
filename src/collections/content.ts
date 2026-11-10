@@ -12,7 +12,7 @@ const G = {
 
 const title: Field = { name: 'title', label: 'Başlıq', type: 'text', localized: true, required: true }
 const excerpt: Field = { name: 'excerpt', label: 'Qısa təsvir', type: 'textarea', localized: true }
-const cover: Field = { name: 'cover', label: 'Örtük şəkli', type: 'upload', relationTo: 'media' }
+const cover: Field = { name: 'cover', label: 'Örtük şəkli', type: 'upload', relationTo: 'media', admin: { components: { Cell: '/components/admin/Cells#ThumbCell' } } }
 const gallery: Field = {
   name: 'gallery', label: 'Qalereya', type: 'upload', relationTo: 'media', hasMany: true,
 }
@@ -198,54 +198,104 @@ export const Projects = contentCollection({
   group: G.content,
   routable: true,
   drafts: true,
-  defaultColumns: ['title', 'location', 'projectCategories', 'featured', '_status'],
+  defaultColumns: ['cover', 'title', 'location', 'projectCategories', 'featured', '_status'],
   fields: [
-    tabs(
-      [
-        title,
-        { name: 'projectCategories', label: 'Kateqoriyalar', type: 'relationship', relationTo: 'project-categories', hasMany: true },
-        { name: 'reference', label: 'Referans (obyekt)', type: 'relationship', relationTo: 'references' },
+    {
+      type: 'tabs',
+      tabs: [
         {
-          type: 'row',
+          label: 'Əsas',
+          description: 'Başlıq, qısa təsvir və layihənin məlumatları.',
           fields: [
-            { name: 'location', label: 'Yer', type: 'text', localized: true },
-            { name: 'size', label: 'Ölçü (məs. 14x6 m)', type: 'text' },
+            title,
+            excerpt,
+            // relationships stay outside rows: in a row the list view loses their values
+            { name: 'projectCategories', label: 'Kateqoriyalar', type: 'relationship', relationTo: 'project-categories', hasMany: true },
+            { name: 'reference', label: 'Referans (obyekt)', type: 'relationship', relationTo: 'references' },
+            {
+              type: 'row',
+              fields: [
+                { name: 'location', label: 'Yer', type: 'text', localized: true },
+                { name: 'size', label: 'Ölçü (məs. 14x6 m)', type: 'text' },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                { name: 'durationDays', label: 'Müddət (gün)', type: 'number' },
+                { name: 'year', label: 'İl', type: 'number' },
+                { name: 'workType', label: 'İş növü', type: 'text', localized: true },
+              ],
+            },
           ],
         },
         {
-          type: 'row',
+          label: 'Şəkillər',
+          description: 'Əvvəl və sonra şəkilləri üçün: Layihələr → Əvvəl & Sonra.',
           fields: [
-            { name: 'durationDays', label: 'Müddət (gün)', type: 'number' },
-            { name: 'year', label: 'İl', type: 'number' },
-            { name: 'workType', label: 'İş növü', type: 'text', localized: true },
+            cover,
+            banner,
+            gallery,
+            {
+              name: 'beforeAfter', label: 'Əvvəl / Sonra', type: 'array',
+              // moved to the "Əvvəl & Sonra" collection (PLAN.md §12, step 5); kept so old data isn't lost
+              admin: { hidden: true },
+              fields: [{ type: 'row', fields: [
+                { name: 'before', label: 'Əvvəl', type: 'upload', relationTo: 'media', required: true },
+                { name: 'after', label: 'Sonra', type: 'upload', relationTo: 'media', required: true },
+              ] }],
+            },
           ],
         },
-        { name: 'featured', label: 'Ana səhifədə göstər', type: 'checkbox', defaultValue: false },
-        excerpt,
-        cover,
-        banner,
-        { name: 'body', label: 'Təsvir', type: 'richText', localized: true },
         {
-          name: 'highlights', label: 'Əsas məqamlar', type: 'array',
+          label: 'Mətn',
           fields: [
-            { name: 'title', label: 'Başlıq', type: 'text', localized: true, required: true },
-            { name: 'description', label: 'Təsvir', type: 'textarea', localized: true },
+            { name: 'body', label: 'Təsvir', type: 'richText', localized: true },
+            {
+              name: 'highlights', label: 'Əsas məqamlar', type: 'array',
+              fields: [
+                { name: 'title', label: 'Başlıq', type: 'text', localized: true, required: true },
+                { name: 'description', label: 'Təsvir', type: 'textarea', localized: true },
+              ],
+            },
           ],
         },
-        gallery,
         {
-          name: 'beforeAfter', label: 'Əvvəl / Sonra', type: 'array',
-          fields: [{ type: 'row', fields: [
-            { name: 'before', label: 'Əvvəl', type: 'upload', relationTo: 'media', required: true },
-            { name: 'after', label: 'Sonra', type: 'upload', relationTo: 'media', required: true },
-          ] }],
+          label: 'Əlavə',
+          fields: [
+            { name: 'services', label: 'Göstərilən xidmətlər', type: 'relationship', relationTo: 'services', hasMany: true },
+            { name: 'testimonial', label: 'Rəy', type: 'relationship', relationTo: 'testimonials' },
+            layout(),
+          ],
         },
       ],
-      [
-        { name: 'services', label: 'Göstərilən xidmətlər', type: 'relationship', relationTo: 'services', hasMany: true },
-        { name: 'testimonial', label: 'Rəy', type: 'relationship', relationTo: 'testimonials' },
-      ],
-    ),
+    },
+    { name: 'featured', label: 'Ana səhifədə göstər', type: 'checkbox', defaultValue: false, admin: { position: 'sidebar', components: { Cell: '/components/admin/Cells#BoolCell' } } },
+  ],
+})
+
+/* ---------------------------------------------------------------- Before / After */
+/**
+ * Before & after photo pairs (PLAN.md §12, step 5) — one place to add them. The home page's
+ * "Əvvəl & Sonra" section shows the ones marked for the home page; a project page shows the
+ * pairs linked to that project.
+ */
+export const BeforeAfter = contentCollection({
+  slug: 'before-after',
+  singular: 'Əvvəl & Sonra',
+  plural: 'Əvvəl & Sonra',
+  group: G.content,
+  description: 'Əvvəl və sonra şəkillərini yükləyin, layihəni seçin. Sıranı siyahıda sürüşdürərək dəyişə bilərsiniz.',
+  defaultColumns: ['after', 'title', 'project', 'showOnHome', 'updatedAt'],
+  fields: [
+    title,
+    { type: 'row', fields: [
+      { name: 'before', label: 'Əvvəl (şəkil)', type: 'upload', relationTo: 'media', required: true },
+      { name: 'after', label: 'Sonra (şəkil)', type: 'upload', relationTo: 'media', required: true, admin: { components: { Cell: '/components/admin/Cells#ThumbCell' } } },
+    ] },
+    { name: 'project', label: 'Layihə', type: 'relationship', relationTo: 'projects', admin: { description: 'Layihə səhifəsində də göstərilir.' } },
+    { name: 'caption', label: 'Qısa qeyd', type: 'text', localized: true },
+    { name: 'showOnHome', label: 'Ana səhifədə göstər', type: 'checkbox', defaultValue: true, admin: { position: 'sidebar', components: { Cell: '/components/admin/Cells#BoolCell' } } },
   ],
 })
 
@@ -397,42 +447,73 @@ export const Products = contentCollection({
   group: G.catalog,
   routable: true,
   drafts: true,
-  defaultColumns: ['title', 'category', 'brand', 'priceFrom', '_status'],
+  defaultColumns: ['images', 'title', 'category', 'priceFrom', '_status'],
   fields: [
-    title,
-    { type: 'row', fields: [
-      { name: 'category', label: 'Kateqoriya', type: 'relationship', relationTo: 'product-categories', required: true },
-      { name: 'brand', label: 'Brend', type: 'relationship', relationTo: 'brands' },
-    ] },
-    { type: 'row', fields: [
-      { name: 'origin', label: 'Mənşə ölkə', type: 'text', localized: true },
-      { name: 'sku', label: 'Kod (SKU)', type: 'text' },
-      { name: 'priceFrom', label: 'Başlayan qiymət (AZN)', type: 'number' },
-      { name: 'inStock', label: 'Stokda', type: 'checkbox', defaultValue: true },
-    ] },
-    { name: 'spec', label: 'Qısa spesifikasiya', type: 'text', localized: true },
-    excerpt,
-    { name: 'images', label: 'Şəkillər', type: 'upload', relationTo: 'media', hasMany: true },
-    { name: 'description', label: 'Təsvir', type: 'richText', localized: true },
     {
-      name: 'specs', label: 'Texniki göstəricilər', type: 'array',
-      fields: [{ type: 'row', fields: [
-        { name: 'key', label: 'Göstərici', type: 'text', localized: true, required: true },
-        { name: 'value', label: 'Dəyər', type: 'text', localized: true, required: true },
-      ] }],
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Əsas',
+          fields: [
+            title,
+            {
+              type: 'row',
+              fields: [
+                { name: 'category', label: 'Kateqoriya', type: 'relationship', relationTo: 'product-categories', required: true },
+                { name: 'brand', label: 'Brend', type: 'relationship', relationTo: 'brands' },
+              ],
+            },
+            { name: 'spec', label: 'Qısa spesifikasiya', type: 'text', localized: true },
+            excerpt,
+            { name: 'description', label: 'Təsvir', type: 'richText', localized: true },
+          ],
+        },
+        {
+          label: 'Qiymət',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'priceFrom', label: 'Başlayan qiymət (AZN)', type: 'number' },
+                { name: 'sku', label: 'Kod (SKU)', type: 'text' },
+                { name: 'inStock', label: 'Stokda', type: 'checkbox', defaultValue: true },
+              ],
+            },
+            {
+              name: 'variants', label: 'Variantlar (ölçü → qiymət)', type: 'array',
+              fields: [{ type: 'row', fields: [
+                { name: 'label', label: 'Variant', type: 'text', localized: true, required: true },
+                { name: 'price', label: 'Qiymət (AZN)', type: 'number' },
+              ] }],
+            },
+            {
+              name: 'priceMatrix', label: 'Qiymət cədvəli (uzunluq × en)', type: 'json',
+              admin: { description: 'Hovuz örtükləri kimi ölçüyə görə qiymətlənən məhsullar üçün: { "widths": [2.5, 3, …], "rows": [{ "length": 2.5, "prices": [12126, …] }] }' },
+            },
+          ],
+        },
+        {
+          label: 'Şəkillər və sənəd',
+          fields: [
+            { name: 'images', label: 'Şəkillər', type: 'upload', relationTo: 'media', hasMany: true, admin: { components: { Cell: '/components/admin/Cells#ThumbCell' } } },
+            { name: 'datasheet', label: 'PDF sənəd', type: 'upload', relationTo: 'media' },
+          ],
+        },
+        {
+          label: 'Texniki',
+          fields: [
+            { name: 'origin', label: 'Mənşə ölkə', type: 'text', localized: true },
+            {
+              name: 'specs', label: 'Texniki göstəricilər', type: 'array',
+              fields: [{ type: 'row', fields: [
+                { name: 'key', label: 'Göstərici', type: 'text', localized: true, required: true },
+                { name: 'value', label: 'Dəyər', type: 'text', localized: true, required: true },
+              ] }],
+            },
+          ],
+        },
+      ],
     },
-    {
-      name: 'variants', label: 'Variantlar (ölçü → qiymət)', type: 'array',
-      fields: [{ type: 'row', fields: [
-        { name: 'label', label: 'Variant', type: 'text', localized: true, required: true },
-        { name: 'price', label: 'Qiymət (AZN)', type: 'number' },
-      ] }],
-    },
-    {
-      name: 'priceMatrix', label: 'Qiymət cədvəli (uzunluq × en)', type: 'json',
-      admin: { description: 'Hovuz örtükləri kimi ölçüyə görə qiymətlənən məhsullar üçün: { "widths": [2.5, 3, …], "rows": [{ "length": 2.5, "prices": [12126, …] }] }' },
-    },
-    { name: 'datasheet', label: 'PDF sənəd', type: 'upload', relationTo: 'media' },
   ],
 })
 
@@ -463,19 +544,26 @@ export const Posts = contentCollection({
   routable: true,
   drafts: true,
   orderable: false,
-  defaultColumns: ['title', 'publishedAt', 'categories', '_status'],
+  defaultColumns: ['cover', 'title', 'publishedAt', 'categories', '_status'],
   fields: [
-    title,
-    excerpt,
-    cover,
-    { name: 'content', label: 'Məzmun', type: 'richText', localized: true, required: true },
+    {
+      type: 'tabs',
+      tabs: [
+        { label: 'Əsas', fields: [title, excerpt, cover, { name: 'content', label: 'Məzmun', type: 'richText', localized: true, required: true }] },
+        {
+          label: 'Əlaqəli',
+          fields: [
+            { name: 'relatedPosts', label: 'Oxşar yazılar', type: 'relationship', relationTo: 'posts', hasMany: true },
+            faqs,
+          ],
+        },
+      ],
+    },
     { name: 'publishedAt', label: 'Dərc tarixi', type: 'date', admin: { position: 'sidebar' } },
     { name: 'author', label: 'Müəllif (komanda)', type: 'relationship', relationTo: 'team', admin: { position: 'sidebar' } },
     { name: 'authorName', label: 'Müəllif adı (komandada yoxdursa)', type: 'text', admin: { position: 'sidebar' } },
     { name: 'categories', label: 'Kateqoriyalar', type: 'relationship', relationTo: 'post-categories', hasMany: true, admin: { position: 'sidebar' } },
     { name: 'tags', label: 'Teqlər', type: 'relationship', relationTo: 'tags', hasMany: true, admin: { position: 'sidebar' } },
-    { name: 'relatedPosts', label: 'Oxşar yazılar', type: 'relationship', relationTo: 'posts', hasMany: true },
-    faqs,
   ],
 })
 
@@ -485,6 +573,7 @@ export const contentCollections = [
   Services,
   ServiceAreas,
   Projects,
+  BeforeAfter,
   ProjectCategories,
   FAQs,
   References,

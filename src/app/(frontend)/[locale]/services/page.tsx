@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import { PageBanner } from '@/components/inner/InnerParts'
 import { PageShell } from '@/components/layout/PageShell'
+import { Section, SectionHeader } from '@/components/ui/primitives'
 import { ServiceCard } from '@/components/ui/ServiceCard'
 import { type Locale, localePrefix, localeCodes } from '@/i18n/config'
 import { t } from '@/i18n/dictionary'
@@ -25,9 +26,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 export default async function ServicesPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params
   const d = t(locale)
-  const [page, services] = await Promise.all([
+  const [page, services, lines] = await Promise.all([
     findBySlug<Page>('pages', 'services', locale, 1),
     findDocs<Service>('services', locale, { where: { _status: { equals: 'published' } }, depth: 1 }),
+    findDocs<Category>('categories', locale, { where: { _status: { equals: 'published' } }, depth: 1, limit: 50 }),
   ])
   const home = localePrefix(locale) || '/'
   return (
@@ -35,8 +37,23 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([breadcrumbLd([{ name: d.breadcrumbHome, path: home }, { name: d.services, path: paths[locale] }])]) }} />
       <PageBanner title={page?.title ?? d.services} intro={page?.intro} image={page?.banner} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.services }]} />
 
-      <section className="px-[15px]">
-        <ul className="mx-auto grid max-w-[1304px] gap-[30px] py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-3">
+      {/* service lines first (pool, SPA, sauna, hammams, steam room, gym), then the pool/SPA solutions */}
+      {lines.length > 0 && (
+        <Section>
+          <SectionHeader eyebrow={d.services} heading={d.serviceLines} intro={d.serviceLinesIntro} />
+          <ul className="grid gap-[var(--grid-gap)] sm:grid-cols-2 lg:grid-cols-3">
+            {lines.map((c) => (
+              <li key={c.id} data-reveal>
+                <ServiceCard href={docPath('categories', c.slug, locale)} title={c.title} excerpt={c.excerpt} image={mediaProps(c.cover as Media, 'card')} icon={c.iconKey ?? 'pool'} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      <Section theme="soft">
+        <SectionHeader eyebrow={d.services} heading={d.solutions} intro={d.solutionsIntro} />
+        <ul className="grid gap-[var(--grid-gap)] sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => {
             const cat = (s.category ?? []).find((c) => typeof c === 'object') as Category | undefined
             return (
@@ -46,7 +63,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
             )
           })}
         </ul>
-      </section>
+      </Section>
     </PageShell>
   )
 }

@@ -66,6 +66,28 @@ export const ServicesGridBlock = make('servicesGrid', 'Xidmətlər grid', 'servi
       { label: 'Böyük şəkilli kartlar (tünd fon)', value: 'overlay' },
     ],
   },
+  {
+    name: 'show',
+    label: 'Nə göstərilsin',
+    type: 'select',
+    defaultValue: 'services',
+    admin: { description: 'İstiqamətlər = Hovuz, SPA, Sauna, Türk hamamı… səhifələri (kateqoriyalar).' },
+    options: [
+      { label: 'Xidmətlər (Xidmətlər kolleksiyası)', value: 'services' },
+      { label: 'İstiqamətlər (kateqoriya səhifələri)', value: 'categories' },
+    ],
+  },
+  {
+    name: 'categoryItems',
+    label: 'İstiqamətlər (sıra ilə)',
+    type: 'relationship',
+    relationTo: 'categories',
+    hasMany: true,
+    admin: {
+      description: 'Boş qalsa bütün dərc olunmuş istiqamətlər admin sırası ilə göstərilir.',
+      condition: (_: unknown, s: { show?: string }) => s?.show === 'categories',
+    },
+  },
 ])
 
 export const ProductsShowcaseBlock = make('productsShowcase', 'Məhsullar', 'products', [

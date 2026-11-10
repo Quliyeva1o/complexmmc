@@ -15,7 +15,7 @@ import { breadcrumbLd, ldScript, projectLd } from '@/lib/jsonld'
 import { mediaProps } from '@/lib/media'
 import { buildMetadata } from '@/lib/seo'
 import { docPath } from '@/lib/urls'
-import type { Media, Project, ProjectCategory, Reference } from '@/payload-types'
+import type { BeforeAfter as BeforeAfterDoc, Media, Project, ProjectCategory, Reference } from '@/payload-types'
 
 /** /projects/{slug} — template "Project Single": overview, gallery, highlights, details, related. */
 export const revalidate = 3600
@@ -57,7 +57,7 @@ export default async function ProjectPage({ params }: P) {
   if (!p) notFound()
 
   const catIds = (p.projectCategories ?? []).map((c) => (typeof c === 'object' ? c.id : c))
-  const [alternates, related] = await Promise.all([
+  const [alternates, related, baDocs] = await Promise.all([
     getAlternates('projects', p.id, toPath),
     findDocs<Project>('projects', locale, {
       where: {
@@ -70,6 +70,7 @@ export default async function ProjectPage({ params }: P) {
       limit: 3,
       depth: 1,
     }),
+    findDocs<BeforeAfterDoc>('before-after', locale, { where: { project: { equals: p.id } }, depth: 1, limit: 20 }),
   ])
 
   const path = toPath(p.slug!, locale)
@@ -84,7 +85,9 @@ export default async function ProjectPage({ params }: P) {
       return thumb && full ? { src: thumb.src, alt: thumb.alt, full: full.src } : null
     })
     .filter(Boolean) as { src: string; alt: string; full: string }[]
-  const pairs = (p.beforeAfter ?? [])
+  // pairs from the "Əvvəl & Sonra" collection; the project's old inline list as a fallback
+  const pairSource = baDocs.length ? baDocs : (p.beforeAfter ?? [])
+  const pairs = pairSource
     .map((ba) => {
       const before = mediaProps(ba.before as Media, 'large')
       const after = mediaProps(ba.after as Media, 'large')
@@ -130,7 +133,7 @@ export default async function ProjectPage({ params }: P) {
           {/* ---------------------------------------------------------- main column (839px) */}
           <div className="flex min-w-0 flex-1 flex-col gap-5 lg:max-w-[839px]">
             {p.excerpt && (
-              <p className="font-display text-[22px] leading-[1.5] font-bold text-heading md:text-[26px]">
+              <p className="text-lg text-heading">
                 {p.excerpt}
               </p>
             )}
@@ -149,14 +152,14 @@ export default async function ProjectPage({ params }: P) {
                 <SectionHeader align="start" heading={d.highlights} className="mb-2" />
                 <ul className="grid gap-[30px] sm:grid-cols-2">
                   {p.highlights!.map((h) => (
-                    <li key={h.id} className="flex h-full flex-col gap-4 rounded-[15px] bg-soft p-[30px]" data-reveal>
+                    <li key={h.id} className="flex h-full flex-col gap-4 rounded-[var(--radius-card)] bg-soft p-[30px]" data-reveal>
                       <div className="flex items-start gap-4">
-                        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary text-[18px] text-heading" aria-hidden="true">
+                        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary-soft text-primary-strong" aria-hidden="true">
                           <UiIcon name="check" />
                         </span>
-                        <h3 className="pt-2 text-[19px] leading-[1.35] tracking-normal md:text-[20px]">{h.title}</h3>
+                        <h3 className="pt-2 text-h4">{h.title}</h3>
                       </div>
-                      {h.description && <p className="leading-[28px]">{h.description}</p>}
+                      {h.description && <p >{h.description}</p>}
                     </li>
                   ))}
                 </ul>
@@ -165,7 +168,7 @@ export default async function ProjectPage({ params }: P) {
 
             {pairs.length > 0 && (
               <section className="flex flex-col gap-5 pt-10">
-                <h2 className="text-[22px] leading-[1.5] tracking-normal md:text-[26px]">
+                <h2 className="text-h3">
                   {d.beforeAfter}
                 </h2>
                 <BeforeAfterSlider
@@ -178,7 +181,7 @@ export default async function ProjectPage({ params }: P) {
 
           {/* ---------------------------------------------------------- sidebar (420px) */}
           <aside className="w-full shrink-0 lg:w-[420px]">
-            <h2 className="mb-5 text-[26px] leading-none tracking-normal">{d.projectDetails}</h2>
+            <h2 className="mb-5 text-h3">{d.projectDetails}</h2>
             <dl className="flex flex-col gap-5 pb-[50px]">
               {[
                 { label: d.reference, value: ref?.name },

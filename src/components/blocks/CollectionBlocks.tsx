@@ -1,11 +1,11 @@
-import { RichText } from '@payloadcms/richtext-lexical/react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import { CategoryStrip } from '@/components/home/CategoryStrip'
 import { FaqItem } from '@/components/inner/InnerParts'
+import { AccordionGroup } from '@/components/ui/Accordion'
 import { UiIcon } from '@/components/icons/UiIcon'
-import { Button, Section, SectionHeader } from '@/components/ui/primitives'
+import { Button, cx, Section, SectionHeader, sectionTone } from '@/components/ui/primitives'
 import { ServiceCard } from '@/components/ui/ServiceCard'
 import { ServiceOverlayCard } from '@/components/ui/ServiceOverlayCard'
 import { findDocs, getGlobal } from '@/lib/data'
@@ -13,6 +13,7 @@ import { faqLd, ldScript } from '@/lib/jsonld'
 import { mediaProps } from '@/lib/media'
 import { docPath, resolveLink } from '@/lib/urls'
 import type {
+  BeforeAfter as BeforeAfterDoc,
   Brand,
   Category,
   Faq,
@@ -80,7 +81,7 @@ export async function ReferencesBlock({ block, ctx }: { block: B; ctx: BlockCtx 
       ? findDocs<Brand>('brands', ctx.locale, { depth: 1 })
       : Promise.resolve([] as Brand[]),
   ])
-  const { id } = blockTheme(block)
+  const { id } = blockTheme(block, ctx)
   const h = block.header
   // Same bento rhythm as the old turanprojects.az section, repeated every 4 items:
   // big (2 rows) · wide · small · small
@@ -91,7 +92,7 @@ export async function ReferencesBlock({ block, ctx }: { block: B; ctx: BlockCtx 
     'sm:col-span-2 lg:col-span-3',
   ]
   return (
-    <section id={id} aria-label={h?.eyebrow ?? undefined} className="bg-[#f7f8fa] py-14 lg:py-20">
+    <section id={id} aria-label={h?.eyebrow ?? undefined} className={cx(sectionTone(ctx.tone), 'py-[var(--section-y)]')}>
       <div className="mx-auto max-w-[1300px] px-6 sm:px-8 lg:px-12">
         <SectionHeader eyebrow={h?.eyebrow} heading={h?.heading} intro={h?.intro} />
         <ul className="grid auto-rows-[240px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[230px] lg:grid-cols-12">
@@ -107,7 +108,7 @@ export async function ReferencesBlock({ block, ctx }: { block: B; ctx: BlockCtx 
               <li
                 key={r.id}
                 data-reveal
-                className={`group relative overflow-hidden rounded-[28px] bg-[#0B1B2B] ${cell[i % 4]}`}
+                className={`group relative overflow-hidden rounded-[var(--radius-card)] bg-[#0B1B2B] ${cell[i % 4]}`}
               >
                 <figure className="relative m-0 size-full">
                   {img && (
@@ -116,24 +117,24 @@ export async function ReferencesBlock({ block, ctx }: { block: B; ctx: BlockCtx 
                       alt={img.alt}
                       fill
                       sizes="(max-width: 640px) 100vw, 50vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
                   <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(11,27,43,0.88)_0%,rgba(11,27,43,0.25)_48%,rgba(11,27,43,0)_70%)]" />
                   {r.type && (
-                    <span className="absolute top-4 left-4 rounded-full border border-white/30 bg-white/16 px-3 py-1 text-[10px] font-bold tracking-[0.18em] text-white uppercase backdrop-blur-md">
+                    <span className="absolute top-4 left-4 rounded-full border border-white/30 bg-white/16 px-2.5 py-1 text-xs font-semibold tracking-[0.1em] text-white uppercase backdrop-blur-md">
                       {r.type}
                     </span>
                   )}
                   <figcaption className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                    <span className="mb-3 block h-[2px] w-8 bg-[#B98A4E] transition-all duration-500 group-hover:w-16" />
+                    <span className="mb-3 block h-[2px] w-8 bg-primary transition-all duration-500 group-hover:w-16" />
                     <h3
-                      className={`m-0 leading-tight font-extrabold tracking-normal text-white ${big ? 'text-[26px] sm:text-[32px]' : 'text-[19px]'}`}
+                      className={`m-0 text-white ${big ? 'text-h3' : 'text-h4'}`}
                     >
                       {r.name}
                     </h3>
                     {r.subtitle && (
-                      <p className="m-0 mt-1 text-[13px] leading-snug text-white/78">
+                      <p className="m-0 mt-1 text-sm text-white/78">
                         {r.subtitle}
                       </p>
                     )}
@@ -142,7 +143,7 @@ export async function ReferencesBlock({ block, ctx }: { block: B; ctx: BlockCtx 
                 {href && (
                   <Link
                     href={href}
-                    className="absolute inset-0 rounded-[28px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B9AA6]"
+                    className="absolute inset-0 rounded-[var(--radius-card)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-strong)]"
                     aria-label={`${r.name}${r.subtitle ? ` – ${r.subtitle}` : ''}`}
                   />
                 )}
@@ -189,7 +190,7 @@ function BrandMarquee({ brands }: { brands: Brand[] }) {
 export async function BrandLogosBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const brands = await itemsFor<Brand>(block, 'brands', ctx.locale, { depth: 1 })
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader
         eyebrow={block.header?.eyebrow}
         heading={block.header?.heading}
@@ -216,18 +217,15 @@ export async function ProjectsCarouselBlock({ block, ctx }: { block: B; ctx: Blo
     .filter(Boolean) as ProjectSlide[]
   const cta = resolveLink(block.cta, ctx.locale)
   return (
-    <section id={blockTheme(block).id} className="overflow-hidden bg-white pt-5 pb-15 lg:pt-12 lg:pb-22">
-      <div className="mx-auto max-w-[1340px] px-6 pt-12 sm:px-8 lg:px-12">
+    <section id={blockTheme(block, ctx).id} className={cx('overflow-hidden py-[var(--section-y)]', sectionTone(ctx.tone))}>
+      <div className="container-x">
         <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
         <ProjectsShowcase slides={slides} viewLabel={ctx.d.viewProject} />
         {cta && (
           <div className="mt-14 flex justify-center">
-            <Link
-              href={cta.href}
-              className="inline-flex items-center justify-center rounded-full bg-[#122844] px-7 py-3.5 text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
-            >
+            <Button href={cta.href} variant="dark">
               {cta.label}
-            </Link>
+            </Button>
           </div>
         )}
       </div>
@@ -236,8 +234,12 @@ export async function ProjectsCarouselBlock({ block, ctx }: { block: B; ctx: Blo
 }
 
 /* ------------------------------------------------------------------ Before / After (turanprojects.az) */
-export function BeforeAfterBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
-  const pairs = (block.pairs ?? [])
+export async function BeforeAfterBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
+  // pairs come from the "Əvvəl & Sonra" collection; the block's own (old) list still wins if filled
+  const source: any[] = block.pairs?.length
+    ? block.pairs
+    : await findDocs<BeforeAfterDoc>('before-after', ctx.locale, { where: { showOnHome: { equals: true } }, depth: 1, limit: 20 })
+  const pairs = source
     .map((p: any) => {
       const before = mediaProps(p.before as Media, 'large')
       const after = mediaProps(p.after as Media, 'large')
@@ -247,7 +249,7 @@ export function BeforeAfterBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   // The block's button label doubles as the picker prompt ("Digər tamamlanmış layihələrə baxın →")
   const cta = resolveLink(block.cta, ctx.locale)
   return (
-    <section id={blockTheme(block).id} className="bg-white py-20">
+    <section id={blockTheme(block, ctx).id} className={cx(sectionTone(ctx.tone), 'py-[var(--section-y)]')}>
       <div className="mx-auto max-w-[960px] px-6">
         <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
         <BeforeAfterTuran
@@ -261,84 +263,121 @@ export function BeforeAfterBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
 }
 
 /* ------------------------------------------------------------------ Services: tabs (template section 2) or grid */
-export async function ServicesGridBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
+/** One card shape for the services section, whether it lists services or service lines (categories). */
+type SvcCard = { id: string; title: string; label: string; excerpt?: string | null; cover: unknown; href: string; points: string[]; icon: string }
+
+/** Section headings of a category page (minus questions, reference and price ones): a real summary of what it covers. */
+function topicsOf(body: any): string[] {
+  const out: string[] = []
+  const walk = (n: any) => {
+    if (!n) return
+    if (n.type === 'heading' && n.tag === 'h2') out.push((n.children ?? []).map((c: any) => c.text ?? '').join('').trim())
+    ;(n.children ?? []).forEach(walk)
+  }
+  walk(body?.root)
+  // statements only ("Sauna Üçün Material Seçimi"), not questions or reference / price headings
+  const topics = out.filter((t) => t && !t.endsWith('?') && !/layihələrimiz|tamamladığımız|referans|^qiymət$|our projects|completed|reference|^price$|наши проекты|выполненные|референс|^цена$/i.test(t))
+  return topics.length >= 2 ? topics.slice(0, 4) : []
+}
+
+async function serviceCards(block: B, ctx: BlockCtx): Promise<SvcCard[]> {
+  if (block.show === 'categories') {
+    const picked = ((block.categoryItems ?? []) as (Category | number)[]).map((c) => (typeof c === 'object' ? c.id : c))
+    const cats = await findDocs<Category>('categories', ctx.locale, {
+      where: picked.length ? { and: [published, { id: { in: picked } }] } : published,
+      depth: 1,
+      limit: 50,
+    })
+    const ordered = picked.length ? picked.map((id) => cats.find((c) => c.id === id)).filter(Boolean) as Category[] : cats
+    return ordered.map((c) => ({
+      id: 'c' + c.id,
+      title: c.title,
+      label: c.shortName || c.title,
+      excerpt: c.excerpt,
+      cover: c.cover,
+      href: docPath('categories', c.slug, ctx.locale),
+      points: topicsOf(c.body),
+      icon: c.iconKey ?? 'pool',
+    }))
+  }
   const services = await itemsFor<Service>(block, 'services', ctx.locale, { where: published })
+  return services.map((s) => {
+    const cat = (s.category ?? []).find((c) => typeof c === 'object') as Category | undefined
+    return {
+      id: String(s.id),
+      title: s.title,
+      label: s.title.split(':')[0],
+      excerpt: s.excerpt,
+      cover: s.cover,
+      href: docPath('services', s.slug, ctx.locale),
+      points: (s.features ?? []).slice(0, 4).map((f) => f.title),
+      icon: cat?.iconKey ?? 'pool',
+    }
+  })
+}
+
+export async function ServicesGridBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
+  const cards = await serviceCards(block, ctx)
   const cta = resolveLink(block.cta, ctx.locale)
+  const header = (
+    <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
+  )
+  const ctaRow = cta && (
+    <div className="mt-10 text-center">
+      <Button href={cta.href} variant="outline">
+        {cta.label}
+      </Button>
+    </div>
+  )
   if (block.layout === 'overlay') {
-    const hasHeader = block.header?.heading || block.header?.eyebrow
     return (
-      <section
-        id={blockTheme(block).id}
-        className="bg-header-sticky py-[var(--section-y)] text-on-dark-muted [&_.sh-eyebrow]:text-primary [&_.sh-intro]:text-white/70 [&_h2]:text-white"
-      >
+      <section id={blockTheme(block, ctx).id} className={cx('py-[var(--section-y)]', sectionTone(ctx.tone))}>
         <div className="container-x">
-          {hasHeader && (
-            <SectionHeader
-              eyebrow={block.header?.eyebrow}
-              heading={block.header?.heading}
-              intro={block.header?.intro}
-            />
-          )}
-          <ul className="grid gap-[30px] md:grid-cols-2 lg:grid-cols-3">
-            {services.map((s) => (
-              <li key={s.id} data-reveal>
-                <ServiceOverlayCard
-                  href={docPath('services', s.slug, ctx.locale)}
-                  title={s.title}
-                  excerpt={s.excerpt}
-                  image={mediaProps(s.cover as Media, 'card')}
-                  cta={ctx.d.readMore}
-                />
+          {(block.header?.heading || block.header?.eyebrow) && header}
+          <ul className="grid gap-[var(--grid-gap)] md:grid-cols-2 lg:grid-cols-3">
+            {cards.map((c) => (
+              <li key={c.id} data-reveal>
+                <ServiceOverlayCard href={c.href} title={c.title} excerpt={c.excerpt} image={mediaProps(c.cover as Media, 'card')} cta={ctx.d.readMore} />
               </li>
             ))}
           </ul>
+          {ctaRow}
         </div>
       </section>
     )
   }
   if (block.layout === 'tabs') {
     return (
-      <Section {...blockTheme(block)}>
-        <SectionHeader
-          eyebrow={block.header?.eyebrow}
-          heading={block.header?.heading}
-          intro={block.header?.intro}
-        />
+      <Section {...blockTheme(block, ctx)}>
+        {header}
         <PillTabs
-          tabs={services.map((s) => {
-            const img = mediaProps(s.cover as Media, 'large')
-            const feats = (s.features ?? []).slice(0, 4)
+          tabs={cards.map((c) => {
+            const img = mediaProps(c.cover as Media, 'large')
             return {
-              id: String(s.id),
-              label: s.title.split(':')[0],
+              id: c.id,
+              label: c.label,
               content: (
-                <div className="grid items-center gap-10 rounded-[var(--radius-card)] bg-soft p-6 md:p-10 lg:grid-cols-2">
+                <div className="grid items-center gap-8 rounded-[var(--radius-card)] border border-border bg-white p-6 md:p-10 lg:grid-cols-2 lg:gap-12">
                   <div>
-                    <h3 className="text-h4">{s.title}</h3>
-                    {s.excerpt && <p className="mt-4">{s.excerpt}</p>}
-                    {feats.length > 0 && (
+                    <h3>{c.title}</h3>
+                    {c.excerpt && <p className="mt-4">{c.excerpt}</p>}
+                    {c.points.length > 0 && (
                       <ul className="mt-6 grid gap-3">
-                        {feats.map((f) => (
-                          <li key={f.id} className="flex gap-3 text-heading">
-                            <UiIcon name="check" className="mt-1.5 shrink-0 text-primary" />
-                            {f.title}
+                        {c.points.map((p) => (
+                          <li key={p} className="flex gap-3 text-card text-heading">
+                            <UiIcon name="check" className="mt-1 shrink-0 text-primary-strong" />
+                            {p}
                           </li>
                         ))}
                       </ul>
                     )}
-                    <Button href={docPath('services', s.slug, ctx.locale)} className="mt-8">
+                    <Button href={c.href} className="mt-8">
                       {ctx.d.readMore}
                     </Button>
                   </div>
                   {img && (
                     <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-media)]">
-                      <Image
-                        src={img.src}
-                        alt={img.alt}
-                        fill
-                        sizes="(min-width:1024px) 600px, 100vw"
-                        className="object-cover"
-                      />
+                      <Image src={img.src} alt={img.alt} fill sizes="(min-width:1024px) 600px, 100vw" className="object-cover" />
                     </div>
                   )}
                 </div>
@@ -346,39 +385,21 @@ export async function ServicesGridBlock({ block, ctx }: { block: B; ctx: BlockCt
             }
           })}
         />
-        {cta && (
-          <div className="mt-10 text-center">
-            <Button href={cta.href} variant="outline">
-              {cta.label}
-            </Button>
-          </div>
-        )}
+        {ctaRow}
       </Section>
     )
   }
   return (
-    <Section {...blockTheme(block)}>
-      <SectionHeader
-        eyebrow={block.header?.eyebrow}
-        heading={block.header?.heading}
-        intro={block.header?.intro}
-      />
-      <ul className="grid gap-[30px] sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((s) => {
-          const cat = (s.category ?? []).find((c) => typeof c === 'object') as Category | undefined
-          return (
-            <li key={s.id} data-reveal>
-              <ServiceCard
-                href={docPath('services', s.slug, ctx.locale)}
-                title={s.title}
-                excerpt={s.excerpt}
-                image={mediaProps(s.cover as Media, 'card')}
-                icon={cat?.iconKey ?? 'pool'}
-              />
-            </li>
-          )
-        })}
+    <Section {...blockTheme(block, ctx)}>
+      {header}
+      <ul className="grid gap-[var(--grid-gap)] sm:grid-cols-2 lg:grid-cols-3">
+        {cards.map((c) => (
+          <li key={c.id} data-reveal>
+            <ServiceCard href={c.href} title={c.title} excerpt={c.excerpt} image={mediaProps(c.cover as Media, 'card')} icon={c.icon} />
+          </li>
+        ))}
       </ul>
+      {ctaRow}
     </Section>
   )
 }
@@ -397,59 +418,50 @@ export async function FAQBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const phone = settings.phones?.find((p) => p.primary)?.number ?? settings.phones?.[0]?.number
   // FAQPage structured data for every FAQ section (home, contact, FAQ page, …)
   const ld = faqs.length ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([faqLd(faqs)!]) }} /> : null
+  // one open answer at a time, smooth height animation (PLAN.md §11 step 7)
   const list = (
-    <div className="divide-y divide-border border-t border-border">
-      {faqs.map((f, i) => (
-        <details key={f.id} className="group py-5" open={i === 0}>
-          <summary className="flex cursor-pointer list-none items-start justify-between gap-6 font-display text-lg font-bold text-heading [&::-webkit-details-marker]:hidden">
-            {f.question}
-            <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-badge text-heading transition-transform duration-300 group-open:rotate-45 group-open:bg-primary">
-              <UiIcon name="plus" />
-            </span>
-          </summary>
-          <div className="prose-pool mt-3 pr-12">
-            <RichText data={f.answer} />
-          </div>
-        </details>
+    <AccordionGroup defaultOpen={faqs[0] ? String(faqs[0].id) : null} className="divide-y divide-border border-y border-border">
+      {faqs.map((f) => (
+        <FaqItem key={f.id} faq={f} variant="line" />
       ))}
-    </div>
+    </AccordionGroup>
   )
   if (!block.showContactForm) {
     // Template (Pooluxe contact page): centred badge + 48px H2, two columns of bordered accordions
     const half = Math.ceil(faqs.length / 2)
     const cols = [faqs.slice(0, half), faqs.slice(half)].filter((c) => c.length)
     return (
-      <Section {...blockTheme(block)}>
+      <Section {...blockTheme(block, ctx)}>
         {ld}
         <SectionHeader
           eyebrow={block.header?.eyebrow || (block.header?.heading ? ctx.d.haveQuestions : undefined)}
           heading={block.header?.heading}
           intro={block.header?.intro}
         />
-        <div className="grid gap-5 p-2.5 md:grid-cols-2 md:gap-[30px]">
+        <AccordionGroup defaultOpen={faqs[0] ? String(faqs[0].id) : null} className="grid items-start gap-3 md:grid-cols-2 md:gap-[var(--grid-gap)]">
           {cols.map((col, ci) => (
-            <div key={ci} className="flex flex-col gap-5">
+            <div key={ci} className="flex flex-col gap-3">
               {col.map((f) => (
                 <FaqItem key={f.id} faq={f} />
               ))}
             </div>
           ))}
-        </div>
+        </AccordionGroup>
       </Section>
     )
   }
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
         {ld}
       <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
         <div data-reveal>
           <SectionHeader align="start" eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} className="mb-0" />
-          <div className="mt-8 rounded-[var(--radius-card)] bg-soft p-8">
-            <h3 className="text-xl">{ctx.d.stillQuestions}</h3>
+          <div className="mt-8 rounded-[var(--radius-card)] bg-soft p-[var(--card-pad)] md:p-8">
+            <h3>{ctx.d.stillQuestions}</h3>
             {phone && (
               <a
                 href={`tel:${phone.replace(/[^\d+]/g, '')}`}
-                className="mt-3 flex items-center gap-2 font-display text-xl font-bold text-heading hover:text-primary"
+                className="mt-3 flex items-center gap-2 font-display text-lg font-semibold text-heading hover:text-primary-strong"
               >
                 <UiIcon name="phone" className="text-primary" />
                 {phone}
@@ -492,7 +504,7 @@ export async function LatestPostsBlock({ block, ctx }: { block: B; ctx: BlockCtx
     month: 'short',
   })
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader
         align="split"
         eyebrow={block.header?.eyebrow}
@@ -526,12 +538,12 @@ export async function LatestPostsBlock({ block, ctx }: { block: B; ctx: BlockCtx
                       alt={img.alt}
                       fill
                       sizes="(min-width:768px) 33vw, 100vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
                   {date && (
                     <span className="absolute top-4 left-4 rounded-[var(--radius-sm)] bg-primary px-3 py-2 text-center leading-none text-on-primary">
-                      <span className="block font-display text-xl font-extrabold">
+                      <span className="block font-display text-lg font-bold">
                         {date.find((d) => d.type === 'day')?.value}
                       </span>
                       <span className="block text-xs font-semibold">
@@ -540,7 +552,7 @@ export async function LatestPostsBlock({ block, ctx }: { block: B; ctx: BlockCtx
                     </span>
                   )}
                 </Link>
-                <h3 className="mt-5 text-xl leading-snug">
+                <h3 className="mt-5 text-h4">
                   <Link href={href} className="transition-colors hover:text-primary">
                     {p.title}
                   </Link>

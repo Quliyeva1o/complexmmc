@@ -26,9 +26,19 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { ThumbCell as ThumbCell_0b36cec6bfaee6492036b2264e0839a1 } from '../../../components/admin/Cells'
+import { BoolCell as BoolCell_0b36cec6bfaee6492036b2264e0839a1 } from '../../../components/admin/Cells'
 import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { FolderField as FolderField_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { RequestCard as RequestCard_e978fd944adfd2c3b8fb3e411868de8a } from '../../../components/admin/SubmissionUI'
+import { KindCell as KindCell_e978fd944adfd2c3b8fb3e411868de8a } from '../../../components/admin/SubmissionUI'
+import { StatusCell as StatusCell_e978fd944adfd2c3b8fb3e411868de8a } from '../../../components/admin/SubmissionUI'
 import { FolderTypeField as FolderTypeField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
+import { ColorField as ColorField_f18d715b9f5ea63091d1361f9c46fa22 } from '../../../components/admin/ColorField'
+import { AdminNav as AdminNav_231477f0faa4368be46fd47ffb9da4d9 } from '../../../components/admin/AdminNav'
+import { AdminIcon as AdminIcon_db845eae23ef682757f9df5d4893ae70 } from '../../../components/admin/AdminBrand'
+import { AdminLogo as AdminLogo_db845eae23ef682757f9df5d4893ae70 } from '../../../components/admin/AdminBrand'
+import { AdminDashboard as AdminDashboard_0171ae121c3d9523aafb7bdbec1300c5 } from '../../../components/admin/AdminDashboard'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -61,8 +71,18 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "/components/admin/Cells#ThumbCell": ThumbCell_0b36cec6bfaee6492036b2264e0839a1,
+  "/components/admin/Cells#BoolCell": BoolCell_0b36cec6bfaee6492036b2264e0839a1,
   "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/next/rsc#FolderField": FolderField_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "/components/admin/SubmissionUI#RequestCard": RequestCard_e978fd944adfd2c3b8fb3e411868de8a,
+  "/components/admin/SubmissionUI#KindCell": KindCell_e978fd944adfd2c3b8fb3e411868de8a,
+  "/components/admin/SubmissionUI#StatusCell": StatusCell_e978fd944adfd2c3b8fb3e411868de8a,
   "@payloadcms/next/client#FolderTypeField": FolderTypeField_2b8867833a34864a02ddf429b0728a40,
+  "/components/admin/ColorField#ColorField": ColorField_f18d715b9f5ea63091d1361f9c46fa22,
+  "/components/admin/AdminNav#AdminNav": AdminNav_231477f0faa4368be46fd47ffb9da4d9,
+  "/components/admin/AdminBrand#AdminIcon": AdminIcon_db845eae23ef682757f9df5d4893ae70,
+  "/components/admin/AdminBrand#AdminLogo": AdminLogo_db845eae23ef682757f9df5d4893ae70,
+  "/components/admin/AdminDashboard#AdminDashboard": AdminDashboard_0171ae121c3d9523aafb7bdbec1300c5,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

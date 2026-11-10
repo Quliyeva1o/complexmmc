@@ -42,20 +42,20 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
             const img = mediaProps(cover as Media, 'card')
             return (
               <li key={cat.id} data-reveal>
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-[16px] bg-card-tint">
+                <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-card-tint">
                   <div className="relative aspect-[415/233] overflow-hidden bg-white">
                     {img && <Image src={img.src} alt="" fill sizes="(min-width:1024px) 415px, (min-width:640px) 50vw, 100vw" className="object-contain p-6 transition-transform duration-300 group-hover:scale-110" />}
                   </div>
                   <div className="flex flex-1 flex-col gap-3 px-6 pt-6 pb-7">
-                    <h2 className="text-[22px] leading-[1.3] tracking-[-0.2px] md:text-[24px]">
+                    <h2 className="text-h3">
                       <Link href={docPath('product-categories', cat.slug, locale)} className="after:absolute after:inset-0">
                         {cat.title}
                       </Link>
                     </h2>
-                    {cat.excerpt && <p className="leading-[28px] text-[#5A6378]">{cat.excerpt}</p>}
+                    {cat.excerpt && <p className="text-muted">{cat.excerpt}</p>}
                     <p className="mt-auto flex flex-wrap items-center gap-[15px] pt-2">
-                      <span className="rounded-[25px] bg-white px-[15px] py-2 text-[14px] leading-[14px]">{d.productCount.replace('{n}', String(count))}</span>
-                      {min != null && <span className="rounded-[25px] bg-white px-[15px] py-2 text-[14px] leading-[14px] font-semibold text-heading">{d.priceFrom.replace('{price}', money(min))}</span>}
+                      <span className="rounded-full bg-white px-[15px] py-2 text-sm">{d.productCount.replace('{n}', String(count))}</span>
+                      {min != null && <span className="rounded-full bg-white px-[15px] py-2 text-sm font-semibold text-heading">{d.priceFrom.replace('{price}', money(min))}</span>}
                     </p>
                   </div>
                 </article>

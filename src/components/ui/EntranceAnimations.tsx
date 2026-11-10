@@ -4,10 +4,9 @@ import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
 /**
- * Template-style entrance animations (Elementor fadeInUp / fadeInRight, 1.25s).
- * Elements with [data-reveal] animate once when they enter the viewport. Items in the same
- * list get staggered delays (300ms, 400ms, … like the template). Without JS, without
- * IntersectionObserver or with reduced motion nothing is hidden.
+ * Entrance animations (PLAN.md §11 step 6): a short 0.6s fade + 16px rise, started just before
+ * an element scrolls into view. Items in the same list are staggered 70ms apart (max 280ms).
+ * Without JS, without IntersectionObserver or with reduced motion nothing is hidden.
  */
 export function EntranceAnimations() {
   const pathname = usePathname()
@@ -26,7 +25,7 @@ export function EntranceAnimations() {
         ? [...(el.closest('ul, ol')?.querySelectorAll<HTMLElement>(':scope > li[data-reveal], :scope > li > [data-reveal]') ?? [])]
         : []
       const i = siblings.indexOf(el)
-      if (i >= 0) el.style.setProperty('--reveal-delay', `${Math.min(300 + i * 100, 800)}ms`)
+      if (i >= 0) el.style.setProperty('--reveal-delay', `${Math.min((i % 4) * 70, 280)}ms`)
     }
 
     const io = new IntersectionObserver(
@@ -37,7 +36,8 @@ export function EntranceAnimations() {
             io.unobserve(e.target)
           }
         }),
-      { rootMargin: '0px 0px -60px 0px' },
+      // start ~10% of a screen before the element appears, so nothing waits on screen to show up
+      { rootMargin: '0px 0px 10% 0px' },
     )
     els.forEach((el) => io.observe(el))
     // anything already scrolled past (anchor links, restored scroll) is shown immediately

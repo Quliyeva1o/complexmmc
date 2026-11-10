@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { Gallery, type GalleryImg } from '@/components/inner/Gallery'
 import { UiIcon } from '@/components/icons/UiIcon'
-import { Button, Section, SectionHeader } from '@/components/ui/primitives'
+import { Button, cx, Section, SectionHeader, sectionTone } from '@/components/ui/primitives'
 import { findDocs, getGlobal } from '@/lib/data'
 import { getEstimateConfig } from '@/lib/estimate/config'
 import { mediaProps } from '@/lib/media'
@@ -32,24 +32,24 @@ const initials = (name: string) =>
 export async function TeamBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const team = await itemsFor<Team>(block, 'team', ctx.locale)
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       {/* Template "Team" card: 304×439 photo (16px radius, grows 1.1 on hover), white name box inset 19px */}
       <ul className="grid gap-[30px] sm:grid-cols-2 lg:grid-cols-4">
         {team.map((m) => {
           const img = mediaProps(m.photo as Media, 'card')
           return (
-            <li key={m.id} className="group relative aspect-[304/439] overflow-hidden rounded-[16px] bg-soft" data-reveal>
+            <li key={m.id} className="group relative aspect-[304/439] overflow-hidden rounded-[var(--radius-card)] bg-soft" data-reveal>
               {img ? (
                 <Image src={img.src} alt={img.alt || m.name} fill sizes="(min-width:1024px) 304px, 50vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
               ) : (
-                <span className="absolute inset-0 grid place-items-center pb-24 font-display text-6xl font-extrabold text-primary/40" aria-hidden="true">
+                <span className="absolute inset-0 grid place-items-center pb-24 font-display text-5xl font-bold text-primary/30" aria-hidden="true">
                   {initials(m.name)}
                 </span>
               )}
               <div className="absolute inset-x-[19px] bottom-[19px] z-10 rounded-[8px] bg-white px-3 py-5 text-center">
-                <h3 className="mb-[5px] text-[20px] leading-none tracking-normal">{m.name}</h3>
-                <p className="leading-[30px]">{m.position}</p>
+                <h3 className="mb-[5px] text-h4">{m.name}</h3>
+                <p >{m.position}</p>
               </div>
             </li>
           )
@@ -71,7 +71,7 @@ export async function CertificatesBlock({ block, ctx }: { block: B; ctx: BlockCt
     .filter(Boolean) as GalleryImg[]
   if (!images.length) return null
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       <div className="mx-auto max-w-4xl">
         <Gallery images={images} layout="grid" fit="contain" labels={{ close: ctx.d.close, prev: ctx.d.prev, next: ctx.d.next, open: ctx.d.openImage }} />
@@ -94,7 +94,7 @@ export async function GalleryBlock({ block, ctx }: { block: B; ctx: BlockCtx }) 
     })
     .filter(Boolean) as GalleryImg[]
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       <Gallery
         images={images}
@@ -113,7 +113,7 @@ export async function ContactFormBlock({ block, ctx }: { block: B; ctx: BlockCtx
   const tel = (n: string) => `tel:${n.replace(/[^\d+]/g, '')}`
   const hours = s.openingHours?.[0]
   const wa = s.whatsapp ? `https://wa.me/${s.whatsapp.replace(/\D/g, '')}` : null
-  const link = 'transition-colors hover:text-primary'
+  const link = 'inline-block py-1 transition-colors hover:text-primary-strong'
   // Template "Contact": four centred info cards (80px navy icon circle, 18px title, 14/30 text)
   const cards = [
     {
@@ -190,29 +190,29 @@ export async function ContactFormBlock({ block, ctx }: { block: B; ctx: BlockCtx
   ]
 
   return (
-    <div id={blockTheme(block).id}>
+    <div id={blockTheme(block, ctx).id}>
       {block.showContactInfo !== false && (
-        <section className="px-[15px]">
-          <ul className="mx-auto grid max-w-[1304px] gap-[30px] py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-4">
+        <section className={sectionTone(ctx.tone)}>
+          <ul className="container-x grid gap-[var(--grid-gap)] py-[var(--section-y)] sm:grid-cols-2 lg:grid-cols-4">
             {cards.map((c) => (
-              <li key={c.title} data-reveal className="rounded-[10px] bg-soft p-[25px] text-center">
-                <span className="mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-header-sticky text-[32px] text-white">
+              <li key={c.title} data-reveal className="rounded-[var(--radius-card)] border border-border bg-white p-[var(--card-pad)] text-center">
+                <span className="mx-auto mb-5 flex size-12 items-center justify-center rounded-full bg-primary-soft text-xl text-primary-strong">
                   <UiIcon name={c.icon} />
                 </span>
-                <h2 className="mb-[14px] text-[18px] leading-none tracking-normal">{c.title}</h2>
-                <div className="mx-auto max-w-[254px] text-[14px] leading-[30px]">{c.body}</div>
+                <h2 className="mb-[14px] text-h4">{c.title}</h2>
+                <div className="mx-auto max-w-[254px] text-sm">{c.body}</div>
               </li>
             ))}
           </ul>
         </section>
       )}
 
-      <section className="bg-soft px-[15px]">
-        <div className="mx-auto flex max-w-[1304px] flex-col gap-5 py-[60px] md:py-[100px] lg:flex-row lg:items-center">
+      <section className={sectionTone(ctx.tone2 ?? ctx.tone ?? 'soft')}>
+        <div className="container-x flex flex-col gap-5 py-[var(--section-y)] lg:flex-row lg:items-center">
           <div className="flex-1 lg:max-w-[637px]" data-reveal>
             {/* template shows only the intro text here; the heading stays for document outline */}
             {block.header?.heading && <h2 className="sr-only">{block.header.heading}</h2>}
-            <p className="mb-[35px] max-w-[421px] leading-[30px]">{block.header?.intro || ctx.d.contactIntro}</p>
+            <p className="mb-[35px] max-w-[421px]">{block.header?.intro || ctx.d.contactIntro}</p>
             {form && (
               <LeadForm
                 variant="template"
@@ -229,7 +229,7 @@ export async function ContactFormBlock({ block, ctx }: { block: B; ctx: BlockCtx
                 src={`https://maps.google.com/maps?q=${s.lat},${s.lng}&z=14&hl=${ctx.locale}&output=embed`}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="block h-[380px] w-full rounded-[15px] border-0"
+                className="block h-[380px] w-full rounded-[var(--radius-card)] border-0"
               />
             </div>
           )}
@@ -239,12 +239,22 @@ export async function ContactFormBlock({ block, ctx }: { block: B; ctx: BlockCtx
   )
 }
 
+/** True when a collection-backed block would render nothing (so it doesn't take a place in the section rhythm). */
+export async function isEmptyBlock(block: B, locale: BlockCtx['locale']): Promise<boolean> {
+  if (block.blockType === 'certificates') {
+    const certs = await itemsFor<Certificate>(block, 'certificates', locale)
+    return !certs.some((c) => mediaProps(c.image as Media, 'card'))
+  }
+  if (block.blockType === 'testimonials') return !(await itemsFor<Testimonial>(block, 'testimonials', locale)).length
+  return false
+}
+
 /* ------------------------------------------------------------------ Testimonials (template "Testimonial") */
 export async function TestimonialsBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const items = await itemsFor<Testimonial>(block, 'testimonials', ctx.locale)
   if (!items.length) return null
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       {/* Template "Testimonial" card: #F4F7FB, 15px radius, 30px padding; avatar + name + date row, stars, quote */}
       <ul className="grid gap-[30px] md:grid-cols-2 lg:grid-cols-3">
@@ -252,7 +262,7 @@ export async function TestimonialsBlock({ block, ctx }: { block: B; ctx: BlockCt
           const img = mediaProps(r.photo as Media, 'thumb')
           const date = r.date ? new Intl.DateTimeFormat({ az: 'az-Latn-AZ', en: 'en-GB', ru: 'ru-RU' }[ctx.locale], { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(r.date)) : null
           return (
-            <li key={r.id} className="rounded-[15px] bg-soft p-[30px]" data-reveal>
+            <li key={r.id} className="rounded-[var(--radius-card)] bg-soft p-[30px]" data-reveal>
               <figure>
                 <figcaption className="flex items-center gap-[15px]">
                   {img ? (
@@ -261,14 +271,14 @@ export async function TestimonialsBlock({ block, ctx }: { block: B; ctx: BlockCt
                     <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary font-display text-sm font-bold text-heading">{initials(r.name)}</span>
                   )}
                   <span className="min-w-0 flex-1">
-                    <span className="block font-display leading-[30px] font-bold text-heading">{r.name}</span>
-                    {(date || r.role) && <span className="block text-[14px] leading-[20px]">{date ?? r.role}</span>}
+                    <span className="block font-display font-bold text-heading">{r.name}</span>
+                    {(date || r.role) && <span className="block text-sm">{date ?? r.role}</span>}
                   </span>
                 </figcaption>
-                <p className="mt-6 text-[18px] tracking-[2px] text-star" aria-label={`${r.rating ?? 5}/5`}>
+                <p className="mt-5 text-base tracking-[2px] text-star" aria-label={`${r.rating ?? 5}/5`}>
                   {'★'.repeat(r.rating ?? 5)}
                 </p>
-                <blockquote className="mt-3 leading-[30px]">“{r.quote}”</blockquote>
+                <blockquote className="mt-3">“{r.quote}”</blockquote>
               </figure>
             </li>
           )
@@ -282,7 +292,7 @@ export async function TestimonialsBlock({ block, ctx }: { block: B; ctx: BlockCt
 export async function ServiceAreasBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const areas = await itemsFor<ServiceArea>(block, 'service-areas', ctx.locale, { where: { _status: { equals: 'published' } }, depth: 0 })
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       <ul className="flex flex-wrap justify-center gap-3">
         {areas.map((a) => (
@@ -304,7 +314,7 @@ export function PriceTableBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const fmt = new Intl.NumberFormat(ctx.locale === 'az' ? 'az-Latn-AZ' : ctx.locale)
   const cta = resolveLink(block.cta, ctx.locale)
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       <div className="mx-auto max-w-4xl overflow-x-auto rounded-[var(--radius-card)] ring-1 ring-border">
         <table className="w-full text-left">
@@ -315,7 +325,7 @@ export function PriceTableBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
                   {r.item}
                   {r.note && <span className="block text-sm font-normal text-text">{r.note}</span>}
                 </th>
-                <td className="px-6 py-4 text-right font-display font-extrabold whitespace-nowrap text-heading">
+                <td className="px-6 py-4 text-right font-display font-bold whitespace-nowrap text-heading">
                   {r.priceFrom != null && fmt.format(r.priceFrom)}
                   {r.priceTo != null && ` – ${fmt.format(r.priceTo)}`} <span className="text-sm font-semibold text-primary">{r.unit}</span>
                 </td>
@@ -339,7 +349,7 @@ export function VideoBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   const poster = mediaProps(block.poster as Media, 'large')
   const file = typeof block.file === 'object' && block.file ? (block.file as Media) : null
   return (
-    <Section {...blockTheme(block)}>
+    <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       <div className="relative mx-auto aspect-video max-w-5xl overflow-hidden rounded-[var(--radius-media)] bg-dark">
         {block.youtubeId ? (
@@ -382,8 +392,8 @@ export async function CalculatorBlock({ block, ctx }: { block: B; ctx: BlockCtx 
     variants: (p.variants ?? []).filter((v) => v.price).map((v) => ({ label: v.label, price: v.price! })),
   })).filter((m) => m.variants.length)
   return (
-    <section id={blockTheme(block).id} className="px-[15px]">
-      <div className="mx-auto max-w-[1304px] py-[60px] md:py-[100px]">
+    <section id={blockTheme(block, ctx).id} className={sectionTone(ctx.tone)}>
+      <div className="container-x py-[var(--section-y)]">
         <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
         <PoolCalculator locale={ctx.locale} config={{ prices: config.prices, places: config.places, extras: config.extras, rangePercent: config.rangePercent, unknownPlacePercent: config.unknownPlacePercent }} mosaics={mosaics} mode={config.mode} defaultDepth={config.defaultDepth} disclaimer={config.disclaimer} formId={form?.id} />
       </div>

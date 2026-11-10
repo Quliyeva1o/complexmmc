@@ -27,6 +27,7 @@ import {
   CertificatesBlock,
   ContactFormBlock,
   GalleryBlock,
+  isEmptyBlock,
   PriceTableBlock,
   ServiceAreasBlock,
   TeamBlock,
@@ -34,7 +35,7 @@ import {
   VideoBlock,
 } from './CompanyBlocks'
 import { HeroBlock } from './HeroBlock'
-import type { BlockCtx } from './shared'
+import type { BlockCtx, Tone } from './shared'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
@@ -70,17 +71,54 @@ const RENDERERS: Record<string, ComponentType<{ block: any; ctx: BlockCtx }>> = 
   calculator: CalculatorBlock,
 }
 
-export function RenderBlocks({ blocks, locale, heroVariant }: { blocks?: any[] | null; locale: Locale; heroVariant?: string }) {
+/** Accent sections: the only ones on a dark background. */
+const DARK = new Set(['warranty', 'cta'])
+/** Blocks with no background of their own (they sit on the hero / page). */
+const NO_TONE = new Set(['hero', 'categoryStrip'])
+/** Blocks that render two sections; the second gets the opposite tone. */
+const twoSections = (b: any) =>
+  (b.blockType === 'aboutIntro' && b.bulletsAsGrid && (b.bullets ?? []).length > 0) ||
+  (b.blockType === 'contactForm' && b.showContactInfo !== false)
+
+/**
+ * Section rhythm: after the hero, sections alternate white → soft → white…; dark accent sections
+ * (warranty, final CTA) break the run and the next one starts white again. Editors' per-block
+ * theme is ignored on purpose so every page keeps the same calm rhythm.
+ */
+function assignTones(blocks: any[]): { tone?: Tone; tone2?: Tone }[] {
+  let next: Tone = 'light'
+  const flip = (t: Tone): Tone => (t === 'light' ? 'soft' : 'light')
+  return blocks.map((b, i) => {
+    if (NO_TONE.has(b.blockType)) return {}
+    // a dark accent never sits directly under the (dark) page banner
+    if (DARK.has(b.blockType) && !(i === 0 && b.blockType !== 'cta')) {
+      next = 'light'
+      return { tone: 'dark' }
+    }
+    const tone = next
+    if (twoSections(b)) {
+      next = tone
+      return { tone, tone2: flip(tone) }
+    }
+    next = flip(tone)
+    return { tone }
+  })
+}
+
+export async function RenderBlocks({ blocks, locale, heroVariant }: { blocks?: any[] | null; locale: Locale; heroVariant?: string }) {
   const d = t(locale)
-  const visible = (blocks ?? [])
-    .filter((b) => !b.settings?.hidden)
+  const shown = (blocks ?? []).filter((b) => !b.settings?.hidden)
+  const empty = await Promise.all(shown.map((b) => isEmptyBlock(b, locale)))
+  const visible = shown
+    .filter((_, i) => !empty[i])
     .map((b) => (heroVariant && b.blockType === 'hero' ? { ...b, variant: heroVariant } : b))
+  const tones = assignTones(visible)
   return (
     <>
       {visible.map((b, i) => {
         const R = RENDERERS[b.blockType]
         if (!R) return null
-        return <R key={b.id ?? i} block={b} ctx={{ locale, d, isFirst: i === 0, prevBlock: visible[i - 1] && (visible[i - 1].blockType === 'hero' ? `hero:${visible[i - 1].variant ?? 'rotating'}` : visible[i - 1].blockType) }} />
+        return <R key={b.id ?? i} block={b} ctx={{ locale, d, isFirst: i === 0, ...tones[i], prevBlock: visible[i - 1] && (visible[i - 1].blockType === 'hero' ? `hero:${visible[i - 1].variant ?? 'rotating'}` : visible[i - 1].blockType) }} />
       })}
     </>
   )

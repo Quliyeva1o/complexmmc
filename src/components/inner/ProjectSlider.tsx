@@ -53,10 +53,10 @@ export function ProjectSlider({ images, labels }: { images: Img[]; labels: { pre
         </div>
         {n > 1 && (
           <>
-            <button type="button" onClick={() => go(i - 1)} aria-label={labels.prev} className="absolute top-1/2 left-0 grid size-[46px] -translate-y-1/2 place-items-center rounded-r-[25px] bg-[#2AD2E6] text-heading transition-colors hover:bg-dark hover:text-white">
+            <button type="button" onClick={() => go(i - 1)} aria-label={labels.prev} className="absolute top-1/2 left-0 grid size-[46px] -translate-y-1/2 place-items-center rounded-r-[25px] bg-[var(--color-primary)] text-heading transition-colors hover:bg-dark hover:text-white">
               <Arrow d="M15 6l-6 6 6 6" />
             </button>
-            <button type="button" onClick={() => go(i + 1)} aria-label={labels.next} className="absolute top-1/2 right-0 grid size-[46px] -translate-y-1/2 place-items-center rounded-l-[25px] bg-[#2AD2E6] text-heading transition-colors hover:bg-dark hover:text-white">
+            <button type="button" onClick={() => go(i + 1)} aria-label={labels.next} className="absolute top-1/2 right-0 grid size-[46px] -translate-y-1/2 place-items-center rounded-l-[25px] bg-[var(--color-primary)] text-heading transition-colors hover:bg-dark hover:text-white">
               <Arrow d="M9 6l6 6-6 6" />
             </button>
           </>

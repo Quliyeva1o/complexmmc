@@ -154,30 +154,48 @@ export const Footer = base('footer', 'Footer', [
     defaultValue: '© {year} Complex MMC. Bütün hüquqlar qorunur.' },
 ])
 
-/* ---------------------------------------------------------------- Theme (overrides tokens.css) */
+/* ---------------------------------------------------------------- Theme (site palette) */
+/**
+ * Site colours (PLAN.md §12, step 6): pick one of the five palettes from src/styles/tokens.css,
+ * or switch on "own colours" to override the main ones. Applied in the [locale] layout.
+ */
 const hex = (name: string, label: string, def: string): Field => ({
   name, label, type: 'text', defaultValue: def,
-  validate: (v: unknown) => !v || /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(String(v)) || 'HEX formatında: #0C7E91',
-  admin: { width: '33%' },
+  validate: (v: unknown) => !v || /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(String(v)) || 'HEX formatında: #0B9AA6',
+  admin: { width: '33%', components: { Field: '/components/admin/ColorField#ColorField' } },
 })
 
+export const PALETTES = ['okean', 'laguna', 'turan', 'mermer', 'gece'] as const
+
 export const Theme = base('theme', 'Tema (rənglər)', [
-  { name: 'enabled', label: 'Admin rənglərini tətbiq et', type: 'checkbox', defaultValue: false,
-    admin: { description: 'Söndürülübsə src/styles/tokens.css-dəki default palitra işləyir.' } },
-  { type: 'row', fields: [
-    hex('primary', 'Əsas (düymələr)', '#0C7E91'),
-    hex('primaryHover', 'Əsas (hover)', '#0E6575'),
-    hex('primarySoft', 'Əsas (açıq fon)', '#EEFBFC'),
+  {
+    name: 'palette',
+    label: 'Saytın palitrası',
+    type: 'radio',
+    defaultValue: 'okean',
+    admin: { layout: 'horizontal', description: 'Bütün saytın rəngləri bu palitradan gəlir.' },
+    options: [
+      { label: 'Okean — turkuaz + göy-qara', value: 'okean' },
+      { label: 'Laguna — səma mavisi', value: 'laguna' },
+      { label: 'Turan — #0B9AA6 + #122844', value: 'turan' },
+      { label: 'Mərmər — yaşıl-turkuaz, isti boz', value: 'mermer' },
+      { label: 'Gecə — qızılı + gecə göyü', value: 'gece' },
+    ],
+  },
+  { name: 'enabled', label: 'Öz rənglərimi istifadə et', type: 'checkbox', defaultValue: false,
+    admin: { description: 'Açıq olsa aşağıdakı rənglər palitranın üstündən yazılır.' } },
+  { type: 'row', admin: { condition: (d) => Boolean(d?.enabled) }, fields: [
+    hex('primary', 'Əsas (düymələr)', '#26CADD'),
+    hex('primaryHover', 'Əsas (hover)', '#14B3C6'),
+    hex('primaryStrong', 'Əsas mətn rəngi (linklər)', '#077A84'),
   ] },
-  { type: 'row', fields: [
-    hex('accent', 'Aksent (isti)', '#B9814F'),
-    hex('heading', 'Başlıqlar', '#082A32'),
-    hex('text', 'Mətn', '#0F2A30'),
+  { type: 'row', admin: { condition: (d) => Boolean(d?.enabled) }, fields: [
+    hex('heading', 'Başlıqlar', '#122844'),
+    hex('text', 'Mətn', '#4A5A6C'),
+    hex('bg', 'Açıq bölmə fonu', '#F5F8FB'),
   ] },
-  { type: 'row', fields: [
-    hex('bg', 'Fon', '#F7FBFB'),
-    hex('darkSection', 'Tünd bölmə', '#082A32'),
-    hex('sand', 'Qum fon', '#FAF6F0'),
+  { type: 'row', admin: { condition: (d) => Boolean(d?.enabled) }, fields: [
+    hex('darkSection', 'Tünd bölmə / footer', '#0F2440'),
   ] },
 ], 'Parametrlər')
 

@@ -68,12 +68,12 @@ export default async function ProductCategoryPage({ params }: P) {
                         href={href}
                         aria-current={on ? 'page' : undefined}
                         className={cx(
-                          'flex min-h-[60px] items-center justify-between gap-2 rounded-[10px] px-[25px] py-[15px] font-display text-[17px] leading-[1.35] font-bold transition-colors duration-300',
+                          'flex min-h-12 items-center justify-between gap-2 rounded-[var(--radius-sm)] px-4 py-3 text-[15px] font-medium transition-colors duration-[var(--duration-fast)]',
                           on ? 'bg-header-sticky text-white' : 'bg-soft text-heading hover:bg-header-sticky hover:text-white',
                         )}
                       >
                         <span>{c.title}</span>
-                        <span className={cx('shrink-0 text-[13px] font-semibold', on ? 'text-white/70' : 'text-text')}>{count}</span>
+                        <span className={cx('shrink-0 text-sm font-semibold', on ? 'text-white/70' : 'text-text')}>{count}</span>
                       </Link>
                     </li>
                   )
@@ -95,7 +95,7 @@ export default async function ProductCategoryPage({ params }: P) {
                 </li>
               ))}
             </ul>
-            <p className="mt-10 flex items-start gap-2 text-[14px] leading-6">
+            <p className="mt-10 flex items-start gap-2 text-sm">
               <UiIcon name="check" className="mt-1 shrink-0 text-primary" />
               {d.catalogNote}
             </p>

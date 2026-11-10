@@ -90,9 +90,12 @@ export const BeforeAfterBlock: Block = {
     sectionHeader(),
     {
       name: 'pairs',
-      label: 'Müqayisələr',
+      label: 'Müqayisələr (köhnə)',
       type: 'array',
-      minRows: 1,
+      admin: {
+        description: 'Boş saxlayın: cütlər «Layihələr → Əvvəl & Sonra» bölməsindən avtomatik götürülür.',
+        initCollapsed: true,
+      },
       fields: [
         { name: 'title', label: 'Başlıq', type: 'text', localized: true, required: true },
         { name: 'caption', label: 'Alt yazı', type: 'text', localized: true },

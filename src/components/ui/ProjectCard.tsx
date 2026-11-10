@@ -23,33 +23,33 @@ export function ProjectCard({
   facts: { size?: string | null; days?: number | null; place?: string | null }
   labels: { view: string; daysUnit: string; completedIn?: string }
 }) {
-  const pill = 'inline-flex items-center rounded-[25px] bg-soft px-[15px] py-2 text-[14px] leading-[14px]'
+  const pill = 'inline-flex h-7 items-center rounded-full bg-soft px-3 text-xs font-medium text-heading'
   const done = facts.days ? (labels.completedIn ? labels.completedIn.replace('{n}', String(facts.days)) : `${facts.days} ${labels.daysUnit}`) : null
   return (
-    <article className="group flex h-full flex-col gap-5" data-reveal>
-      <Link href={href} className="relative block aspect-[415/233] overflow-hidden rounded-[15px] bg-soft" tabIndex={-1} aria-hidden="true">
+    <article className="group flex h-full flex-col gap-4" data-reveal>
+      <Link href={href} className="relative block aspect-[415/233] overflow-hidden rounded-[var(--radius-media)] bg-soft" tabIndex={-1} aria-hidden="true">
         {image && (
           <Image
             src={image.src}
             alt={image.alt}
             fill
             sizes="(min-width: 1024px) 415px, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         )}
       </Link>
-      <h3 className="text-[22px] leading-none tracking-normal md:text-[26px]">
-        <Link href={href} className="leading-[1.2]">
+      <h3 className="text-h3">
+        <Link href={href} className="transition-colors hover:text-primary-strong">
           {title}
         </Link>
       </h3>
       {(facts.place || done) && (
-        <ul className="flex flex-wrap gap-[15px]">
+        <ul className="flex flex-wrap gap-2">
           {facts.place && <li className={pill}>{facts.place}</li>}
           {done && <li className={pill}>{done}</li>}
         </ul>
       )}
-      {excerpt && <p className="line-clamp-3 leading-[30px]">{excerpt}</p>}
+      {excerpt && <p className="line-clamp-3 text-card">{excerpt}</p>}
     </article>
   )
 }

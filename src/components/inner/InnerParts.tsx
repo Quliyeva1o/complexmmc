@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 
 import { CTABlock } from '@/components/blocks/ContentBlocks'
 import { UiIcon } from '@/components/icons/UiIcon'
+import { AccordionGroup, AccordionItem } from '@/components/ui/Accordion'
 import { Button, cx, SectionHeader } from '@/components/ui/primitives'
 import type { Locale } from '@/i18n/config'
 import type { Dict } from '@/i18n/dictionary'
@@ -23,11 +24,11 @@ export function PageBanner({ title, intro, image, crumbs, small = false }: { tit
   const img = mediaProps(image as Media, 'hero')
   return (
     <section className="relative isolate overflow-hidden bg-dark pt-[140px] pb-[60px] text-white md:pt-[200px] md:pb-[140px]">
-      {img && <Image src={img.src} alt="" fill priority sizes="100vw" className="-z-20 object-cover" />}
+      {img && <Image src={img.src} alt="" fill priority fetchPriority="high" sizes="100vw" className="-z-20 object-cover" />}
       <div className="absolute inset-0 -z-10 bg-[image:var(--banner-overlay)]" />
       <div className="container-x flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div className="max-w-3xl">
-          <h1 className={small ? 'text-[32px] leading-[1.2] text-white md:text-[40px] lg:text-[48px]' : 'text-h1 leading-[1.1] text-white'}>{title}</h1>
+          <h1 className={small ? 'text-h1 text-white' : 'text-h1 text-white'}>{title}</h1>
           {intro && <p className="mt-4 max-w-2xl text-white/80">{intro}</p>}
         </div>
         <nav aria-label="Breadcrumb" className="shrink-0">
@@ -65,18 +66,12 @@ export function Prose({ data, className }: { data?: unknown; className?: string 
 }
 
 /* ------------------------------------------------------------------ FAQ list (accordion) */
-/** Template accordion item (Pooluxe contact/FAQ): 1px #ddd border, 16px radius, 15/25 padding. */
-export function FaqItem({ faq, open = false }: { faq: Faq; open?: boolean }) {
+/** One FAQ (question + rich-text answer) as an accordion item; put several in an <AccordionGroup> so only one is open. */
+export function FaqItem({ faq, variant = 'card' }: { faq: Faq; variant?: 'card' | 'line' }) {
   return (
-    <details className="group rounded-[16px] border border-[#ddd] px-[25px] py-[15px]" open={open}>
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-2.5 [&::-webkit-details-marker]:hidden">
-        <h3 className="font-body text-base leading-[30px] font-semibold tracking-normal text-heading">{faq.question}</h3>
-        <span className="shrink-0 text-2xl text-heading transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
-          <UiIcon name="plus" />
-        </span>
-      </summary>
-      <Prose data={faq.answer} className="max-w-none pt-2.5 pr-8" />
-    </details>
+    <AccordionItem id={String(faq.id)} question={faq.question} variant={variant}>
+      <Prose data={faq.answer} className="max-w-none" />
+    </AccordionItem>
   )
 }
 
@@ -85,11 +80,11 @@ export function FaqList({ faqs, heading }: { faqs: Faq[]; heading?: string }) {
   return (
     <section className="pt-[30px] pb-10">
       {heading && <SectionHeader align="start" heading={heading} className="mb-2" />}
-      <div className="flex flex-col gap-5">
-        {faqs.map((f, i) => (
-          <FaqItem key={f.id} faq={f} open={i === 0} />
+      <AccordionGroup defaultOpen={String(faqs[0].id)} className="flex flex-col gap-3">
+        {faqs.map((f) => (
+          <FaqItem key={f.id} faq={f} />
         ))}
-      </div>
+      </AccordionGroup>
     </section>
   )
 }
@@ -98,7 +93,7 @@ export function FaqList({ faqs, heading }: { faqs: Faq[]; heading?: string }) {
 export function SideList({ title, items, activeHref }: { title: string; items: { href: string; label: string }[]; activeHref?: string }) {
   return (
     <div className="rounded-[var(--radius-card)] bg-soft p-6">
-      <h2 className="mb-4 text-xl">{title}</h2>
+      <h2 className="mb-4 text-h3">{title}</h2>
       <ul className="grid gap-2">
         {items.map((it) => {
           const active = it.href === activeHref
@@ -129,10 +124,10 @@ export async function QuoteCard({ locale, d, title, text }: { locale: Locale; d:
   const calc = { az: '/qiymet-hesabla', en: '/en/price-calculator', ru: '/ru/kalkulyator-stoimosti' }[locale]
   return (
     <div className="rounded-[var(--radius-card)] bg-dark p-8 text-white">
-      <h2 className="text-xl text-white">{title ?? d.quote}</h2>
+      <h2 className="text-h3 text-white">{title ?? d.quote}</h2>
       {text && <p className="mt-3 text-white/75">{text}</p>}
       {phone && (
-        <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="mt-5 flex items-center gap-2 font-display text-xl font-bold text-white hover:text-primary">
+        <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="mt-5 flex items-center gap-2 font-display text-lg font-semibold text-white hover:text-primary">
           <UiIcon name="phone" className="text-primary" />
           {phone}
         </a>

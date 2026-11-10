@@ -74,7 +74,7 @@ export default async function ProductPage({ params }: P) {
 
       <div className="px-[15px]">
         <div className="mx-auto grid max-w-[1304px] gap-[45px] py-[60px] md:py-[100px] lg:grid-cols-2">
-          <div className="relative aspect-square overflow-hidden rounded-[15px] bg-soft lg:sticky lg:top-[110px] lg:self-start">
+          <div className="relative aspect-square overflow-hidden rounded-[var(--radius-card)] bg-soft lg:sticky lg:top-[110px] lg:self-start">
             {img && <Image src={img.src} alt={img.alt} fill priority sizes="(min-width:1024px) 630px, 100vw" className="object-contain p-8" />}
           </div>
 
@@ -82,19 +82,19 @@ export default async function ProductPage({ params }: P) {
             <SectionHeader align="start" eyebrow={cat?.title} heading={p.title} intro={p.excerpt} className="mb-0" />
             <dl className="flex flex-wrap gap-[15px]">
               {prices.length > 0 && (
-                <div className="rounded-[25px] bg-card-tint px-5 py-2.5 font-display text-[20px] font-bold text-heading">
+                <div className="rounded-full bg-card-tint px-5 py-2.5 font-display text-h4 text-heading">
                   <dt className="sr-only">{d.priceCol}</dt>
                   <dd>{d.priceFrom.replace('{price}', money(Math.min(...prices)))}</dd>
                 </div>
               )}
               {p.origin && (
-                <div className="rounded-[25px] bg-soft px-[15px] py-2.5 text-[14px]">
+                <div className="rounded-full bg-soft px-[15px] py-2.5 text-sm">
                   <dt className="inline">{d.origin}: </dt>
                   <dd className="inline font-semibold text-heading">{p.origin}</dd>
                 </div>
               )}
               {p.inStock && (
-                <div className="flex items-center gap-1.5 rounded-[25px] bg-soft px-[15px] py-2.5 text-[14px] font-semibold text-heading">
+                <div className="flex items-center gap-1.5 rounded-full bg-soft px-[15px] py-2.5 text-sm font-semibold text-heading">
                   <UiIcon name="check" className="text-primary" />
                   <dd>{d.inStock}</dd>
                 </div>
@@ -103,12 +103,12 @@ export default async function ProductPage({ params }: P) {
 
             {variants.length > 0 && (
               <section>
-                <h2 className="mb-3 text-[22px] leading-none tracking-normal">{d.variantsTitle}</h2>
-                <table className="w-full overflow-hidden rounded-[10px] text-left">
+                <h2 className="mb-3 text-h3">{d.variantsTitle}</h2>
+                <table className="w-full overflow-hidden rounded-[var(--radius-sm)] text-left">
                   <thead className="bg-dark text-white">
                     <tr>
-                      <th className="px-4 py-3 text-[14px] font-semibold">{d.sizeCol}</th>
-                      <th className="px-4 py-3 text-right text-[14px] font-semibold">{d.priceCol}</th>
+                      <th className="px-4 py-3 text-sm font-semibold">{d.sizeCol}</th>
+                      <th className="px-4 py-3 text-right text-sm font-semibold">{d.priceCol}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -125,9 +125,9 @@ export default async function ProductPage({ params }: P) {
 
             {matrix && matrix.rows.length > 0 && (
               <section>
-                <h2 className="mb-3 text-[22px] leading-none tracking-normal">{d.matrixTitle}</h2>
-                <div className="overflow-x-auto rounded-[10px] ring-1 ring-[#E5E7EB]">
-                  <table className="w-full text-center text-[13px]">
+                <h2 className="mb-3 text-h3">{d.matrixTitle}</h2>
+                <div className="overflow-x-auto rounded-[var(--radius-sm)] ring-1 ring-[#E5E7EB]">
+                  <table className="w-full text-center text-sm">
                     <thead className="bg-dark text-white">
                       <tr>
                         <th className="sticky left-0 bg-dark px-3 py-2.5">↓ × →</th>
@@ -157,8 +157,8 @@ export default async function ProductPage({ params }: P) {
 
             {(p.specs ?? []).length > 0 && (
               <section>
-                <h2 className="mb-3 text-[22px] leading-none tracking-normal">{d.specsTitle}</h2>
-                <dl className="divide-y divide-[#E5E7EB] rounded-[10px] ring-1 ring-[#E5E7EB]">
+                <h2 className="mb-3 text-h3">{d.specsTitle}</h2>
+                <dl className="divide-y divide-[#E5E7EB] rounded-[var(--radius-sm)] ring-1 ring-[#E5E7EB]">
                   {p.specs!.map((s) => (
                     <div key={s.id ?? s.key} className="flex justify-between gap-6 px-4 py-3">
                       <dt>{s.key}</dt>
@@ -169,8 +169,8 @@ export default async function ProductPage({ params }: P) {
               </section>
             )}
 
-            <div className="flex flex-wrap items-center gap-4 rounded-[15px] bg-dark p-6 md:p-8">
-              <p className="w-full font-display text-[20px] font-bold text-white">{d.orderProduct}</p>
+            <div className="flex flex-wrap items-center gap-4 rounded-[var(--radius-card)] bg-dark p-6 md:p-8">
+              <p className="w-full font-display text-h4 text-white">{d.orderProduct}</p>
               {wa && (
                 <Button href={wa} target="_blank">
                   {d.whatsapp}
@@ -180,7 +180,7 @@ export default async function ProductPage({ params }: P) {
                 {d.quote} →
               </Link>
             </div>
-            <p className="text-[14px] leading-6">{d.catalogNote}</p>
+            <p className="text-sm">{d.catalogNote}</p>
           </div>
         </div>
       </div>

@@ -105,7 +105,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
 
         {(footer.columns ?? []).map((col) => (
           <div key={col.id ?? col.title}>
-            <h2 className="text-[18px] tracking-normal text-white">{col.title}</h2>
+            <h2 className="text-h4 text-white">{col.title}</h2>
             <ul className="mt-5 space-y-2 text-[0.95rem]">
               {columnLinks(col).map((l) => (
                 <li key={l.href}>
@@ -119,7 +119,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         ))}
 
         <div>
-          <h2 className="text-[18px] tracking-normal text-white">{d.contact}</h2>
+          <h2 className="text-h4 text-white">{d.contact}</h2>
           <ul className="mt-5 space-y-4 text-[0.95rem]">
             {s.address && (
               <li className="flex gap-3">

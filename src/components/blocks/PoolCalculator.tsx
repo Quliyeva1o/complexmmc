@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { type FormEvent, useMemo, useState } from 'react'
 
+import { ButtonContent, buttonClass, cx, FIELD, FIELD_LABEL } from '@/components/ui/primitives'
 import type { Locale } from '@/i18n/config'
 import { ITEM_LABELS, STANDARD_MOSAIC } from '@/lib/estimate/defaults'
 import { computeEstimate, placeFor } from '@/lib/estimate/model'
@@ -69,9 +70,9 @@ const T = {
 
 // AZ uses space-grouped numbers like RU ("29 280"); browsers' az locale data is inconsistent
 const INTL: Record<Locale, string> = { az: 'ru-RU', en: 'en-GB', ru: 'ru-RU' }
-const field = 'h-[46px] w-full rounded-[8px] border border-[#D1D5DB] bg-white px-3 text-[15px] text-[#111827] outline-none transition-colors focus:border-primary'
-const label = 'mb-2 block text-[17px] font-medium text-[#4B5563]'
-const pill = (on: boolean) => `rounded-[25px] border px-5 py-2.5 text-[15px] font-semibold transition-colors ${on ? 'border-primary bg-primary text-heading' : 'border-[#D1D5DB] bg-white text-heading hover:border-primary'}`
+const field = cx(FIELD, 'h-12')
+const label = cx(FIELD_LABEL, 'mb-2 block')
+const pill = (on: boolean) => `inline-flex h-10 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-[var(--duration-fast)] ${on ? 'border-heading bg-heading text-white' : 'border-border bg-white text-heading hover:border-heading/30'}`
 
 /**
  * Pool cost calculator (template "Cost Estimator" layout): configuration on the left,
@@ -161,6 +162,8 @@ export function PoolCalculator({
             { field: 'email', value: String(fd.get('email') ?? '') },
             { field: 'message', value: summary },
             { field: 'page', value: window.location.pathname },
+            // marks the request as a price quote in admin → Müraciətlər
+            { field: 'kind', value: 'quote' },
           ],
         }),
       })
@@ -175,7 +178,7 @@ export function PoolCalculator({
   return (
     <div className="flex flex-col gap-[45px] lg:flex-row lg:items-start">
       {/* ------------------------------------------------------------------ configuration */}
-      <form onSubmit={onSubmit} className="min-w-0 flex-1 rounded-[15px] bg-soft px-6 pt-5 pb-10 md:px-10 lg:max-w-[856px]">
+      <form onSubmit={onSubmit} className="min-w-0 flex-1 rounded-[var(--radius-card)] bg-soft px-6 pt-5 pb-10 md:px-10 lg:max-w-[856px]">
         <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
         <div className="flex flex-col gap-[30px] pt-[30px]">
           <fieldset>
@@ -189,7 +192,7 @@ export function PoolCalculator({
                 ] as const
               ).map(([lbl, v, set, min, max]) => (
                 <label key={lbl} className="block">
-                  <span className="mb-1 block text-[14px] text-text">{lbl}</span>
+                  <span className="mb-1 block text-sm text-text">{lbl}</span>
                   <input type="number" inputMode="decimal" step="0.1" min={min} max={max} value={v} onChange={(e) => set(e.target.value)} className={field} required />
                 </label>
               ))}
@@ -222,9 +225,9 @@ export function PoolCalculator({
             <legend className={label}>{t.pack}</legend>
             <div className="grid gap-2.5 sm:grid-cols-2">
               {(['standard', 'premium'] as const).map((k) => (
-                <button key={k} type="button" aria-pressed={pack === k} onClick={() => setPack(k)} className={`rounded-[12px] border p-4 text-left transition-colors ${pack === k ? 'border-primary bg-white ring-2 ring-primary' : 'border-[#D1D5DB] bg-white hover:border-primary'}`}>
-                  <span className="block font-display text-[18px] font-bold text-heading">{t[k]}</span>
-                  <span className="mt-1 block text-[14px] leading-[22px]">{t.packNote[k]}</span>
+                <button key={k} type="button" aria-pressed={pack === k} onClick={() => setPack(k)} className={`rounded-[var(--radius-media)] border p-4 text-left transition-colors ${pack === k ? 'border-primary bg-white ring-2 ring-primary' : 'border-border bg-white hover:border-primary'}`}>
+                  <span className="block font-display text-h4 text-heading">{t[k]}</span>
+                  <span className="mt-1 block text-sm">{t.packNote[k]}</span>
                 </button>
               ))}
             </div>
@@ -260,7 +263,7 @@ export function PoolCalculator({
             {brands.length > 1 && (
               <div className="mb-4 flex flex-wrap gap-2.5" role="group">
                 {['', ...brands].map((b) => (
-                  <button key={b || 'all'} type="button" aria-pressed={brand === b} onClick={() => setBrand(b)} className={`rounded-[6px] px-4 py-1.5 text-[15px] font-semibold transition-colors ${brand === b ? 'bg-primary text-white' : 'text-text hover:bg-primary hover:text-white'}`}>
+                  <button key={b || 'all'} type="button" aria-pressed={brand === b} onClick={() => setBrand(b)} className={`inline-flex h-9 items-center rounded-full px-3.5 text-sm font-medium transition-colors ${brand === b ? 'bg-heading text-white' : 'text-text hover:bg-soft'}`}>
                     {b || t.allBrands}
                   </button>
                 ))}
@@ -268,14 +271,14 @@ export function PoolCalculator({
             )}
             <ul className="grid max-h-[520px] grid-cols-2 gap-3 overflow-y-auto pr-1 sm:grid-cols-3 md:grid-cols-4">
               <li>
-                <button type="button" aria-pressed={mosaicId === STANDARD_MOSAIC.id} onClick={() => setMosaicId(STANDARD_MOSAIC.id)} className={`h-full w-full overflow-hidden rounded-[10px] border bg-white text-left transition-colors ${mosaicId === STANDARD_MOSAIC.id ? 'border-primary ring-2 ring-primary' : 'border-[#E5E7EB] hover:border-primary'}`}>
+                <button type="button" aria-pressed={mosaicId === STANDARD_MOSAIC.id} onClick={() => setMosaicId(STANDARD_MOSAIC.id)} className={`h-full w-full overflow-hidden rounded-[var(--radius-sm)] border bg-white text-left transition-colors ${mosaicId === STANDARD_MOSAIC.id ? 'border-primary ring-2 ring-primary' : 'border-border hover:border-primary'}`}>
                   <span
                     className="block aspect-[16/9]"
                     aria-hidden="true"
                     style={{ backgroundColor: '#3ccfe0', backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px)', backgroundSize: '12px 12px' }}
                   />
-                  <span className="block p-2.5 text-[13px] leading-[18px] font-semibold text-heading">{t.standardMosaic}</span>
-                  <span className="block px-2.5 pb-2.5 text-[13px]">
+                  <span className="block p-2.5 text-sm leading-[18px] font-semibold text-heading">{t.standardMosaic}</span>
+                  <span className="block px-2.5 pb-2.5 text-sm">
                     {STANDARD_MOSAIC.price} ₼{t.perM2}
                   </span>
                 </button>
@@ -293,11 +296,11 @@ export function PoolCalculator({
                           setMosaicId(m.id)
                           setVariantIdx(0)
                         }}
-                        className={`h-full w-full overflow-hidden rounded-[10px] border bg-white text-left transition-colors ${on ? 'border-primary ring-2 ring-primary' : 'border-[#E5E7EB] hover:border-primary'}`}
+                        className={`h-full w-full overflow-hidden rounded-[var(--radius-sm)] border bg-white text-left transition-colors ${on ? 'border-primary ring-2 ring-primary' : 'border-border hover:border-primary'}`}
                       >
                         <span className="relative block aspect-[16/9] bg-soft">{m.image && <Image src={m.image} alt={m.name} fill sizes="200px" className="object-cover" />}</span>
-                        <span className="block p-2.5 text-[13px] leading-[18px] font-semibold text-heading">{m.name}</span>
-                        <span className="block px-2.5 pb-2.5 text-[13px]">
+                        <span className="block p-2.5 text-sm leading-[18px] font-semibold text-heading">{m.name}</span>
+                        <span className="block px-2.5 pb-2.5 text-sm">
                           {nf2.format(Math.min(...m.variants.map((v) => v.price)))} ₼{t.perM2}
                         </span>
                       </button>
@@ -306,12 +309,12 @@ export function PoolCalculator({
                 })}
             </ul>
             {mosaic && (
-              <div className="mt-4 flex flex-wrap items-center gap-3 rounded-[10px] bg-white p-3">
-                <span className="text-[14px] font-semibold text-heading">{mosaic.name}</span>
+              <div className="mt-4 flex flex-wrap items-center gap-3 rounded-[var(--radius-sm)] bg-white p-3">
+                <span className="text-sm font-semibold text-heading">{mosaic.name}</span>
                 {mosaic.variants.length > 1 && (
-                  <label className="flex items-center gap-2 text-[14px]">
+                  <label className="flex items-center gap-2 text-sm">
                     {t.sizeLabel}
-                    <select value={variantIdx} onChange={(e) => setVariantIdx(Number(e.target.value))} className="h-9 rounded-[6px] border border-[#D1D5DB] px-2">
+                    <select value={variantIdx} onChange={(e) => setVariantIdx(Number(e.target.value))} className="h-9 rounded-[6px] border border-border px-2">
                       {mosaic.variants.map((v, i) => (
                         <option key={v.label} value={i}>
                           {v.label} — {nf2.format(v.price)} ₼{t.perM2}
@@ -321,7 +324,7 @@ export function PoolCalculator({
                   </label>
                 )}
                 {mosaic.href && (
-                  <a href={mosaic.href} target="_blank" rel="noopener" className="text-[14px] font-semibold text-[#0B9AA6] hover:underline">
+                  <a href={mosaic.href} target="_blank" rel="noopener" className="text-sm font-semibold text-[var(--color-primary-strong)] hover:underline">
                     {t.viewProduct} →
                   </a>
                 )}
@@ -337,7 +340,7 @@ export function PoolCalculator({
                   <input type="checkbox" checked={extras.includes(x.key)} onChange={(e) => setExtras((cur) => (e.target.checked ? [...cur, x.key] : cur.filter((k) => k !== x.key)))} className="mt-1 size-4 shrink-0 accent-primary" />
                   <span>
                     {x.name[locale]}
-                    {mode === 'price' && <span className="block text-[13px] text-text">{x.min === x.max ? money(x.min) : `${money(x.min)} – ${money(x.max)}`}</span>}
+                    {mode === 'price' && <span className="block text-sm text-text">{x.min === x.max ? money(x.min) : `${money(x.min)} – ${money(x.max)}`}</span>}
                   </span>
                 </label>
               ))}
@@ -345,21 +348,21 @@ export function PoolCalculator({
           </fieldset>
 
           {/* lead */}
-          <div className="border-t border-[#D1D5DB] pt-[30px]">
-            <p className="mb-4 font-display text-[22px] font-bold text-heading">{t.contact}</p>
+          <div className="border-t border-border pt-[30px]">
+            <p className="mb-4 text-h3 font-display text-heading">{t.contact}</p>
             {state === 'sent' ? (
-              <p role="status" className="rounded-[10px] bg-white p-6 font-semibold text-heading">
+              <p role="status" className="rounded-[var(--radius-sm)] bg-white p-6 font-semibold text-heading">
                 {t.sent}
               </p>
             ) : (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <input name="name" required placeholder={t.name} aria-label={t.name} autoComplete="name" className={field} />
                 <input name="phone" type="tel" required placeholder={t.phone} aria-label={t.phone} autoComplete="tel" className={field} />
                 <input name="email" type="email" placeholder={t.email} aria-label={t.email} autoComplete="email" className={`${field} md:col-span-2`} />
-                <textarea name="note" placeholder={t.note} aria-label={t.note} className={`${field} h-[100px] resize-y py-2.5 md:col-span-2`} />
+                <textarea name="note" placeholder={t.note} aria-label={t.note} className={cx(FIELD, 'h-[100px] resize-y py-3 md:col-span-2')} />
                 <div className="md:col-span-2">
-                  <button type="submit" disabled={state === 'sending' || !ready} className="rounded-[25px] bg-primary px-6 py-2 text-base leading-[30px] font-semibold text-heading transition-colors duration-300 hover:bg-dark hover:text-white disabled:opacity-50">
-                    {state === 'sending' ? t.sending : t.send}
+                  <button type="submit" disabled={state === 'sending' || !ready} className={buttonClass('primary')}>
+                    <ButtonContent>{state === 'sending' ? t.sending : t.send}</ButtonContent>
                   </button>
                   {state === 'error' && (
                     <p role="alert" className="mt-3 text-sm text-red-700">
@@ -374,24 +377,24 @@ export function PoolCalculator({
       </form>
 
       {/* ------------------------------------------------------------------ result */}
-      <aside className="w-full shrink-0 rounded-[15px] bg-dark p-8 text-white lg:sticky lg:top-[110px] lg:w-[403px] md:p-10" aria-live="polite">
-        <p className="sh-eyebrow mb-5 inline-flex items-center gap-2 text-[11px] leading-none font-bold tracking-[0.28em] text-primary uppercase">
+      <aside className="w-full shrink-0 rounded-[var(--radius-card)] bg-dark p-8 text-white lg:sticky lg:top-[110px] lg:w-[403px] md:p-10" aria-live="polite">
+        <p className="sh-eyebrow mb-4 inline-flex items-center gap-2 text-label text-primary uppercase">
           {t.result}
           <span aria-hidden="true" className="inline-block h-px w-5 bg-[var(--section-eyebrow)]" />
         </p>
         {mode === 'price' ? (
           <>
-            <p className="font-display text-[34px] leading-[1.15] font-extrabold tracking-tight">
+            <p className="font-display text-h2">
               {ready ? (
                 <>
                   {money(result.min)}
-                  <span className="block text-[22px] text-white/70">– {money(result.max)}</span>
+                  <span className="block text-xl text-white/70">– {money(result.max)}</span>
                 </>
               ) : (
-                <span className="text-[22px] text-white/70">{t.placePh}</span>
+                <span className="text-xl text-white/70">{t.placePh}</span>
               )}
             </p>
-            <dl className="mt-5 grid grid-cols-3 gap-2 text-[13px] text-white/70">
+            <dl className="mt-5 grid grid-cols-3 gap-2 text-sm text-white/70">
               <div>
                 <dt>{t.geometry}</dt>
                 <dd className="font-semibold text-white">{nf2.format(result.geometry.area)} m²</dd>
@@ -415,12 +418,12 @@ export function PoolCalculator({
                   </li>
                 ))}
             </ul>
-            {ready && !place.confirmed && <p className="mt-4 rounded-[8px] bg-white/10 p-3 text-[13px] leading-5 text-white/80">{t.approxPlace}</p>}
-            <button type="button" onClick={() => setShowDetails((v) => !v)} aria-expanded={showDetails} className="mt-6 text-[15px] font-semibold text-primary hover:underline">
+            {ready && !place.confirmed && <p className="mt-4 rounded-[8px] bg-white/10 p-3 text-sm leading-5 text-white/80">{t.approxPlace}</p>}
+            <button type="button" onClick={() => setShowDetails((v) => !v)} aria-expanded={showDetails} className="mt-6 text-sm font-semibold text-primary hover:underline">
               {showDetails ? t.hideDetails : t.details} {showDetails ? '↑' : '↓'}
             </button>
             {showDetails && (
-              <div className="mt-4 max-h-[460px] overflow-y-auto pr-1 text-[13px]">
+              <div className="mt-4 max-h-[460px] overflow-y-auto pr-1 text-sm">
                 {sectionOrder
                   .filter((s) => result.sections[s].total > 0)
                   .map((s) => (
@@ -455,9 +458,9 @@ export function PoolCalculator({
             )}
           </>
         ) : (
-          <p className="leading-[30px] text-white/80">{t.leadOnly}</p>
+          <p className="text-white/80">{t.leadOnly}</p>
         )}
-        {disclaimer && <p className="mt-6 border-t border-white/15 pt-4 text-[13px] leading-5 text-white/60">{disclaimer}</p>}
+        {disclaimer && <p className="mt-6 border-t border-white/15 pt-4 text-sm leading-5 text-white/60">{disclaimer}</p>}
       </aside>
     </div>
   )
