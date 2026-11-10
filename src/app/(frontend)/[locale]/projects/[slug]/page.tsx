@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { BeforeAfterSlider } from '@/components/blocks/interactive'
 import { ProjectSlider } from '@/components/inner/ProjectSlider'
 import { PageBanner, Prose } from '@/components/inner/InnerParts'
+import { UiIcon } from '@/components/icons/UiIcon'
 import { PageShell } from '@/components/layout/PageShell'
 import { ProjectCard } from '@/components/ui/ProjectCard'
 import { SectionHeader } from '@/components/ui/primitives'
@@ -144,15 +145,18 @@ export default async function ProjectPage({ params }: P) {
             <Prose data={p.body} className="max-w-none" />
 
             {(p.highlights ?? []).length > 0 && (
-              <section className="flex flex-col gap-5 pt-5">
-                <h2 className="text-[22px] leading-[1.5] tracking-normal md:text-[26px]">
-                  {d.highlights}
-                </h2>
+              <section className="pt-10">
+                <SectionHeader align="start" heading={d.highlights} className="mb-2" />
                 <ul className="grid gap-[30px] sm:grid-cols-2">
                   {p.highlights!.map((h) => (
-                    <li key={h.id} className="rounded-[15px] bg-soft p-[30px]">
-                      <h3 className="mb-5 text-[20px] leading-none tracking-normal">{h.title}</h3>
-                      {h.description && <p className="leading-[30px]">{h.description}</p>}
+                    <li key={h.id} className="flex h-full flex-col gap-4 rounded-[15px] bg-soft p-[30px]" data-reveal>
+                      <div className="flex items-start gap-4">
+                        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary text-[18px] text-heading" aria-hidden="true">
+                          <UiIcon name="check" />
+                        </span>
+                        <h3 className="pt-2 text-[19px] leading-[1.35] tracking-normal md:text-[20px]">{h.title}</h3>
+                      </div>
+                      {h.description && <p className="leading-[28px]">{h.description}</p>}
                     </li>
                   ))}
                 </ul>
