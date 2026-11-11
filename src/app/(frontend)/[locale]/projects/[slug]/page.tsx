@@ -91,7 +91,7 @@ export default async function ProjectPage({ params }: P) {
     .map((ba) => {
       const before = mediaProps(ba.before as Media, 'large')
       const after = mediaProps(ba.after as Media, 'large')
-      return before && after ? { title: p.title, before, after } : null
+      return before && after ? { title: ('title' in ba && ba.title) || p.title, before, after } : null
     })
     .filter(Boolean) as {
     title: string
