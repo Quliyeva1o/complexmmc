@@ -113,7 +113,7 @@ async function HeroVideo({ block, ctx }: { block: HeroT; ctx: BlockCtx }) {
         </div>
       </section>
       {services.length > 0 && (
-        <section className="bg-header-sticky px-[15px] py-[60px] md:py-[100px]">
+        <section className="bg-header-sticky py-[60px] md:py-[100px]">
           <ul className="container-x grid gap-[30px] md:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
               <li key={s.id} data-reveal>
