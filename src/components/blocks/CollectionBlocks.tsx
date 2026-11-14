@@ -93,7 +93,7 @@ export async function ReferencesBlock({ block, ctx }: { block: B; ctx: BlockCtx 
   ]
   return (
     <section id={id} aria-label={h?.eyebrow ?? undefined} className={cx(sectionTone(ctx.tone), 'py-[var(--section-y)]')}>
-      <div className="mx-auto max-w-[1300px] px-[var(--gutter)]">
+      <div className="container-x">
         <SectionHeader eyebrow={h?.eyebrow} heading={h?.heading} intro={h?.intro} />
         <ul className="grid auto-rows-[240px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[230px] lg:grid-cols-12">
           {refs.map((r, i) => {
@@ -250,7 +250,7 @@ export async function BeforeAfterBlock({ block, ctx }: { block: B; ctx: BlockCtx
   const cta = resolveLink(block.cta, ctx.locale)
   return (
     <section id={blockTheme(block, ctx).id} className={cx(sectionTone(ctx.tone), 'py-[var(--section-y)]')}>
-      <div className="mx-auto max-w-[960px] px-[var(--gutter)]">
+      <div className="container-x">
         <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
         <BeforeAfterTuran
           pairs={pairs}

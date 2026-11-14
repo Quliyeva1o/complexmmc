@@ -180,9 +180,9 @@ export function BeforeAfterTuran({
           onPointerMove={(e) => e.buttons === 1 && move(e.clientX)}
           onPointerUp={() => setDragging(false)}
         >
-          <Image src={p.after.src} alt={p.after.alt} fill sizes="(min-width:1008px) 912px, 100vw" className="object-cover" />
+          <Image src={p.after.src} alt={p.after.alt} fill sizes="(min-width:1024px) 1304px, 100vw" className="object-cover" />
           <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-            <Image src={p.before.src} alt={p.before.alt} fill sizes="(min-width:1008px) 912px, 100vw" className="object-cover" />
+            <Image src={p.before.src} alt={p.before.alt} fill sizes="(min-width:1024px) 1304px, 100vw" className="object-cover" />
           </div>
           <div className="pointer-events-none absolute inset-y-0 w-[3px] -translate-x-1/2 bg-white shadow-[0_0_12px_rgba(0,0,0,0.3)]" style={{ left: `${pos}%` }}>
             <span
