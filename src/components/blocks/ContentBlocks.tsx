@@ -1,5 +1,6 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import Image from 'next/image'
+import type { ReactNode } from 'react'
 
 import { UiIcon } from '@/components/icons/UiIcon'
 import { Button, cx, Section, SectionHeader, sectionTone } from '@/components/ui/primitives'
@@ -144,18 +145,48 @@ export function WarrantyBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
   )
 }
 
+/* Picks a meaningful UiIcon by keyword so process/feature cards aren't just a bare number —
+   editors can still override per item with their own uploaded icon (the `icon` field). */
+const ICON_KEYWORDS: [RegExp, string][] = [
+  [/baxış|görüş/i, 'pin'],
+  [/layihələndir/i, 'ruler'],
+  [/qazıntı/i, 'compass'],
+  [/beton/i, 'shield'],
+  [/su keçirməz|izolyasiya/i, 'drop'],
+  [/üzlük|mozaika|keramika/i, 'gem'],
+  [/filtrasiya|texnologiya/i, 'gear'],
+  [/açar|anahtar|təhvil/i, 'check'],
+  [/komanda/i, 'compass'],
+  [/fərdi/i, 'ruler'],
+  [/lisenziya/i, 'shield'],
+  [/müasir|həll/i, 'gear'],
+]
+const iconFor = (title: string) => ICON_KEYWORDS.find(([re]) => re.test(title))?.[1]
+
+function CardIcon({ icon, fallback }: { icon?: Media | number | null; fallback: ReactNode }) {
+  const img = mediaProps(icon as Media, 'thumb')
+  return (
+    <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary-strong">
+      {img ? <Image src={img.src} alt="" width={20} height={20} className="object-contain" /> : fallback}
+    </span>
+  )
+}
+
 /* ------------------------------------------------------------------ Process (template "Our Process") */
 export function ProcessBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
-  const steps = (block.steps ?? []) as { title: string; duration?: string; description?: string; id?: string }[]
+  const steps = (block.steps ?? []) as { title: string; duration?: string; description?: string; id?: string; icon?: Media | number | null }[]
   const cta = resolveLink(block.cta, ctx.locale)
   return (
     <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
-      {/* calm steps: hairline on top, small teal step number, title, optional duration, text */}
+      {/* calm steps: hairline on top, an icon + small teal step number, title, optional duration, text */}
       <ol className="grid gap-x-[var(--grid-gap)] gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s, i) => (
           <li key={s.id ?? i} className="flex flex-col border-t border-border pt-6" data-reveal>
-            <span className="text-sm font-semibold text-primary-strong tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+            <div className="flex items-center gap-3">
+              <CardIcon icon={s.icon} fallback={<UiIcon name={iconFor(s.title) ?? 'chevron'} className="text-[20px]" />} />
+              <span className="text-sm font-semibold text-primary-strong tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+            </div>
             <h3 className="mt-3 text-h4">{s.title}</h3>
             {s.duration && <p className="mt-2 text-xs font-medium text-muted">{s.duration}</p>}
             {s.description && <p className="mt-3 text-card">{s.description}</p>}
@@ -174,16 +205,14 @@ export function ProcessBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
 
 /* ------------------------------------------------------------------ Feature grid (template "Why Choose Us") */
 export function FeatureGridBlock({ block, ctx }: { block: B; ctx: BlockCtx }) {
-  const items = (block.items ?? []) as { title: string; description?: string; id?: string }[]
+  const items = (block.items ?? []) as { title: string; description?: string; id?: string; icon?: Media | number | null }[]
   return (
     <Section {...blockTheme(block, ctx)}>
       <SectionHeader eyebrow={block.header?.eyebrow} heading={block.header?.heading} intro={block.header?.intro} />
       <ul className={cx('grid gap-[var(--grid-gap)] sm:grid-cols-2', items.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3')}>
         {items.map((f, i) => (
           <li key={f.id ?? i} className="rounded-[var(--radius-card)] border border-border bg-white p-[var(--card-pad)]" data-reveal>
-            <span className="grid size-10 place-items-center rounded-full bg-primary-soft text-sm font-semibold text-primary-strong">
-              {block.numbered === false ? <UiIcon name="check" /> : i + 1}
-            </span>
+            <CardIcon icon={f.icon} fallback={block.numbered === false ? <UiIcon name={iconFor(f.title) ?? 'check'} className="text-[20px]" /> : i + 1} />
             <h3 className="mt-5 text-h4">{f.title}</h3>
             {f.description && <p className="mt-2 text-card">{f.description}</p>}
           </li>
