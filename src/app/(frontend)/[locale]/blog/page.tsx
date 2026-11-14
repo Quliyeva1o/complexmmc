@@ -37,8 +37,8 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: L
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([breadcrumbLd([{ name: d.breadcrumbHome, path: home }, { name: title, path: paths[locale] }])]) }} />
       <PageBanner title={title} intro={page?.intro} image={page?.banner} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: title }]} />
 
-      <div className="px-[15px]">
-        <ul className="mx-auto grid max-w-[1304px] gap-[30px] py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-3">
+      <div className="container-x">
+        <ul className="grid gap-[30px] py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-3">
           {posts.map((p) => {
             const author = typeof p.author === 'object' && p.author ? (p.author as Team) : null
             return (

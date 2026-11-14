@@ -72,8 +72,8 @@ export default async function ProductPage({ params }: P) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(ld) }} />
       <PageBanner small title={p.title} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.products, href: productsPath }, ...(cat ? [{ name: cat.title, href: catPath }] : []), { name: p.title }]} />
 
-      <div className="px-[15px]">
-        <div className="mx-auto grid max-w-[1304px] gap-[45px] py-[60px] md:py-[100px] lg:grid-cols-2">
+      <div className="container-x">
+        <div className="grid gap-[45px] py-[60px] md:py-[100px] lg:grid-cols-2">
           <div className="relative aspect-square overflow-hidden rounded-[var(--radius-card)] bg-soft lg:sticky lg:top-[110px] lg:self-start">
             {img && <Image src={img.src} alt={img.alt} fill priority sizes="(min-width:1024px) 630px, 100vw" className="object-contain p-8" />}
           </div>
@@ -186,8 +186,8 @@ export default async function ProductPage({ params }: P) {
       </div>
 
       {similar.length > 0 && (
-        <section className="bg-soft px-[15px]">
-          <div className="mx-auto max-w-[1304px] py-[60px] md:py-[100px]">
+        <section className="bg-soft">
+          <div className="container-x py-[60px] md:py-[100px]">
             <SectionHeader heading={d.similarProducts} />
             <ul className="grid gap-[30px] sm:grid-cols-2 lg:grid-cols-4">
               {similar.map((x) => (

@@ -80,8 +80,8 @@ export default async function ServicePage({ params }: P) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(ld) }} />
       <PageBanner title={s.title} image={s.banner ?? s.cover} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.services, href: `${localePrefix(locale)}/services` }, { name: s.title }]} />
 
-      <div className="px-[15px]">
-        <div className="mx-auto flex max-w-[1304px] flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
+      <div className="container-x">
+        <div className="flex flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
           {/* ---------------------------------------------------------- service navigation */}
           <aside className="w-full shrink-0 lg:w-[286px]">
             <nav aria-label={d.allServices}>

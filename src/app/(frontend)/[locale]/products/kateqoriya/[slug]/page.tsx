@@ -54,8 +54,8 @@ export default async function ProductCategoryPage({ params }: P) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([breadcrumbLd([{ name: d.breadcrumbHome, path: home }, { name: d.products, path: productsPath }, { name: cat.title, path }])]) }} />
       <PageBanner title={cat.title} intro={cat.excerpt} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.products, href: productsPath }, { name: cat.title }]} />
 
-      <div className="px-[15px]">
-        <div className="mx-auto flex max-w-[1304px] flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
+      <div className="container-x">
+        <div className="flex flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
           <aside className="w-full shrink-0 lg:w-[286px]">
             <nav aria-label={d.productCategories}>
               <ul className="flex flex-col gap-[15px]">

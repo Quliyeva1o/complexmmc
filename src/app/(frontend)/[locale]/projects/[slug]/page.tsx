@@ -128,8 +128,8 @@ export default async function ProjectPage({ params }: P) {
         ]}
       />
 
-      <div className="px-[15px]">
-        <div className="mx-auto flex max-w-[1304px] flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
+      <div className="container-x">
+        <div className="flex flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
           {/* ---------------------------------------------------------- main column (839px) */}
           <div className="flex min-w-0 flex-1 flex-col gap-5 lg:max-w-[839px]">
             {p.excerpt && (
@@ -208,8 +208,8 @@ export default async function ProjectPage({ params }: P) {
       </div>
 
       {related.length > 0 && (
-        <section className="bg-soft px-[15px] py-[60px] md:py-[100px]">
-          <div className="mx-auto max-w-[1304px]">
+        <section className="bg-soft py-[60px] md:py-[100px]">
+          <div className="container-x">
             <SectionHeader heading={d.relatedProjects} />
             <ul className="grid gap-x-[30px] gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (

@@ -36,8 +36,8 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript([breadcrumbLd([{ name: d.breadcrumbHome, path: home }, { name: d.projects, path: paths[locale] }])]) }} />
       <PageBanner title={page?.title ?? d.projects} intro={page?.intro} image={page?.banner} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.projects }]} />
 
-      <div className="px-[15px]">
-        <ul className="mx-auto grid max-w-[1304px] gap-x-[30px] gap-y-10 py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-3">
+      <div className="container-x">
+        <ul className="grid gap-x-[30px] gap-y-10 py-[60px] sm:grid-cols-2 md:py-[100px] lg:grid-cols-3">
           {projects.map((p) => (
             <li key={p.id}>
               <ProjectCard

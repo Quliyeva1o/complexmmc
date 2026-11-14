@@ -76,8 +76,8 @@ export default async function PostPage({ params }: P) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(ld) }} />
       <PageBanner small title={p.title} image={p.cover} crumbs={[{ name: d.breadcrumbHome, href: home }, { name: d.blog, href: blogPath }, { name: p.title }]} />
 
-      <div className="px-[15px]">
-        <div className="mx-auto flex max-w-[1304px] flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
+      <div className="container-x">
+        <div className="flex flex-col gap-[45px] py-[60px] md:py-[100px] lg:flex-row">
           {/* ---------------------------------------------------------- article */}
           <article className="min-w-0 flex-1 lg:max-w-[818px]">
             <div className="flex flex-col gap-5 px-2.5 py-2.5">
