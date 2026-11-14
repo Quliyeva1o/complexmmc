@@ -140,7 +140,7 @@ function HeroRotating({ block, ctx }: { block: HeroT; ctx: BlockCtx }) {
   const secondary = resolveLink(block.secondaryCta as never, ctx.locale)
   const words = (block.rotatingWords ?? []).map((w) => w.text)
   return (
-    <section className="relative isolate flex min-h-[640px] flex-col justify-center overflow-hidden bg-dark pt-28 pb-32 text-center text-white md:min-h-[720px] lg:min-h-[min(860px,100svh)]">
+    <section className="relative isolate flex h-[100svh] flex-col justify-center overflow-hidden bg-dark pt-28 pb-32 text-center text-white lg:h-[calc(100svh+100px)]">
       {img && <Image src={img.src} alt={img.alt} fill priority fetchPriority="high" sizes="100vw" className="-z-30 object-cover" />}
       {video && <HeroVideoBg src={video.src} type={video.type} />}
       <div className="absolute inset-0 -z-10 bg-[image:var(--hero-overlay)]" />
