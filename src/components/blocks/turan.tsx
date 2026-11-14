@@ -57,14 +57,16 @@ export function ProjectsShowcase({ slides, viewLabel, interval = 2000 }: { slide
                 aria-label={sl.title}
                 aria-current={i === active || undefined}
                 onClick={() => setActive(i)}
-                className="relative h-[3px] flex-1 cursor-pointer overflow-hidden rounded-full border-0 bg-[rgba(18,34,59,0.1)] p-0 hover:bg-[rgba(18,34,59,0.18)]"
+                className="group relative flex min-h-11 flex-1 cursor-pointer items-center border-0 bg-transparent p-0"
               >
-                <span
-                  key={i === active ? `run-${active}` : 'idle'}
-                  className={`absolute inset-y-0 left-0 rounded-full bg-[var(--color-primary-strong)] ${i < active ? 'w-full' : i === active ? 'op-bar-run w-0' : 'w-0'}`}
-                  style={i === active ? { ['--op-dur' as string]: `${interval}ms`, animationPlayState: paused ? 'paused' : 'running' } : undefined}
-                  onAnimationEnd={i === active ? () => setActive((a) => (a + 1) % n) : undefined}
-                />
+                <span className="relative block h-[3px] w-full overflow-hidden rounded-full bg-[rgba(18,34,59,0.1)] group-hover:bg-[rgba(18,34,59,0.18)]">
+                  <span
+                    key={i === active ? `run-${active}` : 'idle'}
+                    className={`absolute inset-y-0 left-0 rounded-full bg-[var(--color-primary-strong)] ${i < active ? 'w-full' : i === active ? 'op-bar-run w-0' : 'w-0'}`}
+                    style={i === active ? { ['--op-dur' as string]: `${interval}ms`, animationPlayState: paused ? 'paused' : 'running' } : undefined}
+                    onAnimationEnd={i === active ? () => setActive((a) => (a + 1) % n) : undefined}
+                  />
+                </span>
               </button>
             ))}
           </div>

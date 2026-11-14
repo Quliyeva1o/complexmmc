@@ -144,6 +144,7 @@ function HeroRotating({ block, ctx }: { block: HeroT; ctx: BlockCtx }) {
       {img && <Image src={img.src} alt={img.alt} fill priority fetchPriority="high" sizes="100vw" className="-z-30 object-cover" />}
       {video && <HeroVideoBg src={video.src} type={video.type} />}
       <div className="absolute inset-0 -z-10 bg-[image:var(--hero-overlay)]" />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[200px] w-[600px] -translate-x-1/2 rounded-full bg-[#087D87]/10 blur-3xl" />
       <div className="container-x flex flex-col items-center [&_.text-accent]:text-primary">
         {words.length > 0 && (
           <p className="hero-zoom mb-3 max-w-full font-display text-mega font-bold text-white" aria-hidden="true">

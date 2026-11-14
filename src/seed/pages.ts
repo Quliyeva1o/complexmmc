@@ -164,7 +164,13 @@ export async function seedPages(ctx: Ctx) {
           source: 'auto',
           limit: 12,
         },
-        { blockType: 'servicesGrid', source: 'auto', limit: 3, layout: 'overlay' },
+        {
+          blockType: 'servicesGrid',
+          header: header(t('Seçilmiş xidmətlər', 'Featured services', 'Избранные услуги')[l], t('Hovuz sistemləri üzrə həllərimiz', 'Our pool systems solutions', 'Наши решения для систем бассейнов')[l]),
+          source: 'auto',
+          limit: 3,
+          layout: 'overlay',
+        },
         {
           blockType: 'stats',
           settings: { theme: 'dark' },
