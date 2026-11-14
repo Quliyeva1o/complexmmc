@@ -55,7 +55,7 @@
   --section-eyebrow: var(--color-primary-strong);
   --section-title: var(--color-heading);
   --section-intro: var(--color-text-muted);
-  --hero-overlay: linear-gradient(180deg, color-mix(in srgb, var(--color-dark) 45%, transparent), color-mix(in srgb, var(--color-dark) 70%, transparent));
+  --hero-overlay: linear-gradient(180deg, rgb(0 0 0 / 0.4) 0%, rgb(0 0 0 / 0.3) 50%, rgb(0 0 0 / 0.7) 100%); /* turanprojects.az hero overlay */
   --banner-overlay: linear-gradient(90deg, color-mix(in srgb, var(--color-dark) 85%, transparent) 0%, color-mix(in srgb, var(--color-dark) 35%, transparent) 100%);
 
   /* ---------- Type scale (desktop → mobile, fluid between 375 and 1440px) ----------
@@ -140,7 +140,7 @@
 }
 :root[data-palette='turan'] {
   --color-primary: #0b9aa6;
-  --color-primary-hover: #09868f;
+  --color-primary-hover: #087d87;
   --color-primary-strong: #077a84;
   --color-on-primary: #ffffff;
   --color-accent: #0b9aa6;
