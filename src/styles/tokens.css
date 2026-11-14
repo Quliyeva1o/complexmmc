@@ -114,7 +114,7 @@
   --anim-distance: 16px;
 
   /* ---------- Layout ---------- */
-  --gutter: clamp(1rem, 4vw, 3rem); /* caps at 48px ≥1200px wide, matching turanprojects.az's lg:px-12 */
+  --gutter: clamp(7rem, 4vw, 3rem); /* caps at 48px ≥1200px wide, matching turanprojects.az's lg:px-12 */
   --container: calc(1304px + 2 * var(--gutter)); /* matches the max-w-[1304px] inner pages */
 }
 
